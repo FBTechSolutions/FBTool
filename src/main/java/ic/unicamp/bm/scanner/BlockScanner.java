@@ -18,8 +18,8 @@ public class BlockScanner implements IBlockScanner {
 
   @Override
   public Map<String, String> retrieveUpdatedBlocks(Path pathFile) throws Exception {
-    Map<String, BlockWrapper> blocks = new HashMap<>();
-    BlockWrapper block = new BlockWrapper();
+    Map<String, Block> blocks = new HashMap<>();
+    Block block = new Block();
     Map<String, String> currentBlocks = retrieveAllValidBlocks(pathFile);
     Map<String, String> originalBlocks = retrieveOriginalBlocks(pathFile);
     for (String currentKey : currentBlocks.keySet()) {

@@ -1,8 +1,10 @@
 package ic.unicamp.bm.scanner;
 
-public class BlockWrapper {
-    private String code;
+public class Block {
+    private String code; // id sequencial
     private String content;
+    //pos
+    //sha
     private BlockState state;
 
     public String getCode() {
