@@ -12,7 +12,7 @@ import java.io.IOException;
 //https://github.com/centic9/jgit-cookbook
 public class GitBlockManager implements IBlockAPI {
     private Git git;
-    public static String BMBlockMaster = "BM Block Master";
+    public static String BMBlockMaster = "bm_block_master";
 
     public GitBlockManager() {
 /*        if(!GitDirectory.existsGitDir()){
