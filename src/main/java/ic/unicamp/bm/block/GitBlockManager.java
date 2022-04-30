@@ -1,18 +1,23 @@
 package ic.unicamp.bm.block;
 
+import java.util.List;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.ListBranchCommand.ListMode;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.lib.Repository;
 
 import java.io.IOException;
-
+//https://github.com/centic9/jgit-cookbook
 public class GitBlockManager implements IBlockAPI {
     private Git git;
+    private static String BMBlockMaster = "BM Block Master";
 
     public GitBlockManager() {
-        if(!GitDirectory.existsGitDir()){
+/*        if(!GitDirectory.existsGitDir()){
             GitDirectory.createGitDir();
-        }
+        }*/
         FileRepositoryBuilder repositoryBuilder = new FileRepositoryBuilder();
         repositoryBuilder.setMustExist(true);
         repositoryBuilder.setGitDir(GitDirectory.getGitDirAsFile());
@@ -48,5 +53,37 @@ public class GitBlockManager implements IBlockAPI {
     @Override
     public Boolean exitBlock(String blockId) {
         return null;
+    }
+
+    @Override
+    public Boolean exitBlockDirectory() {
+        List<Ref> call;
+        try {
+            call = git.branchList().setListMode(ListMode.ALL).call();
+            for (Ref ref : call) {
+                if(ref.getName().equals(BMBlockMaster)){
+                    return true;
+                }
+            }
+        } catch (GitAPIException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
+
+    @Override
+    public void createBlockDirectory() {
+        try {
+            git.branchCreate().setName(BMBlockMaster).call();
+            git.checkout().setName(BMBlockMaster).call();
+
+        } catch (GitAPIException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Object getBlockDirector() {
+        return git;
     }
 }

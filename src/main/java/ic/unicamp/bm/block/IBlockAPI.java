@@ -7,4 +7,8 @@ public interface IBlockAPI {
     public void removeBlock(String blockId); //not used
     public String retrieveBlock(String blockId); // return content
     public Boolean exitBlock(String blockId);
+
+    public Object getBlockDirector();
+    public Boolean exitBlockDirectory();
+    public void createBlockDirectory();
 }
