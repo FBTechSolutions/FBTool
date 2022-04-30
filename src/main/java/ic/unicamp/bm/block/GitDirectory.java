@@ -5,11 +5,16 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 public class GitDirectory {
+
+    private static final Pattern pattern = Pattern.compile(GitDirectory.GitDirectoryName);
+    public static String GitDirectoryName = ".git";
     public static Path getGitDirAsPath() {
         String currentDirectory = System.getProperty("user.dir");
         return Paths.get(currentDirectory, ".git");
@@ -47,5 +52,9 @@ public class GitDirectory {
         } else {
             return true;
         }
+    }
+    public static boolean existNameInPath(Path filePath){
+        Matcher matcher = pattern.matcher(filePath.toString());
+        return matcher.find();
     }
 }

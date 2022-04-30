@@ -1,4 +1,6 @@
 package ic.unicamp.bm.cli.cmd;
+import ic.unicamp.bm.block.BMDirectory;
+import ic.unicamp.bm.block.GitDirectory;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,10 +29,9 @@ public class BMAnalyze implements Runnable {
     }
 
     public static List<Path> listFiles(Path path) throws IOException {
-
         List<Path> result;
         try (Stream<Path> walk = Files.walk(path)) {
-            result = walk.filter(Files::isRegularFile)
+            result = walk.filter(Files::isRegularFile).filter(aPath -> !GitDirectory.existNameInPath(aPath) && !BMDirectory.existNameInPath(aPath))
                 .collect(Collectors.toList());
         }
         return result;

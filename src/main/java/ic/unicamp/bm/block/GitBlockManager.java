@@ -15,9 +15,6 @@ public class GitBlockManager implements IBlockAPI {
     public static String BMBlockMaster = "bm_block_master";
 
     public GitBlockManager() {
-/*        if(!GitDirectory.existsGitDir()){
-            GitDirectory.createGitDir();
-        }*/
         FileRepositoryBuilder repositoryBuilder = new FileRepositoryBuilder();
         repositoryBuilder.setMustExist(true);
         repositoryBuilder.setGitDir(GitDirectory.getGitDirAsFile());

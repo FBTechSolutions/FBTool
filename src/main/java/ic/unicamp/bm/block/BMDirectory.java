@@ -5,10 +5,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 
 public class BMDirectory {
 
+    private static final Pattern pattern = Pattern.compile(BMDirectory.BMDirectoryName);//, Pattern.CASE_INSENSITIVE
     public static String BMDirectoryName = ".bm";
 
     public static Path getBMDirectoryAsPath() {
@@ -54,5 +57,9 @@ public class BMDirectory {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public static boolean existNameInPath(Path filePath){
+        Matcher matcher = pattern.matcher(filePath.toString());
+        return matcher.find();
     }
 }
