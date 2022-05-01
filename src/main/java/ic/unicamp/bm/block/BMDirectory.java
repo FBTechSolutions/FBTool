@@ -11,7 +11,7 @@ import org.apache.commons.io.FileUtils;
 
 public class BMDirectory {
 
-    private static final Pattern pattern = Pattern.compile( ".bm");//, Pattern.CASE_INSENSITIVE
+    private static final Pattern pattern = Pattern.compile( "\\.bm");//, Pattern.CASE_INSENSITIVE
     public static String BMDirectoryName = ".bm";
 
     public static Path getBMDirectoryAsPath() {

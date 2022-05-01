@@ -13,7 +13,7 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 
 public class GitDirectory {
 
-    private static final Pattern pattern = Pattern.compile(".git");
+    private static final Pattern pattern = Pattern.compile("\\.git");
     public static Path getGitDirAsPath() {
         String currentDirectory = System.getProperty("user.dir");
         return Paths.get(currentDirectory, ".git");
