@@ -28,13 +28,14 @@ public class BMAnalyze implements Runnable {
         Path path = Paths.get(System.getProperty("user.dir"));
         List<Path> paths = null;
         try {
-            paths = listFiles(path);
-            paths.forEach(System.out::println);
             IBlockAPI gitBlock = GitBlockManager.createInstance();
             Git git = (Git) gitBlock.getBlockDirector();
             git.checkout().setName(GitBlock.BMBlockMaster).call();
-            git.add().addFilepattern(".").call();
 
+            paths = listFiles(path);
+            paths.forEach(System.out::println);
+
+            git.add().addFilepattern(".").call();
             Collection<RevCommit> stashes = git.stashList().call();;
             for(RevCommit rev : stashes) {
                 System.out.println("Found stash: " + rev + ": " + rev.getFullMessage());
