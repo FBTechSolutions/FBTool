@@ -11,7 +11,7 @@ import org.apache.commons.io.FileUtils;
 
 public class BMDirectory {
 
-    private static final Pattern pattern = Pattern.compile(BMDirectory.BMDirectoryName);//, Pattern.CASE_INSENSITIVE
+    private static final Pattern pattern = Pattern.compile( ".bm");//, Pattern.CASE_INSENSITIVE
     public static String BMDirectoryName = ".bm";
 
     public static Path getBMDirectoryAsPath() {
@@ -28,8 +28,8 @@ public class BMDirectory {
     }
 
     public static boolean createBMDirectory() {
-        File xgit_dir_as_file = BMDirectory.getBMDirectoryAsFile();
-        boolean file_was_created = xgit_dir_as_file.mkdir();
+        File bmDirectoryAsFile = BMDirectory.getBMDirectoryAsFile();
+        boolean file_was_created = bmDirectoryAsFile.mkdir();
         if (file_was_created) {
             setHiddenAttr(BMDirectory.getBMDirectoryAsPath());
             return true;
