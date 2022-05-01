@@ -53,7 +53,7 @@ public class GitBlockManager implements IBlockAPI {
     }
 
     @Override
-    public Boolean exitBlockDirectory() {
+    public Boolean exitBlockBranchDir() {
         List<Ref> call;
         try {
             call = git.branchList().setListMode(ListMode.ALL).call();
@@ -69,8 +69,9 @@ public class GitBlockManager implements IBlockAPI {
     }
 
     @Override
-    public void createBlockDirectory() {
+    public void createBlockBranchDir() {
         try {
+
             git.branchCreate().setName(BMBlockMaster).call();
             git.checkout().setName(BMBlockMaster).call();
 

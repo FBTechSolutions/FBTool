@@ -9,6 +9,6 @@ public interface IBlockAPI {
     public Boolean exitBlock(String blockId);
 
     public Object getBlockDirector();
-    public Boolean exitBlockDirectory();
-    public void createBlockDirectory();
+    public Boolean exitBlockBranchDir();
+    public void createBlockBranchDir();
 }

@@ -21,18 +21,23 @@ public class BMConfigure implements Runnable {
       GitDirectory.createGitDir();
     }
     IBlockAPI gitBlockManager = new GitBlockManager();
-    if (!gitBlockManager.exitBlockDirectory()) {
-      gitBlockManager.createBlockDirectory();
-      if (!BMDirectory.existsBmDirectory()) {
-        BMDirectory.createBMDirectory();
-      }
-      Git git = (Git) gitBlockManager.getBlockDirector();
-      try {
-        git.checkout().setName(GitBlockManager.BMBlockMaster).call();
-        git.commit().setMessage("Adding BM directory").call();
-      } catch (GitAPIException e) {
-        throw new RuntimeException(e);
-      }
+    if (!gitBlockManager.exitBlockBranchDir()) {
+      gitBlockManager.createBlockBranchDir();
+    }
+    if (!BMDirectory.existsBmDirectory()) {
+      BMDirectory.createBMDirectory();
+      commitBMDirectory(gitBlockManager);
+    }
+
+  }
+
+  private void commitBMDirectory(IBlockAPI gitBlockManager) {
+    Git git = (Git) gitBlockManager.getBlockDirector();
+    try {
+      git.checkout().setName(GitBlockManager.BMBlockMaster).call();
+      git.commit().setMessage("Adding BM directory").call();
+    } catch (GitAPIException e) {
+      throw new RuntimeException(e);
     }
   }
 }
