@@ -28,7 +28,6 @@ public class BMConfigure implements Runnable {
       BMDirectory.createBMDirectory();
       commitBMDirectory(gitBlockManager);
     }
-
   }
 
   private void commitBMDirectory(IBlockAPI gitBlockManager) {
