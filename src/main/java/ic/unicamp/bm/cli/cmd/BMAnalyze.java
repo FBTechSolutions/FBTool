@@ -14,7 +14,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevWalk;
+import org.eclipse.jgit.treewalk.TreeWalk;
 import picocli.CommandLine.Command;
 
 @Command(
@@ -35,11 +39,40 @@ public class BMAnalyze implements Runnable {
             paths = listFiles(path);
             paths.forEach(System.out::println);
 
-            git.add().addFilepattern(".").call();
+
+            Ref head = git.getRepository().findRef("HEAD");
+            RevWalk walk = new RevWalk(git.getRepository());
+            RevCommit commit = walk.parseCommit(head.getObjectId());
+
+            TreeWalk treeWalk = new TreeWalk(git.getRepository());
+            treeWalk.addTree(commit.getTree());
+            treeWalk.setRecursive(false);
+            while (treeWalk.next()) {
+                if (treeWalk.isSubtree()) {
+                    System.out.println("dir: " + treeWalk.getPathString());
+                    treeWalk.enterSubtree();
+                } else {
+                    System.out.println("file: " + treeWalk.getPathString());
+                }
+            }
+
+
+/*            git.add().addFilepattern(".").call();
             Collection<RevCommit> stashes = git.stashList().call();;
             for(RevCommit rev : stashes) {
                 System.out.println("Found stash: " + rev + ": " + rev.getFullMessage());
-            }
+            }*/
+            /*TreeWalk treeWalk = new TreeWalk(git.getRepository());
+            treeWalk.addTree(tree);
+            treeWalk.setRecursive(false);
+            while (treeWalk.next()) {
+                if (treeWalk.isSubtree()) {
+                    System.out.println("dir: " + treeWalk.getPathString());
+                    treeWalk.enterSubtree();
+                } else {
+                    System.out.println("file: " + treeWalk.getPathString());
+                }
+            }*/
         } catch (IOException | GitAPIException e) {
             throw new RuntimeException(e);
         }
