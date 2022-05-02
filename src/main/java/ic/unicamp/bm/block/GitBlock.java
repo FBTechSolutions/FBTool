@@ -17,7 +17,7 @@ public class GitBlock implements IBlockAPI {
     public GitBlock() {
         FileRepositoryBuilder repositoryBuilder = new FileRepositoryBuilder();
         repositoryBuilder.setMustExist(true);
-        repositoryBuilder.setGitDir(GitDirectory.getGitDirAsFile());
+        repositoryBuilder.setGitDir(GitDirUtil.getGitDirAsFile());
         try {
             Repository repository = repositoryBuilder.build();
             this.git = new Git(repository);

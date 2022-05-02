@@ -1,9 +1,9 @@
 package ic.unicamp.bm.cli.cmd;
 
-import ic.unicamp.bm.block.BMDirectory;
+import ic.unicamp.bm.block.BMDirUtil;
 import ic.unicamp.bm.block.GitBlock;
 import ic.unicamp.bm.block.GitBlockManager;
-import ic.unicamp.bm.block.GitDirectory;
+import ic.unicamp.bm.block.GitDirUtil;
 import ic.unicamp.bm.block.IBlockAPI;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -18,15 +18,15 @@ public class BMConfigure implements Runnable {
 
   @Override
   public void run() {
-    if (!GitDirectory.existsGitDir()) {
-      GitDirectory.createGitDir();
+    if (!GitDirUtil.existsGitDir()) {
+      GitDirUtil.createGitDir();
     }
     IBlockAPI gitBlock = GitBlockManager.createInstance();
     if (!gitBlock.exitBlockBranchDir()) {
       gitBlock.createBlockBranchDir();
     }
-    if (!BMDirectory.existsBmDirectory()) {
-      BMDirectory.createBMDirectory();
+    if (!BMDirUtil.existsBmDirectory()) {
+      BMDirUtil.createBMDirectory();
       commitBMDirectory(gitBlock);
     }
   }

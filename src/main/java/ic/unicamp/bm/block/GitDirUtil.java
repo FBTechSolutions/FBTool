@@ -11,7 +11,7 @@ import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
-public class GitDirectory {
+public class GitDirUtil {
 
     private static final Pattern pattern = Pattern.compile("\\.git");
     public static Path getGitDirAsPath() {
@@ -20,11 +20,11 @@ public class GitDirectory {
     }
 
     public static File getGitDirAsFile() {
-        return new File(String.valueOf(GitDirectory.getGitDirAsPath()));
+        return new File(String.valueOf(GitDirUtil.getGitDirAsPath()));
     }
 
     public static boolean existsGitDir() {
-        return GitDirectory.getGitDirAsFile().exists();
+        return GitDirUtil.getGitDirAsFile().exists();
     }
 
     public static boolean createGitDir() {
@@ -40,9 +40,9 @@ public class GitDirectory {
     }
 
     public static boolean removeGitDir() {
-        if (GitDirectory.existsGitDir()) {
+        if (GitDirUtil.existsGitDir()) {
             try {
-                FileUtils.deleteDirectory(GitDirectory.getGitDirAsFile());
+                FileUtils.deleteDirectory(GitDirUtil.getGitDirAsFile());
                 return true;
             } catch (IOException e) {
                 e.printStackTrace();

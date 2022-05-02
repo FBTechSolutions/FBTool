@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 
-public class BMDirectory {
+public class BMDirUtil {
 
     private static final Pattern pattern = Pattern.compile( "\\.bm");//, Pattern.CASE_INSENSITIVE
     public static String BMDirectoryName = ".bm";
@@ -20,27 +20,27 @@ public class BMDirectory {
     }
 
     public static File getBMDirectoryAsFile() {
-        return new File(String.valueOf(BMDirectory.getBMDirectoryAsPath()));
+        return new File(String.valueOf(BMDirUtil.getBMDirectoryAsPath()));
     }
 
     public static boolean existsBmDirectory() {
-        return BMDirectory.getBMDirectoryAsFile().exists();
+        return BMDirUtil.getBMDirectoryAsFile().exists();
     }
 
     public static boolean createBMDirectory() {
-        File bmDirectoryAsFile = BMDirectory.getBMDirectoryAsFile();
+        File bmDirectoryAsFile = BMDirUtil.getBMDirectoryAsFile();
         boolean file_was_created = bmDirectoryAsFile.mkdir();
         if (file_was_created) {
-            setHiddenAttr(BMDirectory.getBMDirectoryAsPath());
+            setHiddenAttr(BMDirUtil.getBMDirectoryAsPath());
             return true;
         }
         return false;
     }
 
     public static boolean removeBMDirectory() {
-        if (BMDirectory.existsBmDirectory()) {
+        if (BMDirUtil.existsBmDirectory()) {
             try {
-                FileUtils.deleteDirectory(BMDirectory.getBMDirectoryAsFile());
+                FileUtils.deleteDirectory(BMDirUtil.getBMDirectoryAsFile());
                 return true;
             } catch (IOException e) {
                 e.printStackTrace();

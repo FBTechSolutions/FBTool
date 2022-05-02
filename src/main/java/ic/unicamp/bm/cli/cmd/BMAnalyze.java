@@ -1,21 +1,18 @@
 package ic.unicamp.bm.cli.cmd;
-import ic.unicamp.bm.block.BMDirectory;
+import ic.unicamp.bm.block.BMDirUtil;
 import ic.unicamp.bm.block.GitBlock;
 import ic.unicamp.bm.block.GitBlockManager;
-import ic.unicamp.bm.block.GitDirectory;
+import ic.unicamp.bm.block.GitDirUtil;
 import ic.unicamp.bm.block.IBlockAPI;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Ref;
-import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.treewalk.TreeWalk;
@@ -29,15 +26,15 @@ public class BMAnalyze implements Runnable {
 
     @Override
     public void run() {
-        Path path = Paths.get(System.getProperty("user.dir"));
+/*        Path path = Paths.get(System.getProperty("user.dir"));*/
         List<Path> paths = null;
         try {
             IBlockAPI gitBlock = GitBlockManager.createInstance();
             Git git = (Git) gitBlock.getBlockDirector();
             git.checkout().setName(GitBlock.BMBlockMaster).call();
 
-            paths = listFiles(path);
-            paths.forEach(System.out::println);
+/*            paths = listFiles(path);
+            paths.forEach(System.out::println);*/
 
 
             Ref head = git.getRepository().findRef("HEAD");
@@ -81,7 +78,7 @@ public class BMAnalyze implements Runnable {
     public static List<Path> listFiles(Path path) throws IOException {
         List<Path> result;
         try (Stream<Path> walk = Files.walk(path)) {
-            result = walk.filter(Files::isRegularFile).filter(aPath -> !GitDirectory.existNameInPath(aPath)).filter(aPath -> !BMDirectory.existNameInPath(aPath))
+            result = walk.filter(Files::isRegularFile).filter(aPath -> !GitDirUtil.existNameInPath(aPath)).filter(aPath -> !BMDirUtil.existNameInPath(aPath))
                 .collect(Collectors.toList());
         }
         return result;
