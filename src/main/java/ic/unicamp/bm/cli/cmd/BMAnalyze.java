@@ -4,12 +4,15 @@ import ic.unicamp.bm.block.GitBlock;
 import ic.unicamp.bm.block.GitBlockManager;
 import ic.unicamp.bm.block.GitDirUtil;
 import ic.unicamp.bm.block.IBlockAPI;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.LineIterator;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Ref;
@@ -50,6 +53,16 @@ public class BMAnalyze implements Runnable {
                     treeWalk.enterSubtree();
                 } else {
                     System.out.println("file: " + treeWalk.getPathString());
+                    LineIterator it = null;
+                    try {
+                        it = FileUtils.lineIterator(new File(treeWalk.getPathString()), "UTF-8");
+                        while (it.hasNext()) {
+                            String line = it.nextLine();
+                            System.out.println(line);
+                        }
+                    }catch (Exception e){
+
+                    }
                 }
             }
 
