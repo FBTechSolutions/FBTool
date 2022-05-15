@@ -10,13 +10,16 @@ public class HelloJGraph {
   public static void main(String[] args) {
 
     try {
+      //https://old-docs.janusgraph.org/0.2.3/connecting-via-java.html
       GraphTraversalSource g = traversal().withRemote("conf/remote-graph.properties");
 
-     // Object herculesAge = g.V().has("name", "hercules").values("age").next();
+      //Object herculesAge = g.V().has("name", "hercules").values("age").next();
       //System.out.println("Hercules is " + herculesAge + " years old.");
-      g.addV("dsads");
+      g.addV("person").property("name","John");
+      g.addV("person").property("name", "David");
 
-      System.out.println(g.toString());
+     // System.out.println("====");
+      System.out.println(g.V().count());
       g.close();
     } catch (Exception e) {
       e.printStackTrace();

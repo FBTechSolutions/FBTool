@@ -26,9 +26,9 @@ public class BMConfigure implements Runnable {
   }
 
   private void upsertBMDir() {
-    IBlockAPI gitBlock = GitBlockManager.createInstance();
-    if (!gitBlock.exitBlockBranchDir()) {
-      gitBlock.createBlockBranchDir();
+    IBlockAPI gitBlock = GitBlockManager.createGitBlockInstance();
+    if (!gitBlock.exitInternalBranch()) {
+      gitBlock.createInternalBranch();
     }
     checkoutBlockBranch(gitBlock);
     if (!BMDirUtil.existsBmDirectory()) {
@@ -38,7 +38,7 @@ public class BMConfigure implements Runnable {
   }
 
   private void checkoutBlockBranch(IBlockAPI gitBlock) {
-    Git git = (Git) gitBlock.getBlockDirector();
+    Git git = (Git) gitBlock.retrieveDirector();
     try {
       git.checkout().setName(GitBlock.BMBlockMaster).call();
     } catch (GitAPIException e) {
@@ -54,8 +54,8 @@ public class BMConfigure implements Runnable {
   }
 
   private void commitBMDirectory() {
-    IBlockAPI gitBlockManager = GitBlockManager.createInstance();
-    Git git = (Git) gitBlockManager.getBlockDirector();
+    IBlockAPI gitBlockManager = GitBlockManager.createGitBlockInstance();
+    Git git = (Git) gitBlockManager.retrieveDirector();
     try {
       git.checkout().setName(GitBlock.BMBlockMaster).call();
       git.add().addFilepattern(".").call();
@@ -66,8 +66,8 @@ public class BMConfigure implements Runnable {
   }
 
   private void commitHelloWorld() {
-    IBlockAPI gitBlockManager = GitBlockManager.createInstance();
-    Git git = (Git) gitBlockManager.getBlockDirector();
+    IBlockAPI gitBlockManager = GitBlockManager.createGitBlockInstance();
+    Git git = (Git) gitBlockManager.retrieveDirector();
     File myFile =
         new File(git.getRepository().getDirectory().getParent(), ".gitignore");
     try {

@@ -1,14 +1,17 @@
 package ic.unicamp.bm.block;
 
 public interface IBlockAPI {
-    //block limit-> String lenght
-    public String insertBlock(String content); //return sha -> commit
-    public void editBlock(String blockId, String Content);
-    public void removeBlock(String blockId); //not used
-    public String retrieveBlock(String blockId); // return content
-    public Boolean exitBlock(String blockId);
+    public void upsertContentBlock(String blockId, String Content);
+    public void removeContentBlock(String blockId);
+    public String retrieveContentBlock(String blockId);
+    public Boolean exitContentBlock(String blockId);
 
-    public Object getBlockDirector();
-    public Boolean exitBlockBranchDir();
-    public void createBlockBranchDir();
+    public void upsertContainerBlock(String blockId, String Content);
+    public void removeContainerBlock(String blockId);
+    public String retrieveContainerBlock(String blockId);
+    public Boolean exitContainerBlock(String blockId);
+
+    public Object retrieveDirector(); // e.g, git
+    public Boolean exitInternalBranch();
+    public void createInternalBranch();
 }

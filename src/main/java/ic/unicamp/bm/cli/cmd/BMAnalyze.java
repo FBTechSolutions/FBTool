@@ -1,5 +1,6 @@
 package ic.unicamp.bm.cli.cmd;
 import ic.unicamp.bm.block.BMDirUtil;
+import ic.unicamp.bm.block.BMTemporalDirUtil;
 import ic.unicamp.bm.block.GitBlock;
 import ic.unicamp.bm.block.GitBlockManager;
 import ic.unicamp.bm.block.GitDirUtil;
@@ -29,16 +30,14 @@ public class BMAnalyze implements Runnable {
 
     @Override
     public void run() {
-/*        Path path = Paths.get(System.getProperty("user.dir"));*/
         List<Path> paths = null;
         try {
-            IBlockAPI gitBlock = GitBlockManager.createInstance();
-            Git git = (Git) gitBlock.getBlockDirector();
+            IBlockAPI temporalGitBlock = GitBlockManager.createTemporalGitBlockInstance();
+            Git git = (Git) temporalGitBlock.retrieveDirector();
             git.checkout().setName(GitBlock.BMBlockMaster).call();
-
-/*            paths = listFiles(path);
-            paths.forEach(System.out::println);*/
-
+            if(!BMTemporalDirUtil.existsBmTemporalDirectory()){
+                BMTemporalDirUtil.createBMTemporalDirectory();
+            }
 
             Ref head = git.getRepository().findRef("HEAD");
             RevWalk walk = new RevWalk(git.getRepository());
@@ -65,24 +64,6 @@ public class BMAnalyze implements Runnable {
                     }
                 }
             }
-
-
-/*            git.add().addFilepattern(".").call();
-            Collection<RevCommit> stashes = git.stashList().call();;
-            for(RevCommit rev : stashes) {
-                System.out.println("Found stash: " + rev + ": " + rev.getFullMessage());
-            }*/
-            /*TreeWalk treeWalk = new TreeWalk(git.getRepository());
-            treeWalk.addTree(tree);
-            treeWalk.setRecursive(false);
-            while (treeWalk.next()) {
-                if (treeWalk.isSubtree()) {
-                    System.out.println("dir: " + treeWalk.getPathString());
-                    treeWalk.enterSubtree();
-                } else {
-                    System.out.println("file: " + treeWalk.getPathString());
-                }
-            }*/
         } catch (IOException | GitAPIException e) {
             throw new RuntimeException(e);
         }
