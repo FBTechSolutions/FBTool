@@ -221,3 +221,40 @@ mutation MyMutation {
     }
   }
 }
+//
+{
+   "set": [
+    {
+      "productId":"P10",
+      "label":"Product 10",
+      "dgraph.type": "Product"
+    }
+  ]
+}
+
+{
+   "set": [
+    {
+      "dgraph.type": "Product",
+      "Product.label": "Product 10",
+      "Product.productId": "P10"
+    }
+  ]
+}
+
+{
+   "set": [
+    {
+      "dgraph.type": "Product",
+      "Product.label": "Product 11",
+      "Product.productId": "P11",
+      "Product.associatedTo":[
+       { "dgraph.type" : "Feature",
+           "Feature.featureId": "F10",
+           "Feature.label": "F10"
+       }
+      ]
+    }
+  ]
+}
+

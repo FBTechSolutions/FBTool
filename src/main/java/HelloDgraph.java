@@ -41,7 +41,7 @@ public class HelloDgraph {
     Response response = bestEffortTxn.queryWithVars(query, vars);
     System.out.println(response);
 
-    //createData(dgraphClient);
+    createData(dgraphClient);
   }
 
   private static void query(DgraphClient dgraphClient) {
@@ -85,7 +85,7 @@ public class HelloDgraph {
     Product product = new Product();
     product.setProductId("P10");
     product.setLabel("Product 10");
-    product.setAssociatedTo(featureList);
+    //product.setAssociatedTo(featureList);
 
     // Serialize it
     Gson gson = new Gson();
