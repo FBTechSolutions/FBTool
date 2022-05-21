@@ -1,5 +1,6 @@
 package ic.unicamp.bm.block;
 
+import ic.unicamp.bm.cli.util.logger.SplMgrLogger;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -61,5 +62,20 @@ public class BMDirUtil {
     public static boolean existNameInPath(Path filePath){
         Matcher matcher = pattern.matcher(filePath.toString());
         return matcher.find();
+    }
+
+    public static void createBMContactFile() {
+        File myFile =
+            new File(getBMDirectoryAsPath().toString(), "support");
+        try {
+                FileUtils.writeStringToFile(myFile, "Please if you have some bug contact with Junior using the jcupe.cas@gmail.com email", "ISO-8859-1");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static boolean existsBMContactFile() {
+        File myFile =
+            new File(getBMDirectoryAsPath().toString(), "support");
+        return myFile.exists();
     }
 }

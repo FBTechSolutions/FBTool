@@ -71,21 +71,13 @@ public class Cmd implements Runnable {
                 String command = inputs.get(0);
                 switch (command) {
                     // basic
-                 /*   case CMD_EXIT -> {
+                    case CMD_EXIT -> {
                         alive = false;
                         CommandLine commandLine = new CommandLine(new BMExit());
                         __executeCmd(inputs, commandLine);
                     }
-                    case CMD_INIT -> {
-                        CommandLine commandLine = new CommandLine(new BMInit());
-                        __executeCmd(inputs, commandLine);
-                    }
                     case CMD_VERSION -> {
                         CommandLine commandLine = new CommandLine(new BMVersion());
-                        __executeCmd(inputs, commandLine);
-                    }
-                    case CMD_SP -> {
-                        CommandLine commandLine = new CommandLine(new BMSB());
                         __executeCmd(inputs, commandLine);
                     }
                     //
@@ -96,8 +88,8 @@ public class Cmd implements Runnable {
                     case CMD_ANALYSE-> {
                         CommandLine commandLine = new CommandLine(new BMAnalyze());
                         __executeCmd(inputs, commandLine);
-                    }*/
-                    //default -> __printCmdNotValid();
+                    }
+                    default -> __printCmdNotValid();
                 }
             }
         }
