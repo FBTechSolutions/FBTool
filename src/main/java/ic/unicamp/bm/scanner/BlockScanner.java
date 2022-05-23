@@ -217,19 +217,19 @@ public class BlockScanner implements IBlockScanner {
                     }
                   } else {
                     block.append(line.substring(0, startPos));
-                    String key = "a"+ SequenceAbstractBlockNumber.getNextStringCode();
+                    String key = "a" + SequenceAbstractBlockNumber.getNextStringCode();
                     blocks.put(key, block.toString());
                     line = line.substring(startPos);
 
                     block = new StringBuilder();
                     isLine = false;
                   }
-                }else{
-                    block.append(line);
-                    String key = "a"+ SequenceAbstractBlockNumber.getNextStringCode();
-                    blocks.put(key, block.toString());
-                    thereIsLine = false;
-                    block = new StringBuilder();
+                } else {
+                  block.append(line);
+                  String key = "a" + SequenceAbstractBlockNumber.getNextStringCode();
+                  blocks.put(key, block.toString());
+                  thereIsLine = false;
+                  block = new StringBuilder();
                 }
               } else {
                 int endPos = getFirstEndMark(line);

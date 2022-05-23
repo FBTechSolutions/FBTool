@@ -32,14 +32,14 @@ public class BMConfigure implements Runnable {
 
     if (!gitBlock.exitInternalBranch()) {
       gitBlock.createInternalBranch();
-      SplMgrLogger.message_ln("- "+ BMBlockMaster +" branch was created", false);
+      SplMgrLogger.message_ln("- " + BMBlockMaster + " branch was created", false);
     }
     checkoutBlockBranch(gitBlock);
     if (!BMDirUtil.existsBmDirectory()) {
       BMDirUtil.createBMDirectory();
       SplMgrLogger.message_ln("- BM directory was created", false);
     }
-    if(!BMDirUtil.existsBMContactFile()){
+    if (!BMDirUtil.existsBMContactFile()) {
       BMDirUtil.createBMContactFile();
       commitBMDirectory();
     }

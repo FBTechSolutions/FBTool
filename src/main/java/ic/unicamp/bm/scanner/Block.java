@@ -1,33 +1,34 @@
 package ic.unicamp.bm.scanner;
 
 public class Block {
-    private String code; // id sequencial
-    private String content;
-    //pos
-    //sha
-    private BlockState state;
 
-    public String getCode() {
-        return code;
-    }
+  private String code; // id sequencial
+  private String content;
+  //pos
+  //sha
+  private BlockState state;
 
-    public void setCode(String code) {
-        this.code = code;
-    }
+  public String getCode() {
+    return code;
+  }
 
-    public String getContent() {
-        return content;
-    }
+  public void setCode(String code) {
+    this.code = code;
+  }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+  public String getContent() {
+    return content;
+  }
 
-    public BlockState getState() {
-        return state;
-    }
+  public void setContent(String content) {
+    this.content = content;
+  }
 
-    public void setState(BlockState state) {
-        this.state = state;
-    }
+  public BlockState getState() {
+    return state;
+  }
+
+  public void setState(BlockState state) {
+    this.state = state;
+  }
 }

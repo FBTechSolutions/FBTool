@@ -90,12 +90,12 @@ public class GitBlock implements IBlockAPI {
   //container
   @Override
   public void upsertContainerBlock(String blockId, String path) {
-      upsertContentBlock(blockId, path);
+    upsertContentBlock(blockId, path);
   }
 
   @Override
   public void removeContainerBlock(String blockId) {
-      removeContentBlock(blockId);
+    removeContentBlock(blockId);
   }
 
   @Override
