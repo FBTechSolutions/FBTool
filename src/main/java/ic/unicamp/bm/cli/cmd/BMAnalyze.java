@@ -8,6 +8,8 @@ import ic.unicamp.bm.block.GitDirUtil;
 import ic.unicamp.bm.block.IBlockAPI;
 import ic.unicamp.bm.cli.util.logger.SplMgrLogger;
 import ic.unicamp.bm.graph.schema.ContainerBlock;
+import ic.unicamp.bm.graph.schema.GraphAPI;
+import ic.unicamp.bm.graph.schema.GraphBuilder;
 import ic.unicamp.bm.graph.schema.enums.ContainerType;
 import java.io.File;
 import java.io.IOException;
@@ -33,8 +35,8 @@ public class BMAnalyze implements Runnable {
 
   @Override
   public void run() {
-    List<Path> paths = null;
     try {
+      GraphAPI graph = GraphBuilder.createGraphInstance();
       IBlockAPI temporalGitBlock = GitBlockManager.createTemporalGitBlockInstance();
       Git git = (Git) temporalGitBlock.retrieveDirector();
       git.checkout().setName(GitBlock.BMBlockMaster).call();
@@ -58,17 +60,19 @@ public class BMAnalyze implements Runnable {
 
       changeTreeToSchemaForm(treeWalk, main);
 
-      //printTree("", main);
+      createContainers("", main, graph);
 
     } catch (IOException | GitAPIException e) {
       throw new RuntimeException(e);
     }
   }
 
-  private void printTree(String space, ContainerBlock container) {
+  private void createContainers(String space, ContainerBlock container, GraphAPI graph) {
+    graph.upsertContainer(container);
     System.out.println(space + container.getContainerId());
     for (ContainerBlock containerBlock : container.getGoChildren()) {
-      printTree(space + "-->", containerBlock);
+      graph.upsertContainer(containerBlock);
+      createContainers(space + "-->", containerBlock, graph);
     }
   }
 

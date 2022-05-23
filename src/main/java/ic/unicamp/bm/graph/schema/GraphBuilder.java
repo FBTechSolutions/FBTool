@@ -2,9 +2,9 @@ package ic.unicamp.bm.graph.schema;
 
 public class GraphBuilder {
 
-  private GraphManager graphManager;
+  private static GraphManager graphManager;
 
-  public GraphManager createGraphInstance() {
+  public static GraphManager createGraphInstance() {
     if (graphManager == null) {
       graphManager = new GraphManager();
     }
