@@ -1,4 +1,4 @@
-package ic.unicamp.bm.graph.schema;
+package ic.unicamp.bm.graph;
 
 public class GraphBuilder {
 

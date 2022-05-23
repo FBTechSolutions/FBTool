@@ -2,8 +2,8 @@ package ic.unicamp.bm.graph.schema;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import ic.unicamp.bm.graph.RecordOrientation;
 import ic.unicamp.bm.graph.schema.enums.ContainerType;
-import ic.unicamp.bm.scanner.BlockState;
 import java.util.LinkedList;
 import java.util.List;
 import lombok.Getter;
@@ -18,7 +18,7 @@ public class ContainerBlock {
   private String containerId;
   @Getter
   @Setter
-  private ContainerType type;  //added
+  private ContainerType containerType;  //added
 
   @Getter
   @Setter
@@ -30,19 +30,37 @@ public class ContainerBlock {
   @Setter
   private ContentBlock goContent;
 
-  public JsonObject createJson() {
+  public JsonObject createJson(int depth, RecordOrientation orientation) {
     JsonObject json = new JsonObject();
     json.addProperty("dgraph.type", "ContainerBlock");
-    json.addProperty(TAG + ".type", containerId);
-    json.addProperty(TAG + ".type", String.valueOf(type));
-    json.addProperty(TAG + ".goParent", String.valueOf(goParent.createJson()));
-
-    JsonArray array = new JsonArray();
-    for (ContainerBlock containerBlock : goChildren) {
-      array.add(containerBlock.createJson());
+    if(containerId!=null){
+      json.addProperty(TAG + ".containerId", containerId);
     }
-    json.addProperty(TAG + ".goChildren", String.valueOf(array));
-    json.addProperty(TAG + ".goContent", String.valueOf(goContent.createJson()));
+    if(containerType !=null){
+      json.addProperty(TAG + ".containerType", containerType.toString());
+    }
+    if(depth>0){
+      switch (orientation){
+        case UP -> {
+          if(goParent!=null){
+            json.addProperty(TAG + ".goParent", goParent.createJson(0, orientation).toString());
+          }
+        }
+        case DOWN -> {
+          JsonArray array = new JsonArray();
+          for (ContainerBlock containerBlock : goChildren) {
+            array.add(containerBlock.createJson(0, orientation));
+          }
+          if(goChildren!=null){
+            json.add(TAG + ".goChildren", array);
+          }
+        }
+      }
+    }
+    if(goContent!=null){
+      json.addProperty(TAG + ".goContent", goContent.createJson().toString());
+    }
+    //System.out.println(json.toString());
     return json;
   }
 }

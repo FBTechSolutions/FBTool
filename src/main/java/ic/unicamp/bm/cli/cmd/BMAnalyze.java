@@ -7,9 +7,10 @@ import ic.unicamp.bm.block.GitBlockManager;
 import ic.unicamp.bm.block.GitDirUtil;
 import ic.unicamp.bm.block.IBlockAPI;
 import ic.unicamp.bm.cli.util.logger.SplMgrLogger;
+import ic.unicamp.bm.graph.RecordOrientation;
 import ic.unicamp.bm.graph.schema.ContainerBlock;
-import ic.unicamp.bm.graph.schema.GraphAPI;
-import ic.unicamp.bm.graph.schema.GraphBuilder;
+import ic.unicamp.bm.graph.GraphAPI;
+import ic.unicamp.bm.graph.GraphBuilder;
 import ic.unicamp.bm.graph.schema.enums.ContainerType;
 import java.io.File;
 import java.io.IOException;
@@ -56,23 +57,35 @@ public class BMAnalyze implements Runnable {
       //spl main container
       ContainerBlock main = new ContainerBlock();
       main.setContainerId(GitDirUtil.getGitDirAsPath().toString());
-      main.setType(ContainerType.MAIN);
+      main.setContainerType(ContainerType.MAIN);
 
       changeTreeToSchemaForm(treeWalk, main);
 
       createContainers("", main, graph);
-
+      createRelationDown("", main, graph);
+      createRelationUp("", main, graph);
     } catch (IOException | GitAPIException e) {
       throw new RuntimeException(e);
     }
   }
 
   private void createContainers(String space, ContainerBlock container, GraphAPI graph) {
-    graph.upsertContainer(container);
+    graph.upsertContainer(container, 0, RecordOrientation.DOWN);
     System.out.println(space + container.getContainerId());
     for (ContainerBlock containerBlock : container.getGoChildren()) {
-      graph.upsertContainer(containerBlock);
       createContainers(space + "-->", containerBlock, graph);
+    }
+  }
+  private void createRelationDown(String space, ContainerBlock container, GraphAPI graph) {
+    graph.upsertContainer(container, 20, RecordOrientation.DOWN);
+    for (ContainerBlock containerBlock : container.getGoChildren()) {
+      createContainers(space + "", containerBlock, graph);
+    }
+  }
+  private void createRelationUp(String space, ContainerBlock container, GraphAPI graph) {
+    graph.upsertContainer(container, 20, RecordOrientation.UP);
+    for (ContainerBlock containerBlock : container.getGoChildren()) {
+      createContainers(space + "", containerBlock, graph);
     }
   }
 
@@ -85,7 +98,7 @@ public class BMAnalyze implements Runnable {
         //folder
         ContainerBlock currentContainerBlock = new ContainerBlock();
         currentContainerBlock.setContainerId(treeWalk.getPathString());
-        currentContainerBlock.setType(ContainerType.FOLDER);
+        currentContainerBlock.setContainerType(ContainerType.FOLDER);
         //main
         if (isMainLoaded) {
           //backing
@@ -96,7 +109,7 @@ public class BMAnalyze implements Runnable {
             if (exists.exists()) {
               back = false;
             } else {
-              if (parentPivot.getType() != ContainerType.MAIN) {
+              if (parentPivot.getContainerType() != ContainerType.MAIN) {
                 parentPivot = parentPivot.getGoParent();
               } else {
                 back = false;
@@ -129,7 +142,7 @@ public class BMAnalyze implements Runnable {
         //file
         ContainerBlock currentContainerBlock = new ContainerBlock();
         currentContainerBlock.setContainerId(treeWalk.getPathString());
-        currentContainerBlock.setType(ContainerType.FILE);
+        currentContainerBlock.setContainerType(ContainerType.FILE);
 
         if (isMainLoaded) {
           //backing
@@ -140,7 +153,7 @@ public class BMAnalyze implements Runnable {
             if (exists.exists()) {
               back = false;
             } else {
-              if (parentPivot.getType() != ContainerType.MAIN) {
+              if (parentPivot.getContainerType() != ContainerType.MAIN) {
                 parentPivot = parentPivot.getGoParent();
               } else {
                 back = false;

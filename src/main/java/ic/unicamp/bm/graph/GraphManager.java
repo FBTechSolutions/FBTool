@@ -1,9 +1,15 @@
-package ic.unicamp.bm.graph.schema;
+package ic.unicamp.bm.graph;
 
 import com.google.protobuf.ByteString;
+import ic.unicamp.bm.graph.schema.ContainerBlock;
+import ic.unicamp.bm.graph.schema.ContentBlock;
+import ic.unicamp.bm.graph.schema.Data;
+import ic.unicamp.bm.graph.schema.Feature;
+import ic.unicamp.bm.graph.schema.Product;
 import io.dgraph.DgraphClient;
 import io.dgraph.DgraphGrpc.DgraphStub;
 import io.dgraph.DgraphProto.Mutation;
+import io.dgraph.DgraphProto.Version;
 import io.dgraph.Transaction;
 import io.dgraph.TxnConflictException;
 import java.net.MalformedURLException;
@@ -18,11 +24,13 @@ public class GraphManager implements GraphAPI {
       throw new RuntimeException(e);
     }
     dgraphClient = new DgraphClient(stub);
+    Version v = dgraphClient.checkVersion();
+    System.out.println(v.getTag());
   }
 
   @Override
-  public void upsertContainer(ContainerBlock container) {
-    String record = String.valueOf(container.createJson());
+  public void upsertContainer(ContainerBlock container, int depth, RecordOrientation orientation){
+    String record = container.createJson(depth,orientation).toString();
     createRecord(record);
   }
 
@@ -46,19 +54,23 @@ public class GraphManager implements GraphAPI {
 
   @Override
   public void upsertProduct(Product product) {
-    String record = String.valueOf(product.createJson());
+    String record = product.createJson().toString();
+    System.out.println(record);
     createRecord(record);
   }
 
   private void createRecord(String record) {
+    System.out.println(record);
     Transaction txn = dgraphClient.newTransaction();
     try {
       Mutation mu = Mutation.newBuilder()
+          //.setCommitNow(true)
           .setSetJson(ByteString.copyFromUtf8(record))
           .build();
       txn.mutate(mu);
       txn.commit();
     } catch (TxnConflictException ex) {
+      System.out.println("Error here");
     } finally {
       txn.discard();
     }
