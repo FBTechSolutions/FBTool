@@ -6,6 +6,7 @@ import ic.unicamp.bm.graph.RecordOrientation;
 import ic.unicamp.bm.graph.schema.enums.ContainerType;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,7 +31,8 @@ public class ContainerBlock {
   @Setter
   private ContentBlock goContent;
 
-  public JsonObject createJson(int depth, RecordOrientation orientation) {
+  //add map here to check if visitied or not, o the visitor issue. or put in a stack and remove when processing.
+/*  public JsonObject createJson(Map<String, Boolean> map, RecordOrientation orientation) {
     JsonObject json = new JsonObject();
     json.addProperty("dgraph.type", "ContainerBlock");
     if(containerId!=null){
@@ -39,7 +41,7 @@ public class ContainerBlock {
     if(containerType !=null){
       json.addProperty(TAG + ".containerType", containerType.toString());
     }
-    if(depth>0){
+    if(map >0){
       switch (orientation){
         case UP -> {
           if(goParent!=null){
@@ -62,5 +64,5 @@ public class ContainerBlock {
     }
     //System.out.println(json.toString());
     return json;
-  }
+  }*/
 }

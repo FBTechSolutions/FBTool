@@ -11,6 +11,8 @@
     <properties>
         <maven.compiler.source>17</maven.compiler.source> <!--15-->
         <maven.compiler.target>17</maven.compiler.target>
+        <jackson.version>2.13.3</jackson.version>
+        <typesafe.version>1.4.2</typesafe.version>
     </properties>
 
     <dependencies>
@@ -44,6 +46,7 @@
             <groupId>info.picocli</groupId>
             <artifactId>picocli</artifactId>
             <version>4.6.3</version>
+
         </dependency>
         <!-- CLI End dependencies -->
         <!-- CLI Art -->
@@ -124,6 +127,17 @@
             <groupId>io.grpc</groupId>
             <artifactId>grpc-netty</artifactId>
             <version>1.46.0</version>
+        </dependency>
+        <!--Jason-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.typesafe</groupId>
+            <artifactId>config</artifactId>
+            <version>${typesafe.version}</version>
         </dependency>
     </dependencies>
 

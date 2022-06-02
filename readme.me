@@ -249,12 +249,21 @@ mutation MyMutation {
       "Product.label": "Product 11",
       "Product.productId": "P11",
       "Product.associatedTo":[
-       { "dgraph.type" : "Feature",
+       {   "dgraph.type" : "Feature",
+           "uid": "_:Feature",
            "Feature.featureId": "F10",
            "Feature.label": "F10"
        }
       ]
     }
   ]
+}
+//////////////////////////////
+query getFeature(featureId: string) {
+    features(func: eq(Feature.featureId, featureId)) {
+      uid
+      Feature.featureId
+      Feature.label
+    }
 }
 

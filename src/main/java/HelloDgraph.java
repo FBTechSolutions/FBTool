@@ -17,10 +17,19 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class HelloDgraph {
-
+  private static final ObjectMapper objectMapper = new ObjectMapper();
   public static void main(String[] args) {
+    //Product product = Product.builder().productId("d").label("d2").build();
+    //final String inputJson = objectMapper.writeValueAsString(element);
+
+    //return DgraphProto.Mutation.newBuilder().setSetJson(ByteString.copyFromUtf8(inputJson)).build();
+    //People people = daoOperation.getPeople(name);
+    //people.getPersons().forEach(person -> System.out.println(person.getName()));
+  }
+/*  public static void main(String[] args) {
     DgraphStub stub = null;
     try {
       stub = DgraphClient.clientStubFromCloudEndpoint("https://blue-surf-590541.us-east-1.aws.cloud.dgraph.io/graphql", "YzQ2OGZmNTI5ZWI1MjBjZmQ3ZWIyYzY0NGU4M2JkYTE=");
@@ -109,5 +118,5 @@ public class HelloDgraph {
       System.out.println("In the end do this");
       txn.discard();
     }
-  }
+  }*/
 }
