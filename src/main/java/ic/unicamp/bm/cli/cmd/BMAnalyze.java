@@ -61,33 +61,43 @@ public class BMAnalyze implements Runnable {
 
       changeTreeToSchemaForm(treeWalk, main);
 
-      createContainers("", main, graph);
-      createRelationDown("", main, graph);
-      createRelationUp("", main, graph);
+      createContainers( main, graph);
+      System.out.println("UP");
+      createRelations(main, graph);
+      //createRelationDown(main, graph);
+      //createRelationUp( main, graph);
     } catch (IOException | GitAPIException e) {
       throw new RuntimeException(e);
     }
   }
 
-  private void createContainers(String space, ContainerBlock container, GraphAPI graph) {
-    graph.upsertContainer(container, 0, RecordOrientation.DOWN);
-    System.out.println(space + container.getContainerId());
+  private void createContainers(ContainerBlock container, GraphAPI graph) {
+    graph.upsertContainer(container, RecordOrientation.NONE);
     for (ContainerBlock containerBlock : container.getGoChildren()) {
-      createContainers(space + "-->", containerBlock, graph);
+      createContainers( containerBlock, graph);
     }
   }
-  private void createRelationDown(String space, ContainerBlock container, GraphAPI graph) {
-    graph.upsertContainer(container, 20, RecordOrientation.DOWN);
-    for (ContainerBlock containerBlock : container.getGoChildren()) {
-      createContainers(space + "", containerBlock, graph);
-    }
+/*  private void createRelationDown(ContainerBlock container, GraphAPI graph) {
+    System.out.println("DOWN");
+    graph.upsertContainer(container, RecordOrientation.DOWN);
+*//*    for (ContainerBlock containerBlock : container.getGoChildren()) {
+      createRelationDown(containerBlock, graph);
+    }*//*
   }
-  private void createRelationUp(String space, ContainerBlock container, GraphAPI graph) {
-    graph.upsertContainer(container, 20, RecordOrientation.UP);
+  private void createRelationUp(ContainerBlock container, GraphAPI graph) {
+    System.out.println("UP");
+    graph.upsertContainer(container, RecordOrientation.UP);
     for (ContainerBlock containerBlock : container.getGoChildren()) {
-      createContainers(space + "", containerBlock, graph);
+      createRelationUp( containerBlock, graph);
     }
+  }*/
+private void createRelations(ContainerBlock container, GraphAPI graph) {
+
+  graph.upsertContainer(container, RecordOrientation.RELATIONS);
+  for (ContainerBlock containerBlock : container.getGoChildren()) {
+    createRelations( containerBlock, graph);
   }
+}
 
   private void changeTreeToSchemaForm(TreeWalk treeWalk, ContainerBlock main) throws IOException {
 

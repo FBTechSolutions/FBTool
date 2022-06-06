@@ -8,7 +8,7 @@ import ic.unicamp.bm.graph.schema.Product;
 
 public interface GraphAPI {
 
-  void upsertContainer(ContainerBlock containerBlock, int depth, RecordOrientation orientation);
+  void upsertContainer(ContainerBlock containerBlock, RecordOrientation none);
 
   void upsertContent(ContentBlock contentBlock);
 
