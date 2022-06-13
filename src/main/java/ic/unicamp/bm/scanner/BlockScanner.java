@@ -1,5 +1,6 @@
 package ic.unicamp.bm.scanner;
 
+import java.util.LinkedHashMap;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
@@ -49,7 +50,7 @@ public class BlockScanner implements IBlockScanner {
 
   @Override
   public Map<String, String> createInitialBlocks(Path pathFile) {
-    Map<String, String> blocks = new HashMap<>();
+    Map<String, String> blocks = new LinkedHashMap<>();
     if (Files.exists(pathFile)) {
       LineIterator it = null;
       try {
@@ -84,7 +85,7 @@ public class BlockScanner implements IBlockScanner {
 
 
   public Map<String, String> retrieveAllValidBlocks(Path pathFile) throws Exception {
-    Map<String, String> blocks = new HashMap<>();
+    Map<String, String> blocks = new LinkedHashMap<>();
     if (Files.exists(pathFile)) {
       LineIterator it = null;
       try {
@@ -171,7 +172,7 @@ public class BlockScanner implements IBlockScanner {
   }
 
   public Map<String, String> retrieveAllBlocks(Path pathFile) throws Exception {
-    Map<String, String> blocks = new HashMap<>();
+    Map<String, String> blocks = new LinkedHashMap<>();
     if (Files.exists(pathFile)) {
       LineIterator it = null;
       try {

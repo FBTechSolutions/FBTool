@@ -1,6 +1,6 @@
 package ic.unicamp.bm.cli.cmd;
 
-import static ic.unicamp.bm.block.GitBlock.BMBlockMaster;
+import static ic.unicamp.bm.block.GitBlock.BMBlockMasterLabel;
 
 import ic.unicamp.bm.block.BMDirUtil;
 import ic.unicamp.bm.block.GitBlockManager;
@@ -32,7 +32,7 @@ public class BMConfigure implements Runnable {
 
     if (!gitBlock.exitInternalBranch()) {
       gitBlock.createInternalBranch();
-      SplMgrLogger.message_ln("- " + BMBlockMaster + " branch was created", false);
+      SplMgrLogger.message_ln("- " + BMBlockMasterLabel + " branch was created", false);
     }
     checkoutBlockBranch(gitBlock);
     if (!BMDirUtil.existsBmDirectory()) {
@@ -48,7 +48,7 @@ public class BMConfigure implements Runnable {
   private void checkoutBlockBranch(IBlockAPI gitBlock) {
     Git git = (Git) gitBlock.retrieveDirector();
     try {
-      git.checkout().setName(BMBlockMaster).call();
+      git.checkout().setName(BMBlockMasterLabel).call();
     } catch (GitAPIException e) {
       throw new RuntimeException(e);
     }
@@ -66,7 +66,7 @@ public class BMConfigure implements Runnable {
     IBlockAPI gitBlockManager = GitBlockManager.createGitBlockInstance();
     Git git = (Git) gitBlockManager.retrieveDirector();
     try {
-      git.checkout().setName(BMBlockMaster).call();
+      git.checkout().setName(BMBlockMasterLabel).call();
       git.add().addFilepattern(".").call();
       git.commit().setMessage("BM: Adding BM directory").call();
     } catch (GitAPIException e) {

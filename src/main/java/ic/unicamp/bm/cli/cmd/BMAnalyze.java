@@ -7,16 +7,24 @@ import ic.unicamp.bm.block.GitBlockManager;
 import ic.unicamp.bm.block.GitDirUtil;
 import ic.unicamp.bm.block.IBlockAPI;
 import ic.unicamp.bm.cli.util.logger.SplMgrLogger;
-import ic.unicamp.bm.graph.RecordOrientation;
+import ic.unicamp.bm.graph.RecordState;
 import ic.unicamp.bm.graph.schema.ContainerBlock;
 import ic.unicamp.bm.graph.GraphAPI;
 import ic.unicamp.bm.graph.GraphBuilder;
+import ic.unicamp.bm.graph.schema.ContentBlock;
+import ic.unicamp.bm.graph.schema.Data;
 import ic.unicamp.bm.graph.schema.enums.ContainerType;
+import ic.unicamp.bm.graph.schema.enums.DataState;
+import ic.unicamp.bm.scanner.BlockScanner;
+import ic.unicamp.bm.scanner.BlockState;
+import ic.unicamp.bm.scanner.IBlockScanner;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eclipse.jgit.api.Git;
@@ -40,7 +48,7 @@ public class BMAnalyze implements Runnable {
       GraphAPI graph = GraphBuilder.createGraphInstance();
       IBlockAPI temporalGitBlock = GitBlockManager.createTemporalGitBlockInstance();
       Git git = (Git) temporalGitBlock.retrieveDirector();
-      git.checkout().setName(GitBlock.BMBlockMaster).call();
+      git.checkout().setName(GitBlock.BMBlockMasterLabel).call();
       if (!BMTemporalDirUtil.existsBmTemporalDirectory()) {
         BMTemporalDirUtil.createBMTemporalDirectory();
         SplMgrLogger.message_ln("- Temporal Directory for blocks was created", false);
@@ -58,29 +66,83 @@ public class BMAnalyze implements Runnable {
       ContainerBlock main = new ContainerBlock();
       main.setContainerId(GitDirUtil.getGitDirAsPath().toString());
       main.setContainerType(ContainerType.MAIN);
-
       changeTreeToSchemaForm(treeWalk, main);
-
-      createContainers( main, graph);
-      System.out.println("UP");
+      createContainers(main, graph);
       createRelations(main, graph);
-      //createRelationDown(main, graph);
-      //createRelationUp( main, graph);
+
+      //blocks
+      createBlocksByFile(main, graph);
+
     } catch (IOException | GitAPIException e) {
       throw new RuntimeException(e);
     }
   }
 
+  private void createBlocksByFile(ContainerBlock container, GraphAPI graph) {
+    if(container.getContainerType() == ContainerType.FILE){
+      IBlockScanner blockScanner = new BlockScanner();
+      Path path = Paths.get(container.getContainerId());
+      Map<String, String> blocks = blockScanner.createInitialBlocks(path); //id and data
+      IBlockAPI temporalGitBlock = GitBlockManager.createTemporalGitBlockInstance();
+
+      //previous
+      ContentBlock previous = null;
+      ContentBlock main = null;
+      for(String key:blocks.keySet()){
+        String content = blocks.get(key);
+        temporalGitBlock.upsertContentBlock(key,content);
+
+        ContentBlock block = new ContentBlock();
+        Data data = new Data();
+        data.setDataId(key);
+        //data.setSha(content);
+        data.setBelongsTo(block);
+        data.setCurrentState(DataState.NORMAL);
+
+        block.setGoData(data);
+        block.setBelongsTo(container);
+        block.setContentId(key);
+        block.setCurrentState(BlockState.TO_INSERT);
+        if(previous!=null){
+          block.setGoPrevious(previous);
+          previous.setGoNext(block);
+        }else{
+          main = block;
+        }
+        previous = block;
+        graph.upsertContent(block, RecordState.NORMAL);
+      }
+      container.setGoContent(main);
+      graph.upsertContent(main, RecordState.RELATIONS);
+      
+      graph.upsertContainer(container, RecordState.RELATIONS);
+
+      if(main!=null){
+        ContentBlock next = main.getGoNext();
+        while(next!=null){
+          graph.upsertContent(next, RecordState.RELATIONS);
+          next = next.getGoNext();
+        }
+      }
+    }else{
+      for (ContainerBlock containerBlock : container.getGoChildren()) {
+        createBlocksByFile(containerBlock, graph);
+      }
+    }
+
+  }
+
   private void createContainers(ContainerBlock container, GraphAPI graph) {
-    graph.upsertContainer(container, RecordOrientation.NONE);
+    graph.upsertContainer(container, RecordState.NORMAL);
     for (ContainerBlock containerBlock : container.getGoChildren()) {
-      createContainers( containerBlock, graph);
+      createContainers(containerBlock, graph);
     }
   }
-/*  private void createRelationDown(ContainerBlock container, GraphAPI graph) {
-    System.out.println("DOWN");
-    graph.upsertContainer(container, RecordOrientation.DOWN);
-*//*    for (ContainerBlock containerBlock : container.getGoChildren()) {
+
+  /*  private void createRelationDown(ContainerBlock container, GraphAPI graph) {
+      System.out.println("DOWN");
+      graph.upsertContainer(container, RecordOrientation.DOWN);
+  *//*    for (ContainerBlock containerBlock : container.getGoChildren()) {
       createRelationDown(containerBlock, graph);
     }*//*
   }
@@ -91,13 +153,13 @@ public class BMAnalyze implements Runnable {
       createRelationUp( containerBlock, graph);
     }
   }*/
-private void createRelations(ContainerBlock container, GraphAPI graph) {
+  private void createRelations(ContainerBlock container, GraphAPI graph) {
 
-  graph.upsertContainer(container, RecordOrientation.RELATIONS);
-  for (ContainerBlock containerBlock : container.getGoChildren()) {
-    createRelations( containerBlock, graph);
+    graph.upsertContainer(container, RecordState.RELATIONS);
+    for (ContainerBlock containerBlock : container.getGoChildren()) {
+      createRelations(containerBlock, graph);
+    }
   }
-}
 
   private void changeTreeToSchemaForm(TreeWalk treeWalk, ContainerBlock main) throws IOException {
 

@@ -6,14 +6,14 @@ import ic.unicamp.bm.graph.schema.Data;
 import ic.unicamp.bm.graph.schema.Feature;
 import ic.unicamp.bm.graph.schema.Product;
 import ic.unicamp.bm.graph.schema.doa.DAOOperation;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
 public class GraphManager implements GraphAPI {
+
   //private final DgraphClient dgraphClient;
   private final DAOOperation daoOperation;
+
   public GraphManager() {
     daoOperation = new DAOOperation();
 /*    DgraphStub stub;
@@ -28,33 +28,96 @@ public class GraphManager implements GraphAPI {
   }
 
   @Override
-  public void upsertContainer(ContainerBlock container, RecordOrientation orientation){
+  public void upsertContainer(ContainerBlock container, RecordState orientation) {
 
-    switch (orientation){
-      case NONE -> {
+    switch (orientation) {
+      case NORMAL -> {
         ContainerBlock temp1 = container.getGoParent();
         List<ContainerBlock> temp2 = container.getGoChildren();
         container.setGoParent(null);
         container.setGoChildren(null);
-        String uid = daoOperation.addNode(container);
-        if(!uid.isEmpty()){
-          container.setUid(uid);
+        String uid = daoOperation.findAContainerNode(container.getContainerId());
+        if (StringUtils.isBlank(uid)) {
+          uid = daoOperation.addANode(container);
+          if (StringUtils.isNotBlank(uid)) {
+            container.setUid(uid);
+          }
         }
         container.setGoParent(temp1);
         container.setGoChildren(temp2);
       }
       case RELATIONS -> {
-        String uid = daoOperation.addNodeByJSON(container.createJson());
-        if(!uid.isEmpty()){
+        String uid = daoOperation.findAContainerNode(container.getContainerId());
+        if (StringUtils.isNotBlank(uid)) {
           container.setUid(uid);
+          daoOperation.addNodeByJSON(container.createJson());
         }
       }
     }
   }
 
   @Override
-  public void upsertContent(ContentBlock content) {
-    daoOperation.addNode(content);
+  public void upsertContent(ContentBlock content,  RecordState orientation) {
+    switch (orientation) {
+      case NORMAL -> {
+        ContainerBlock temp1 = content.getBelongsTo();
+        Feature temp2 = content.getAssociatedTo();
+        Data temp3 = content.getGoData();
+        ContentBlock temp4 = content.getGoPrevious();
+        ContentBlock temp5 = content.getGoNext();
+        content.setBelongsTo(null);
+        content.setAssociatedTo(null);
+        content.setGoData(null);
+        content.setGoPrevious(null);
+        content.setGoNext(null);
+
+        String uid = daoOperation.findAContentNode(content.getContentId());
+        if (StringUtils.isBlank(uid)) {
+          uid = daoOperation.addANode(content);
+          if (StringUtils.isNotBlank(uid)) {
+            content.setUid(uid);
+          }
+        }
+        content.setBelongsTo(temp1);
+        content.setAssociatedTo(temp2);
+        content.setGoData(temp3);
+        content.setGoPrevious(temp4);
+        content.setGoNext(temp5);
+
+        Data data = content.getGoData();
+        ContentBlock temp6 = data.getBelongsTo();
+        data.setBelongsTo(null);
+
+        uid = daoOperation.findADataNode(data.getDataId());
+        if (StringUtils.isBlank(uid)) {
+          uid = daoOperation.addANode(data);
+          if (StringUtils.isNotBlank(uid)) {
+            data.setUid(uid);
+          }
+        }
+        data.setBelongsTo(temp6);
+      }
+      case RELATIONS -> {
+        String uid = daoOperation.findAContentNode(content.getContentId());
+        if (StringUtils.isNotBlank(uid)) {
+          content.setUid(uid);
+          daoOperation.addNodeByJSON(content.createJson());
+        }
+        ContainerBlock container = content.getBelongsTo();
+        uid = daoOperation.findAContainerNode(container.getContainerId());
+        if (StringUtils.isNotBlank(uid)) {
+          container.setUid(uid);
+          daoOperation.addNodeByJSON(container.createJson());
+        }
+
+        Data data = content.getGoData();
+        uid = daoOperation.findADataNode(data.getDataId());
+        if (StringUtils.isNotBlank(uid)) {
+          content.setUid(uid);
+          daoOperation.addNodeByJSON(data.createJson());
+        }
+    }
+    }
   }
 
   @Override
@@ -65,30 +128,30 @@ public class GraphManager implements GraphAPI {
 
   @Override
   public void upsertFeature(Feature feature) {
-   // String record = String.valueOf(feature.createJson());
-   // createRecord(record);
+    // String record = String.valueOf(feature.createJson());
+    // createRecord(record);
   }
 
   @Override
   public void upsertProduct(Product product) {
-   // String record = product.createJson().toString();
-   // System.out.println(record);
+    // String record = product.createJson().toString();
+    // System.out.println(record);
     //createRecord(record);
   }
 
   private void createRecord(String record) {
-  //  System.out.println(record);
-  //  Transaction txn = dgraphClient.newTransaction();
-  //  try {
-  //    Mutation mu = Mutation.newBuilder()
-   //       .setSetJson(ByteString.copyFromUtf8(record))
-   //       .build();
-  //    txn.mutate(mu);
-  //    txn.commit();
-  //  } catch (TxnConflictException ex) {
-   //   System.out.println("Error here");
-  //  } finally {
-   //   txn.discard();
-  //  }
+    //  System.out.println(record);
+    //  Transaction txn = dgraphClient.newTransaction();
+    //  try {
+    //    Mutation mu = Mutation.newBuilder()
+    //       .setSetJson(ByteString.copyFromUtf8(record))
+    //       .build();
+    //    txn.mutate(mu);
+    //    txn.commit();
+    //  } catch (TxnConflictException ex) {
+    //   System.out.println("Error here");
+    //  } finally {
+    //   txn.discard();
+    //  }
   }
 }

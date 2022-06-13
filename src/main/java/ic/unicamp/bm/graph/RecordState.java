@@ -1,6 +1,6 @@
 package ic.unicamp.bm.graph;
 
-public enum RecordOrientation {
+public enum RecordState {
   RELATIONS,
-  NONE
+  NORMAL
 }

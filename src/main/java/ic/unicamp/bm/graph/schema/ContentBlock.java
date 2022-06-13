@@ -18,12 +18,11 @@ import lombok.experimental.FieldDefaults;
 import org.apache.tinkerpop.shaded.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@EqualsAndHashCode
 @FieldDefaults(makeFinal = false, level = AccessLevel.PRIVATE)
-@ToString
 @Setter
 @Getter
 public class ContentBlock {
+
   @JsonProperty("dgraph.type")
   String type = "ContentBlock";
   String uid;
@@ -34,23 +33,23 @@ public class ContentBlock {
   @JsonProperty("ContentBlock.currentState")
   BlockState currentState;
 
-  @JsonBackReference
+  @JsonBackReference(value = "Content-Content")
   @JsonProperty("ContentBlock.goPrevious")
   ContentBlock goPrevious;
 
-  @JsonManagedReference
+  @JsonManagedReference(value = "Content-Content")
   @JsonProperty("ContentBlock.goNext")
   ContentBlock goNext;
 
-  @JsonManagedReference
+  @JsonManagedReference(value = "Content-Data")
   @JsonProperty("ContentBlock.goData")
   Data goData;
 
-  @JsonBackReference
+  @JsonBackReference(value = "Container-Content")
   @JsonProperty("ContentBlock.belongsTo")
   ContainerBlock belongsTo;
 
-  @JsonBackReference
+  @JsonBackReference(value = "Feature-Content")
   @JsonProperty("ContentBlock.associatedTo")
   Feature associatedTo;
 
@@ -59,35 +58,35 @@ public class ContentBlock {
     result.addProperty("dgraph.type", "ContentBlock");
     result.addProperty("uid", getUid());
 
-    if(getGoPrevious()!=null && !getGoPrevious().getUid().equals("")){
+    if (getGoPrevious() != null && !getGoPrevious().getUid().equals("")) {
       JsonObject jsonParent = new JsonObject();
       jsonParent.addProperty("dgraph.type", "ContentBlock");
       jsonParent.addProperty("uid", getGoPrevious().getUid());
-      result.addProperty( "ContentBlock.goPrevious", jsonParent.toString());
+      result.add("ContentBlock.goPrevious", jsonParent);
     }
-    if(getGoNext()!=null && !getGoNext().getUid().equals("")){
+    if (getGoNext() != null && !getGoNext().getUid().equals("")) {
       JsonObject jsonParent = new JsonObject();
       jsonParent.addProperty("dgraph.type", "ContentBlock");
       jsonParent.addProperty("uid", getGoNext().getUid());
-      result.addProperty( "ContentBlock.goNext", jsonParent.toString());
+      result.add("ContentBlock.goNext", jsonParent);
     }
-    if(getGoData()!=null && !getGoData().getUid().equals("")){
+    if (getGoData() != null && !getGoData().getUid().equals("")) {
       JsonObject jsonParent = new JsonObject();
       jsonParent.addProperty("dgraph.type", "Data");
       jsonParent.addProperty("uid", getGoData().getUid());
-      result.addProperty( "ContentBlock.goData", jsonParent.toString());
+      result.add("ContentBlock.goData", jsonParent);
     }
-    if(getBelongsTo()!=null && !getBelongsTo().getUid().equals("")){
+    if (getBelongsTo() != null && !getBelongsTo().getUid().equals("")) {
       JsonObject jsonParent = new JsonObject();
       jsonParent.addProperty("dgraph.type", "ContainerBlock");
       jsonParent.addProperty("uid", getBelongsTo().getUid());
-      result.addProperty( "ContentBlock.belongsTo", jsonParent.toString());
+      result.add("ContentBlock.belongsTo", jsonParent);
     }
-    if(getAssociatedTo()!=null && !getAssociatedTo().getUid().equals("")){
+    if (getAssociatedTo() != null && !getAssociatedTo().getUid().equals("")) {
       JsonObject jsonParent = new JsonObject();
       jsonParent.addProperty("dgraph.type", "Feature");
       jsonParent.addProperty("uid", getAssociatedTo().getUid());
-      result.addProperty( "ContentBlock.associatedTo", jsonParent.toString());
+      result.add("ContentBlock.associatedTo", jsonParent);
     }
     return result;
   }

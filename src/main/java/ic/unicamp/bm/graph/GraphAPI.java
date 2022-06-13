@@ -8,9 +8,9 @@ import ic.unicamp.bm.graph.schema.Product;
 
 public interface GraphAPI {
 
-  void upsertContainer(ContainerBlock containerBlock, RecordOrientation none);
+  void upsertContainer(ContainerBlock containerBlock, RecordState none);
 
-  void upsertContent(ContentBlock contentBlock);
+  void upsertContent(ContentBlock contentBlock, RecordState none);
 
   void upsertData(Data data);
 

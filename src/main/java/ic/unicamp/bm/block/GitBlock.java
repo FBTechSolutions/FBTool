@@ -1,5 +1,7 @@
 package ic.unicamp.bm.block;
 
+import ic.unicamp.bm.graph.schema.ContentBlock;
+import ic.unicamp.bm.graph.schema.Data;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -20,7 +22,7 @@ import java.io.IOException;
 public class GitBlock implements IBlockAPI {
 
   private Git git;
-  public static String BMBlockMaster = "bm_block_master";
+  public static String BMBlockMasterLabel = "bm_block_master";
 
   public GitBlock() {
     FileRepositoryBuilder repositoryBuilder = new FileRepositoryBuilder();
@@ -115,7 +117,7 @@ public class GitBlock implements IBlockAPI {
     try {
       call = git.branchList().setListMode(ListMode.ALL).call();
       for (Ref ref : call) {
-        if (ref.getName().contains(BMBlockMaster)) {
+        if (ref.getName().contains(BMBlockMasterLabel)) {
           return true;
         }
       }
@@ -128,8 +130,8 @@ public class GitBlock implements IBlockAPI {
   @Override
   public void createInternalBranch() {
     try {
-      git.branchCreate().setName(BMBlockMaster).call();
-      git.checkout().setName(BMBlockMaster).call();
+      git.branchCreate().setName(BMBlockMasterLabel).call();
+      git.checkout().setName(BMBlockMasterLabel).call();
     } catch (GitAPIException e) {
       throw new RuntimeException(e);
     }

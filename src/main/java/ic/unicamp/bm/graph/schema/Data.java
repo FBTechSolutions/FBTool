@@ -16,9 +16,7 @@ import lombok.experimental.FieldDefaults;
 import org.apache.tinkerpop.shaded.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@EqualsAndHashCode
 @FieldDefaults(makeFinal = false, level = AccessLevel.PRIVATE)
-@ToString
 @Setter
 @Getter
 public class Data {
@@ -27,13 +25,16 @@ public class Data {
   String type = "Data";
   String uid;
 
+  @JsonProperty("Data.dataId")
+  String dataId;
+
   @JsonProperty("Data.sha")
   String sha;
 
   @JsonProperty("Data.currentState")
   DataState currentState;
 
-  @JsonBackReference
+  @JsonBackReference(value = "Content-Data")
   @JsonProperty("Data.belongsTo")
   ContentBlock belongsTo;
 
@@ -46,7 +47,7 @@ public class Data {
       JsonObject goContent = new JsonObject();
       goContent.addProperty("dgraph.type", "ContentBlock");
       goContent.addProperty("uid", getBelongsTo().getUid());
-      result.addProperty("Data.belongsTo", goContent.toString());
+      result.add("Data.belongsTo", goContent);
     }
     return result;
   }

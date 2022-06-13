@@ -19,12 +19,11 @@ import lombok.experimental.FieldDefaults;
 import org.apache.tinkerpop.shaded.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@EqualsAndHashCode
 @FieldDefaults(makeFinal = false, level = AccessLevel.PRIVATE)
-@ToString
 @Setter
 @Getter
 public class Feature {
+
   @JsonProperty("dgraph.type")
   String type = "Feature";
   String uid;
@@ -35,11 +34,11 @@ public class Feature {
   @JsonProperty("Feature.label")
   String label;
 
-  @JsonBackReference
+  @JsonBackReference(value = "Product-Feature")
   @JsonProperty("Feature.belongsTo")
   Product belongsTo;
 
-  @JsonManagedReference
+  @JsonManagedReference(value = "Feature-Content")
   @JsonProperty("Feature.associatedTo")
   List<ContentBlock> associatedTo = new LinkedList<>();
 
@@ -48,23 +47,23 @@ public class Feature {
     result.addProperty("dgraph.type", "Feature");
     result.addProperty("uid", getUid());
 
-    if(getBelongsTo()!=null && !getBelongsTo().getUid().equals("")){
+    if (getBelongsTo() != null && !getBelongsTo().getUid().equals("")) {
       JsonObject goContent = new JsonObject();
       goContent.addProperty("dgraph.type", "Product");
       goContent.addProperty("uid", getBelongsTo().getUid());
-      result.addProperty( "Feature.belongsTo", goContent.toString());
+      result.add("Feature.belongsTo", goContent);
     }
-    if(!getAssociatedTo().isEmpty()){
+    if (!getAssociatedTo().isEmpty()) {
       JsonArray jsonList = new JsonArray();
-      for(ContentBlock content: getAssociatedTo()){
-        if(!content.getUid().equals("")){
+      for (ContentBlock content : getAssociatedTo()) {
+        if (!content.getUid().equals("")) {
           JsonObject aChild = new JsonObject();
           aChild.addProperty("dgraph.type", "ContentBlock");
           aChild.addProperty("uid", content.getUid());
           jsonList.add(aChild);
         }
       }
-      result.addProperty( "Product.associatedTo", jsonList.toString());
+      result.add("Product.associatedTo", jsonList);
     }
     return result;
   }

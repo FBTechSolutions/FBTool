@@ -18,12 +18,11 @@ import lombok.experimental.FieldDefaults;
 import org.apache.tinkerpop.shaded.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@EqualsAndHashCode
 @FieldDefaults(makeFinal = false, level = AccessLevel.PRIVATE)
-@ToString
 @Setter
 @Getter
 public class Product {
+
   @JsonProperty("dgraph.type")
   String type = "Product";
   String uid;
@@ -34,7 +33,7 @@ public class Product {
   @JsonProperty("Product.label")
   String label;
 
-  @JsonManagedReference
+  @JsonManagedReference(value = "Product-Feature")
   @JsonProperty("Product.associatedTo")
   List<Feature> associatedTo = new LinkedList<>();
 
@@ -43,17 +42,17 @@ public class Product {
     result.addProperty("dgraph.type", "Product");
     result.addProperty("uid", getUid());
 
-    if(!getAssociatedTo().isEmpty()){
+    if (!getAssociatedTo().isEmpty()) {
       JsonArray jsonList = new JsonArray();
-      for(Feature feature: getAssociatedTo()){
-        if(!feature.getUid().equals("")){
+      for (Feature feature : getAssociatedTo()) {
+        if (!feature.getUid().equals("")) {
           JsonObject aChild = new JsonObject();
           aChild.addProperty("dgraph.type", "Feature");
           aChild.addProperty("uid", feature.getUid());
           jsonList.add(aChild);
         }
       }
-      result.addProperty( "Product.associatedTo", jsonList.toString());
+      result.add("Product.associatedTo", jsonList);
     }
     return result;
   }

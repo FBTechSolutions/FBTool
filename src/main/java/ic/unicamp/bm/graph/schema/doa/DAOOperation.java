@@ -9,6 +9,8 @@ import com.google.protobuf.ByteString;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import ic.unicamp.bm.graph.schema.ContainerBlock;
+import ic.unicamp.bm.graph.schema.ContentBlock;
+import ic.unicamp.bm.graph.schema.Data;
 import ic.unicamp.bm.graph.schema.Product;
 import ic.unicamp.bm.graph.schema.Raw;
 import io.dgraph.DgraphClient;
@@ -20,22 +22,13 @@ import io.dgraph.Transaction;
 import io.dgraph.TxnConflictException;
 import io.grpc.StatusRuntimeException;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import org.apache.http.HttpHeaders;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 
 public class DAOOperation {
+
   private static final ObjectMapper objectMapper = new ObjectMapper();
   private static Config config = ConfigFactory.load("application.conf");
   private static final DgraphStub stub;
@@ -43,21 +36,25 @@ public class DAOOperation {
 
   static {
     try {
-      stub = DgraphClient.clientStubFromCloudEndpoint("https://blue-surf-590541.us-east-1.aws.cloud.dgraph.io/graphql", "YzQ2OGZmNTI5ZWI1MjBjZmQ3ZWIyYzY0NGU4M2JkYTE=");
+      stub = DgraphClient.clientStubFromCloudEndpoint(
+          "https://blue-surf-590541.us-east-1.aws.cloud.dgraph.io/graphql",
+          "YzQ2OGZmNTI5ZWI1MjBjZmQ3ZWIyYzY0NGU4M2JkYTE=");
       dgraphClient = new DgraphClient(stub);
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }
   }
 
-  public <T> String addNode(final T element) {
+  public <T> String addANode(final T element) {
     DgraphProto.Mutation mutation = getMutation(element);
     return applyMutation(mutation);
   }
+
   public String addNodeByJSON(JsonObject json) {
     String payload = new Gson().toJson(json);
-    System.out.println("amigo3="+payload);
-    DgraphProto.Mutation mutation = DgraphProto.Mutation.newBuilder().setSetJson(ByteString.copyFromUtf8(payload)).build();
+    System.out.println("amigo3=" + payload);
+    DgraphProto.Mutation mutation = DgraphProto.Mutation.newBuilder()
+        .setSetJson(ByteString.copyFromUtf8(payload)).build();
     return applyMutation(mutation);
   }
 
@@ -67,12 +64,13 @@ public class DAOOperation {
       try {
         Response response = txn.mutate(mutation);
         txn.commit();
-        for(String key: response.getUidsMap().keySet()){
+        for (String key : response.getUidsMap().keySet()) {
           uid = response.getUidsMap().get(key);
         }
       } catch (StatusRuntimeException | TxnConflictException dgraphException) {
         txn.discard();
-        throw new RuntimeException("Unable to persist the transaction." + dgraphException.getMessage());
+        throw new RuntimeException(
+            "Unable to persist the transaction." + dgraphException.getMessage());
       }
       return uid;
     }
@@ -82,7 +80,8 @@ public class DAOOperation {
     try {
       final String inputJson = objectMapper.writeValueAsString(element);
       System.out.println(inputJson);
-      return DgraphProto.Mutation.newBuilder().setSetJson(ByteString.copyFromUtf8(inputJson)).build();
+      return DgraphProto.Mutation.newBuilder().setSetJson(ByteString.copyFromUtf8(inputJson))
+          .build();
     } catch (JsonProcessingException ex) {
       throw new RuntimeException("Error occurred while parsing." + ex.getMessage());
     }
@@ -127,13 +126,17 @@ public class DAOOperation {
       DgraphProto.Response response = dgraphClient.newTransaction().queryWithVars(query, vars);
       // Deserialize
 
-      Raw<ContainerBlock> containerBlocks = objectMapper.readValue(response.getJson().toByteArray(),new TypeReference<Raw<ContainerBlock>>() {});
+      Raw<ContainerBlock> containerBlocks = objectMapper.readValue(response.getJson().toByteArray(),
+          new TypeReference<Raw<ContainerBlock>>() {
+          });
+      if (containerBlocks.getRaw().isEmpty()) {
+        return null;
+      }
       System.out.println(containerBlocks.getRaw().get(0).toString());
       return containerBlocks.getRaw().get(0);
     } catch (Exception ex) {
       throw new RuntimeException("Result can not be cast into object." + ex);
     }
-
   }
 
   public ContainerBlock getAContainerBlockByUid(String uid) {
@@ -143,8 +146,52 @@ public class DAOOperation {
     try {
       DgraphProto.Response response = dgraphClient.newTransaction().queryWithVars(query, vars);
       // Deserialize
-      ContainerBlock containerBlock = objectMapper.readValue(response.getJson().toByteArray(), ContainerBlock.class);
+      ContainerBlock containerBlock = objectMapper.readValue(response.getJson().toByteArray(),
+          ContainerBlock.class);
       return containerBlock;
+    } catch (Exception ex) {
+      throw new RuntimeException("Result can not be cast into object." + ex);
+    }
+  }
+
+
+  public ContentBlock getAContentBlockById(String id) {
+    // Query
+    String query = config.getString("queries.getAContentBlockById");
+    Map<String, String> vars = Collections.singletonMap("$contentId", id);
+    try {
+      DgraphProto.Response response = dgraphClient.newTransaction().queryWithVars(query, vars);
+      // Deserialize
+
+      Raw<ContentBlock> contentBlocks = objectMapper.readValue(response.getJson().toByteArray(),
+          new TypeReference<Raw<ContentBlock>>() {
+          });
+      if (contentBlocks.getRaw().isEmpty()) {
+        return null;
+      }
+      System.out.println(contentBlocks.getRaw().get(0).toString());
+      return contentBlocks.getRaw().get(0);
+    } catch (Exception ex) {
+      throw new RuntimeException("Result can not be cast into object." + ex);
+    }
+  }
+
+  public Data getADataById(String id) {
+    // Query
+    String query = config.getString("queries.getADataById");
+    Map<String, String> vars = Collections.singletonMap("$dataId", id);
+    try {
+
+      DgraphProto.Response response = dgraphClient.newTransaction().queryWithVars(query, vars);
+      // Deserialize
+      Raw<Data> dataRaw = objectMapper.readValue(response.getJson().toByteArray(),
+          new TypeReference<Raw<Data>>() {
+          });
+      if (dataRaw.getRaw().isEmpty()) {
+        return null;
+      }
+      System.out.println(dataRaw.getRaw().get(0).toString());
+      return dataRaw.getRaw().get(0);
     } catch (Exception ex) {
       throw new RuntimeException("Result can not be cast into object." + ex);
     }
@@ -156,14 +203,16 @@ public class DAOOperation {
     try {
       DgraphProto.Response response = dgraphClient.newTransaction().queryWithVars(query, null);
       // Deserialize
-      List<Product> products = objectMapper.readValue(response.getJson().toByteArray(),new TypeReference<List<Product>>(){});
+      List<Product> products = objectMapper.readValue(response.getJson().toByteArray(),
+          new TypeReference<List<Product>>() {
+          });
       return products;
     } catch (Exception ex) {
       throw new RuntimeException("Result can not be cast into object." + ex);
     }
   }
 
-  public <T> boolean deleteNode(final T element)  {
+  public <T> boolean deleteNode(final T element) {
     try (Transaction txn = dgraphClient.newTransaction()) {
       try {
         final DgraphProto.Mutation mutation = getDeleteMutation(element);
@@ -171,7 +220,8 @@ public class DAOOperation {
         txn.commit();
         return true;
 
-      } catch (StatusRuntimeException | TxnConflictException | JsonProcessingException dgraphException) {
+      } catch (StatusRuntimeException | TxnConflictException |
+               JsonProcessingException dgraphException) {
         txn.discard();
         throw new RuntimeException("Unable to persist the transaction ", dgraphException);
       }
@@ -184,5 +234,29 @@ public class DAOOperation {
     return DgraphProto.Mutation.newBuilder()
         .setDeleteJson(ByteString.copyFromUtf8(inputJson))
         .build();
+  }
+
+  public String findAContainerNode(String containerId) {
+    ContainerBlock containerBlock = getAContainerBlockById(containerId);
+    if (containerBlock!= null) {
+      return containerBlock.getUid();
+    }
+    return null;
+  }
+
+  public String findAContentNode(String containerId) {
+    ContentBlock contentBlock = getAContentBlockById(containerId);
+    if (contentBlock!= null) {
+      return contentBlock.getUid();
+    }
+    return null;
+  }
+
+  public String findADataNode(String dataId) {
+    Data data = getADataById(dataId);
+    if (data!= null) {
+      return data.getUid();
+    }
+    return null;
   }
 }

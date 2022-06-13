@@ -12,9 +12,9 @@ import org.apache.tinkerpop.shaded.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @EqualsAndHashCode
 @FieldDefaults(makeFinal = false, level = AccessLevel.PRIVATE)
-@ToString
 @Setter
 @Getter
 public class Raw<T> {
+
   List<T> raw;
 }
