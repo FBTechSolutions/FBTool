@@ -31,12 +31,12 @@ public class GraphManager implements GraphAPI {
   public void upsertContainer(ContainerBlock container, RecordState orientation) {
 
     switch (orientation) {
-      case NORMAL -> {
+      case CONTENT -> {
         ContainerBlock temp1 = container.getGoParent();
         List<ContainerBlock> temp2 = container.getGoChildren();
         container.setGoParent(null);
         container.setGoChildren(null);
-        String uid = daoOperation.findAContainerNode(container.getContainerId());
+        String uid = daoOperation.findUidFromAContainerNode(container.getContainerId());
         if (StringUtils.isBlank(uid)) {
           uid = daoOperation.addANode(container);
           if (StringUtils.isNotBlank(uid)) {
@@ -47,7 +47,7 @@ public class GraphManager implements GraphAPI {
         container.setGoChildren(temp2);
       }
       case RELATIONS -> {
-        String uid = daoOperation.findAContainerNode(container.getContainerId());
+        String uid = daoOperation.findUidFromAContainerNode(container.getContainerId());
         if (StringUtils.isNotBlank(uid)) {
           container.setUid(uid);
           daoOperation.addNodeByJSON(container.createJson());
@@ -57,21 +57,23 @@ public class GraphManager implements GraphAPI {
   }
 
   @Override
-  public void upsertContent(ContentBlock content,  RecordState orientation) {
+  public void upsertContent(ContentBlock content, RecordState orientation) {
     switch (orientation) {
-      case NORMAL -> {
+      case CONTENT -> {
+        //content
         ContainerBlock temp1 = content.getBelongsTo();
         Feature temp2 = content.getAssociatedTo();
         Data temp3 = content.getGoData();
         ContentBlock temp4 = content.getGoPrevious();
         ContentBlock temp5 = content.getGoNext();
+
         content.setBelongsTo(null);
         content.setAssociatedTo(null);
         content.setGoData(null);
         content.setGoPrevious(null);
         content.setGoNext(null);
 
-        String uid = daoOperation.findAContentNode(content.getContentId());
+        String uid = daoOperation.findUidFromAContentNode(content.getContentId());
         if (StringUtils.isBlank(uid)) {
           uid = daoOperation.addANode(content);
           if (StringUtils.isNotBlank(uid)) {
@@ -84,11 +86,12 @@ public class GraphManager implements GraphAPI {
         content.setGoPrevious(temp4);
         content.setGoNext(temp5);
 
+        //data
         Data data = content.getGoData();
         ContentBlock temp6 = data.getBelongsTo();
         data.setBelongsTo(null);
 
-        uid = daoOperation.findADataNode(data.getDataId());
+        uid = daoOperation.findUidFromADataNode(data.getDataId());
         if (StringUtils.isBlank(uid)) {
           uid = daoOperation.addANode(data);
           if (StringUtils.isNotBlank(uid)) {
@@ -98,32 +101,65 @@ public class GraphManager implements GraphAPI {
         data.setBelongsTo(temp6);
       }
       case RELATIONS -> {
-        String uid = daoOperation.findAContentNode(content.getContentId());
+        String uid = daoOperation.findUidFromAContentNode(content.getContentId());
         if (StringUtils.isNotBlank(uid)) {
           content.setUid(uid);
           daoOperation.addNodeByJSON(content.createJson());
         }
         ContainerBlock container = content.getBelongsTo();
-        uid = daoOperation.findAContainerNode(container.getContainerId());
+        uid = daoOperation.findUidFromAContainerNode(container.getContainerId());
         if (StringUtils.isNotBlank(uid)) {
           container.setUid(uid);
           daoOperation.addNodeByJSON(container.createJson());
         }
 
         Data data = content.getGoData();
-        uid = daoOperation.findADataNode(data.getDataId());
+        uid = daoOperation.findUidFromADataNode(data.getDataId());
         if (StringUtils.isNotBlank(uid)) {
           content.setUid(uid);
           daoOperation.addNodeByJSON(data.createJson());
         }
-    }
+      }
     }
   }
 
   @Override
-  public void upsertData(Data data) {
-    //String record = String.valueOf(data.createJson());
-    //createRecord(record);
+  public void upsertData(Data data, RecordState orientation) {
+    switch (orientation) {
+      case CONTENT -> {
+        //temp
+        ContentBlock temp1 = data.getBelongsTo();
+        temp1.setBelongsTo(null);
+        String uid = daoOperation.findUidFromADataNode(data.getDataId());
+        if (StringUtils.isBlank(uid)) {
+          uid = daoOperation.addANode(data);
+          if (StringUtils.isNotBlank(uid)) {
+            data.setUid(uid);
+          }
+        } else {
+          data.setUid(uid);
+          daoOperation.addANode(data);
+        }
+        data.setBelongsTo(temp1);
+      }
+      case RELATIONS -> {
+        //core
+        String uid = daoOperation.findUidFromADataNode(data.getDataId());
+        if (StringUtils.isNotBlank(uid)) {
+          data.setUid(uid);
+          daoOperation.addNodeByJSON(data.createJson());
+        }
+        //relations
+        ContentBlock contentBlock = data.getBelongsTo();
+        if (contentBlock != null) {
+          String contentUid = daoOperation.findUidFromAContentNode(contentBlock.getContentId());
+          if (StringUtils.isNotBlank(contentUid)) {
+            contentBlock.setUid(contentUid);
+            daoOperation.addNodeByJSON(contentBlock.createJson());
+          }
+        }
+      }
+    }
   }
 
   @Override

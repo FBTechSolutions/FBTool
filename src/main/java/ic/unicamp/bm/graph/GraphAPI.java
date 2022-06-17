@@ -12,7 +12,7 @@ public interface GraphAPI {
 
   void upsertContent(ContentBlock contentBlock, RecordState none);
 
-  void upsertData(Data data);
+  void upsertData(Data data, RecordState none);
 
   void upsertFeature(Feature feature);
 

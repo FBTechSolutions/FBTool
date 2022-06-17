@@ -236,25 +236,25 @@ public class DAOOperation {
         .build();
   }
 
-  public String findAContainerNode(String containerId) {
+  public String findUidFromAContainerNode(String containerId) {
     ContainerBlock containerBlock = getAContainerBlockById(containerId);
-    if (containerBlock!= null) {
+    if (containerBlock != null) {
       return containerBlock.getUid();
     }
     return null;
   }
 
-  public String findAContentNode(String containerId) {
+  public String findUidFromAContentNode(String containerId) {
     ContentBlock contentBlock = getAContentBlockById(containerId);
-    if (contentBlock!= null) {
+    if (contentBlock != null) {
       return contentBlock.getUid();
     }
     return null;
   }
 
-  public String findADataNode(String dataId) {
+  public String findUidFromADataNode(String dataId) {
     Data data = getADataById(dataId);
-    if (data!= null) {
+    if (data != null) {
       return data.getUid();
     }
     return null;

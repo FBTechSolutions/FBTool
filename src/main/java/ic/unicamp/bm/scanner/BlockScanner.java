@@ -83,7 +83,8 @@ public class BlockScanner implements IBlockScanner {
     return blocks;
   }
 
-
+  //constrainst that i tiwll work
+  // it will be good part to put in the paper
   public Map<String, String> retrieveAllValidBlocks(Path pathFile) throws Exception {
     Map<String, String> blocks = new LinkedHashMap<>();
     if (Files.exists(pathFile)) {

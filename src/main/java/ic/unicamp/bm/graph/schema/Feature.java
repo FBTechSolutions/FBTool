@@ -16,6 +16,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.Value;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tinkerpop.shaded.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -47,7 +48,7 @@ public class Feature {
     result.addProperty("dgraph.type", "Feature");
     result.addProperty("uid", getUid());
 
-    if (getBelongsTo() != null && !getBelongsTo().getUid().equals("")) {
+    if (getBelongsTo() != null && StringUtils.isNotBlank(getBelongsTo().getUid())) {
       JsonObject goContent = new JsonObject();
       goContent.addProperty("dgraph.type", "Product");
       goContent.addProperty("uid", getBelongsTo().getUid());

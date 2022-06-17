@@ -13,6 +13,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.Value;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tinkerpop.shaded.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -42,11 +43,11 @@ public class Data {
     JsonObject result = new JsonObject();
     result.addProperty("dgraph.type", "Data");
     result.addProperty("uid", getUid());
-
-    if (getBelongsTo() != null && !getBelongsTo().getUid().equals("")) {
+    ContentBlock contentBlock = getBelongsTo();
+    if (contentBlock != null && StringUtils.isNotBlank(contentBlock.getUid())) {
       JsonObject goContent = new JsonObject();
       goContent.addProperty("dgraph.type", "ContentBlock");
-      goContent.addProperty("uid", getBelongsTo().getUid());
+      goContent.addProperty("uid", contentBlock.getUid());
       result.add("Data.belongsTo", goContent);
     }
     return result;

@@ -53,7 +53,7 @@ public class ContainerBlock {
     result.addProperty("dgraph.type", "ContainerBlock");
     result.addProperty("uid", getUid());
 
-    if (getGoParent() != null && !getGoParent().getUid().equals("")) {
+    if (getGoParent() != null && StringUtils.isNotBlank(getGoParent().getUid())) {
       JsonObject jsonParent = new JsonObject();
       jsonParent.addProperty("dgraph.type", "ContainerBlock");
       jsonParent.addProperty("uid", getGoParent().getUid());
@@ -72,7 +72,7 @@ public class ContainerBlock {
       }
       result.add("ContainerBlock.goChildren", jsonChildren);
     }
-    if (getGoContent() != null && !getGoContent().getUid().equals("")) {
+    if (getGoContent() != null && StringUtils.isNotBlank(getGoContent().getUid())) {
       JsonObject goContent = new JsonObject();
       goContent.addProperty("dgraph.type", "ContentBlock");
       goContent.addProperty("uid", getGoContent().getUid());

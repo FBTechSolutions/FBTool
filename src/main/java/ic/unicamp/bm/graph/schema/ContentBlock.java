@@ -15,6 +15,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.Value;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tinkerpop.shaded.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -58,31 +59,31 @@ public class ContentBlock {
     result.addProperty("dgraph.type", "ContentBlock");
     result.addProperty("uid", getUid());
 
-    if (getGoPrevious() != null && !getGoPrevious().getUid().equals("")) {
+    if (getGoPrevious() != null && StringUtils.isNotBlank(getGoPrevious().getUid())) {
       JsonObject jsonParent = new JsonObject();
       jsonParent.addProperty("dgraph.type", "ContentBlock");
       jsonParent.addProperty("uid", getGoPrevious().getUid());
       result.add("ContentBlock.goPrevious", jsonParent);
     }
-    if (getGoNext() != null && !getGoNext().getUid().equals("")) {
+    if (getGoNext() != null && StringUtils.isNotBlank(getGoNext().getUid())) {
       JsonObject jsonParent = new JsonObject();
       jsonParent.addProperty("dgraph.type", "ContentBlock");
       jsonParent.addProperty("uid", getGoNext().getUid());
       result.add("ContentBlock.goNext", jsonParent);
     }
-    if (getGoData() != null && !getGoData().getUid().equals("")) {
+    if (getGoData() != null && StringUtils.isNotBlank(getGoData().getUid())) {
       JsonObject jsonParent = new JsonObject();
       jsonParent.addProperty("dgraph.type", "Data");
       jsonParent.addProperty("uid", getGoData().getUid());
       result.add("ContentBlock.goData", jsonParent);
     }
-    if (getBelongsTo() != null && !getBelongsTo().getUid().equals("")) {
+    if (getBelongsTo() != null && StringUtils.isNotBlank(getBelongsTo().getUid())) {
       JsonObject jsonParent = new JsonObject();
       jsonParent.addProperty("dgraph.type", "ContainerBlock");
       jsonParent.addProperty("uid", getBelongsTo().getUid());
       result.add("ContentBlock.belongsTo", jsonParent);
     }
-    if (getAssociatedTo() != null && !getAssociatedTo().getUid().equals("")) {
+    if (getAssociatedTo() != null && StringUtils.isNotBlank(getAssociatedTo().getUid())) {
       JsonObject jsonParent = new JsonObject();
       jsonParent.addProperty("dgraph.type", "Feature");
       jsonParent.addProperty("uid", getAssociatedTo().getUid());
