@@ -24,6 +24,8 @@ public class Data {
 
   @JsonProperty("dgraph.type")
   String type = "Data";
+
+  @JsonProperty("uid")
   String uid;
 
   @JsonProperty("Data.dataId")

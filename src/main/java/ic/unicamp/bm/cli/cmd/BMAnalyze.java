@@ -67,8 +67,9 @@ public class BMAnalyze implements Runnable {
       main.setContainerId(GitDirUtil.getGitDirAsPath().toString());
       main.setContainerType(ContainerType.MAIN);
       changeTreeToSchemaForm(treeWalk, main);
+
       createContainers(main, graph);
-      createRelations(main, graph);
+      createContainerRelations(main, graph);
 
       //blocks
       createBlocksByFile(main, graph);
@@ -86,12 +87,13 @@ public class BMAnalyze implements Runnable {
       IBlockAPI temporalGitBlock = GitBlockManager.createTemporalGitBlockInstance();
 
       //previous
-      ContentBlock previous = null;
-      ContentBlock main = null;
+      ContentBlock contentPrevious = null;
+      ContentBlock contentMain = null;
       for (String key : scannedBlocks.keySet()) {
         String content = scannedBlocks.get(key);
+        //path
         temporalGitBlock.upsertContentBlock(key, content);
-
+        //db
         ContentBlock block = new ContentBlock();
         Data data = new Data();
         data.setDataId(key);
@@ -104,21 +106,22 @@ public class BMAnalyze implements Runnable {
         block.setBelongsTo(container);
         block.setContentId(key);
         block.setCurrentState(BlockState.TO_INSERT);
-        if (previous != null) {
-          block.setGoPrevious(previous);
-          previous.setGoNext(block);
+        if (contentPrevious != null) {
+          block.setGoPrevious(contentPrevious);
+          contentPrevious.setGoNext(block);
         } else {
-          main = block;
+          contentMain = block;
         }
-        previous = block;
+        contentPrevious = block;
         graph.upsertContent(block, RecordState.CONTENT);
       }
-      container.setGoContent(main);
+      container.setGoContent(contentMain);
       graph.upsertContainer(container, RecordState.RELATIONS);
-      graph.upsertContent(main, RecordState.RELATIONS);
 
-      if (main != null) {
-        ContentBlock next = main.getGoNext();
+      graph.upsertContent(contentMain, RecordState.RELATIONS);
+
+      if (contentMain != null) {
+        ContentBlock next = contentMain.getGoNext();
         while (next != null) {
           graph.upsertContent(next, RecordState.RELATIONS);
           next = next.getGoNext();
@@ -139,25 +142,11 @@ public class BMAnalyze implements Runnable {
     }
   }
 
-  /*  private void createRelationDown(ContainerBlock container, GraphAPI graph) {
-      System.out.println("DOWN");
-      graph.upsertContainer(container, RecordOrientation.DOWN);
-  *//*    for (ContainerBlock containerBlock : container.getGoChildren()) {
-      createRelationDown(containerBlock, graph);
-    }*//*
-  }
-  private void createRelationUp(ContainerBlock container, GraphAPI graph) {
-    System.out.println("UP");
-    graph.upsertContainer(container, RecordOrientation.UP);
-    for (ContainerBlock containerBlock : container.getGoChildren()) {
-      createRelationUp( containerBlock, graph);
-    }
-  }*/
-  private void createRelations(ContainerBlock container, GraphAPI graph) {
+  private void createContainerRelations(ContainerBlock container, GraphAPI graph) {
 
     graph.upsertContainer(container, RecordState.RELATIONS);
     for (ContainerBlock containerBlock : container.getGoChildren()) {
-      createRelations(containerBlock, graph);
+      createContainerRelations(containerBlock, graph);
     }
   }
 

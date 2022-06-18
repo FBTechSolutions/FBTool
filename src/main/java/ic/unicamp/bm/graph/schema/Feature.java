@@ -27,6 +27,8 @@ public class Feature {
 
   @JsonProperty("dgraph.type")
   String type = "Feature";
+
+  @JsonProperty("uid")
   String uid;
 
   @JsonProperty("Feature.featureId")

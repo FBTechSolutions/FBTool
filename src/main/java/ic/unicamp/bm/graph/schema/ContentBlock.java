@@ -26,6 +26,8 @@ public class ContentBlock {
 
   @JsonProperty("dgraph.type")
   String type = "ContentBlock";
+
+  @JsonProperty("uid")
   String uid;
 
   @JsonProperty("ContentBlock.contentId")

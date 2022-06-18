@@ -25,6 +25,8 @@ public class Product {
 
   @JsonProperty("dgraph.type")
   String type = "Product";
+
+  @JsonProperty("uid")
   String uid;
 
   @JsonProperty("Product.productId")

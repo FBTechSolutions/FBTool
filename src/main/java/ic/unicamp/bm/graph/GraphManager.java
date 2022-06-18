@@ -42,15 +42,39 @@ public class GraphManager implements GraphAPI {
           if (StringUtils.isNotBlank(uid)) {
             container.setUid(uid);
           }
+        } else {
+          container.setUid(uid);
+          daoOperation.addANode(container);
         }
         container.setGoParent(temp1);
         container.setGoChildren(temp2);
       }
       case RELATIONS -> {
+        //core
         String uid = daoOperation.findUidFromAContainerNode(container.getContainerId());
         if (StringUtils.isNotBlank(uid)) {
           container.setUid(uid);
           daoOperation.addNodeByJSON(container.createJson());
+        }
+        //relation (1)
+        ContainerBlock parent = container.getGoParent();
+        if (parent != null) {
+          String uidParent = daoOperation.findUidFromAContainerNode(parent.getContainerId());
+          if (StringUtils.isNotBlank(uidParent)) {
+            parent.setUid(uidParent);
+            daoOperation.addNodeByJSON(parent.createJson());
+          }
+        }
+        //relation (2)
+        List<ContainerBlock> children = container.getGoChildren();
+        if (children != null) {
+          for (ContainerBlock child : children) {
+            String uidChild = daoOperation.findUidFromAContainerNode(child.getContainerId());
+            if (StringUtils.isNotBlank(uidChild)) {
+              child.setUid(uidChild);
+              daoOperation.addNodeByJSON(child.createJson());
+            }
+          }
         }
       }
     }
@@ -60,7 +84,7 @@ public class GraphManager implements GraphAPI {
   public void upsertContent(ContentBlock content, RecordState orientation) {
     switch (orientation) {
       case CONTENT -> {
-        //content
+        //core
         ContainerBlock temp1 = content.getBelongsTo();
         Feature temp2 = content.getAssociatedTo();
         Data temp3 = content.getGoData();
@@ -73,12 +97,15 @@ public class GraphManager implements GraphAPI {
         content.setGoPrevious(null);
         content.setGoNext(null);
 
-        String uid = daoOperation.findUidFromAContentNode(content.getContentId());
-        if (StringUtils.isBlank(uid)) {
-          uid = daoOperation.addANode(content);
-          if (StringUtils.isNotBlank(uid)) {
-            content.setUid(uid);
+        String contentUid = daoOperation.findUidFromAContentNode(content.getContentId());
+        if (StringUtils.isBlank(contentUid)) {
+          contentUid = daoOperation.addANode(content);
+          if (StringUtils.isNotBlank(contentUid)) {
+            content.setUid(contentUid);
           }
+        } else {
+          content.setUid(contentUid);
+          daoOperation.addANode(content);
         }
         content.setBelongsTo(temp1);
         content.setAssociatedTo(temp2);
@@ -86,39 +113,35 @@ public class GraphManager implements GraphAPI {
         content.setGoPrevious(temp4);
         content.setGoNext(temp5);
 
-        //data
-        Data data = content.getGoData();
-        ContentBlock temp6 = data.getBelongsTo();
-        data.setBelongsTo(null);
-
-        uid = daoOperation.findUidFromADataNode(data.getDataId());
-        if (StringUtils.isBlank(uid)) {
-          uid = daoOperation.addANode(data);
-          if (StringUtils.isNotBlank(uid)) {
-            data.setUid(uid);
-          }
-        }
-        data.setBelongsTo(temp6);
       }
       case RELATIONS -> {
-        String uid = daoOperation.findUidFromAContentNode(content.getContentId());
-        if (StringUtils.isNotBlank(uid)) {
-          content.setUid(uid);
+        //core
+        String contentUid = daoOperation.findUidFromAContentNode(content.getContentId());
+        if (StringUtils.isNotBlank(contentUid)) {
+          content.setUid(contentUid);
           daoOperation.addNodeByJSON(content.createJson());
         }
+
+        //relation (1)
         ContainerBlock container = content.getBelongsTo();
-        uid = daoOperation.findUidFromAContainerNode(container.getContainerId());
-        if (StringUtils.isNotBlank(uid)) {
-          container.setUid(uid);
-          daoOperation.addNodeByJSON(container.createJson());
+        if (container != null) {
+          String containerUid = daoOperation.findUidFromAContainerNode(container.getContainerId());
+          if (StringUtils.isNotBlank(containerUid)) {
+            container.setUid(containerUid);
+            daoOperation.addNodeByJSON(container.createJson());
+          }
         }
 
+        //relation (2)
         Data data = content.getGoData();
-        uid = daoOperation.findUidFromADataNode(data.getDataId());
-        if (StringUtils.isNotBlank(uid)) {
-          content.setUid(uid);
-          daoOperation.addNodeByJSON(data.createJson());
+        if (data != null) {
+          String dataUid = daoOperation.findUidFromADataNode(data.getDataId());
+          if (StringUtils.isNotBlank(dataUid)) {
+            data.setUid(dataUid);
+            daoOperation.addNodeByJSON(data.createJson());
+          }
         }
+
       }
     }
   }
@@ -127,26 +150,25 @@ public class GraphManager implements GraphAPI {
   public void upsertData(Data data, RecordState orientation) {
     switch (orientation) {
       case CONTENT -> {
-        //temp
         ContentBlock temp1 = data.getBelongsTo();
         temp1.setBelongsTo(null);
-        String uid = daoOperation.findUidFromADataNode(data.getDataId());
-        if (StringUtils.isBlank(uid)) {
-          uid = daoOperation.addANode(data);
-          if (StringUtils.isNotBlank(uid)) {
-            data.setUid(uid);
+        String dataUid = daoOperation.findUidFromADataNode(data.getDataId());
+        if (StringUtils.isBlank(dataUid)) {
+          dataUid = daoOperation.addANode(data);
+          if (StringUtils.isNotBlank(dataUid)) {
+            data.setUid(dataUid);
           }
         } else {
-          data.setUid(uid);
+          data.setUid(dataUid);
           daoOperation.addANode(data);
         }
         data.setBelongsTo(temp1);
       }
       case RELATIONS -> {
         //core
-        String uid = daoOperation.findUidFromADataNode(data.getDataId());
-        if (StringUtils.isNotBlank(uid)) {
-          data.setUid(uid);
+        String dataUid = daoOperation.findUidFromADataNode(data.getDataId());
+        if (StringUtils.isNotBlank(dataUid)) {
+          data.setUid(dataUid);
           daoOperation.addNodeByJSON(data.createJson());
         }
         //relations

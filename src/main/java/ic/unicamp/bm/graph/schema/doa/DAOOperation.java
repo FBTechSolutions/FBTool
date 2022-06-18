@@ -47,12 +47,15 @@ public class DAOOperation {
 
   public <T> String addANode(final T element) {
     DgraphProto.Mutation mutation = getMutation(element);
+    System.out.println("Add Node");
+    System.out.println(mutation);
     return applyMutation(mutation);
   }
 
   public String addNodeByJSON(JsonObject json) {
     String payload = new Gson().toJson(json);
-    System.out.println("amigo3=" + payload);
+    System.out.println("Add JSON Node");
+    System.out.println(payload);
     DgraphProto.Mutation mutation = DgraphProto.Mutation.newBuilder()
         .setSetJson(ByteString.copyFromUtf8(payload)).build();
     return applyMutation(mutation);
@@ -79,7 +82,7 @@ public class DAOOperation {
   public <T> DgraphProto.Mutation getMutation(final T element) {
     try {
       final String inputJson = objectMapper.writeValueAsString(element);
-      System.out.println(inputJson);
+      //System.out.println(inputJson);
       return DgraphProto.Mutation.newBuilder().setSetJson(ByteString.copyFromUtf8(inputJson))
           .build();
     } catch (JsonProcessingException ex) {
@@ -169,7 +172,7 @@ public class DAOOperation {
       if (contentBlocks.getRaw().isEmpty()) {
         return null;
       }
-      System.out.println(contentBlocks.getRaw().get(0).toString());
+
       return contentBlocks.getRaw().get(0);
     } catch (Exception ex) {
       throw new RuntimeException("Result can not be cast into object." + ex);
@@ -190,7 +193,7 @@ public class DAOOperation {
       if (dataRaw.getRaw().isEmpty()) {
         return null;
       }
-      System.out.println(dataRaw.getRaw().get(0).toString());
+
       return dataRaw.getRaw().get(0);
     } catch (Exception ex) {
       throw new RuntimeException("Result can not be cast into object." + ex);
