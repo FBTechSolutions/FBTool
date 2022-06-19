@@ -6,6 +6,7 @@ import ic.unicamp.bm.graph.schema.Data;
 import ic.unicamp.bm.graph.schema.Feature;
 import ic.unicamp.bm.graph.schema.Product;
 import ic.unicamp.bm.graph.schema.doa.DAOOperation;
+import ic.unicamp.bm.graph.schema.enums.DataState;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
@@ -195,6 +196,11 @@ public class GraphManager implements GraphAPI {
     // String record = product.createJson().toString();
     // System.out.println(record);
     //createRecord(record);
+  }
+
+  @Override
+  public List<Data> retrieveDataByState(DataState temporal) {
+    return daoOperation.getDataByState(temporal);
   }
 
   private void createRecord(String record) {

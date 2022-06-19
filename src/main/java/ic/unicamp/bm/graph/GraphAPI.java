@@ -5,6 +5,8 @@ import ic.unicamp.bm.graph.schema.ContentBlock;
 import ic.unicamp.bm.graph.schema.Data;
 import ic.unicamp.bm.graph.schema.Feature;
 import ic.unicamp.bm.graph.schema.Product;
+import ic.unicamp.bm.graph.schema.enums.DataState;
+import java.util.List;
 
 public interface GraphAPI {
 
@@ -18,4 +20,5 @@ public interface GraphAPI {
 
   void upsertProduct(Product product);
 
+  List<Data> retrieveDataByState(DataState temporal);
 }

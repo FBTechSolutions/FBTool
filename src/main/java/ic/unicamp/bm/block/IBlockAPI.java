@@ -23,4 +23,6 @@ public interface IBlockAPI {
   public Boolean exitInternalBranch();
 
   public void createInternalBranch();
+
+  public String getCurrentDirectory();
 }

@@ -74,8 +74,21 @@ public class BMAnalyze implements Runnable {
       //blocks
       createBlocksByFile(main, graph);
 
+      showTemporalData(graph);
+
+
     } catch (IOException | GitAPIException e) {
       throw new RuntimeException(e);
+    }
+  }
+
+  private void showTemporalData( GraphAPI graph) {
+    List<Data> data = graph.retrieveDataByState(DataState.TEMPORAL);
+    System.out.println("Block List:");
+    for(Data record:data){
+      ContentBlock block = record.getBelongsTo();
+      String blockId = block.getContentId();
+      System.out.println("blockId - " + blockId + "  state - "+ DataState.TEMPORAL+ " FROM "+block.getBelongsTo().getContainerId());
     }
   }
 
@@ -99,7 +112,7 @@ public class BMAnalyze implements Runnable {
         data.setDataId(key);
         //data.setSha(content);
         data.setBelongsTo(block);
-        data.setCurrentState(DataState.NORMAL);
+        data.setCurrentState(DataState.TEMPORAL);
         graph.upsertData(data, RecordState.CONTENT);
 
         block.setGoData(data);

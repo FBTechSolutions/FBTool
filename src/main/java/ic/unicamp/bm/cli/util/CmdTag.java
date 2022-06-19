@@ -1,7 +1,9 @@
 package ic.unicamp.bm.cli.util;
 
 
+import ic.unicamp.bm.cli.cmd.BMAdd;
 import ic.unicamp.bm.cli.cmd.BMAnalyze;
+import ic.unicamp.bm.cli.cmd.BMCommit;
 import ic.unicamp.bm.cli.cmd.BMConfigure;
 import ic.unicamp.bm.cli.cmd.BMExit;
 import ic.unicamp.bm.cli.cmd.BMInit;
@@ -17,4 +19,7 @@ public interface CmdTag {
   String CMD_SP = BMSB.CMD_NAME;
   String CMD_CONFIGURE = BMConfigure.CMD_NAME;
   String CMD_ANALYSE = BMAnalyze.CMD_NAME;
+
+  String CMD_ADD = BMAdd.CMD_NAME;
+  String CMD_COMMIT = BMCommit.CMD_NAME;
 }

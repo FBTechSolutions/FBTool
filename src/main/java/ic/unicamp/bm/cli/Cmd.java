@@ -1,7 +1,9 @@
 package ic.unicamp.bm.cli;
 
 import com.github.lalyos.jfiglet.FigletFont;
+import ic.unicamp.bm.cli.cmd.BMAdd;
 import ic.unicamp.bm.cli.cmd.BMAnalyze;
+import ic.unicamp.bm.cli.cmd.BMCommit;
 import ic.unicamp.bm.cli.cmd.BMConfigure;
 import ic.unicamp.bm.cli.cmd.BMExit;
 import ic.unicamp.bm.cli.cmd.BMInit;
@@ -87,6 +89,14 @@ public class Cmd implements Runnable {
           }
           case CMD_ANALYSE -> {
             CommandLine commandLine = new CommandLine(new BMAnalyze());
+            __executeCmd(inputs, commandLine);
+          }
+          case CMD_ADD -> {
+            CommandLine commandLine = new CommandLine(new BMAdd());
+            __executeCmd(inputs, commandLine);
+          }
+          case CMD_COMMIT -> {
+            CommandLine commandLine = new CommandLine(new BMCommit());
             __executeCmd(inputs, commandLine);
           }
           default -> __printCmdNotValid();

@@ -13,6 +13,7 @@ import ic.unicamp.bm.graph.schema.ContentBlock;
 import ic.unicamp.bm.graph.schema.Data;
 import ic.unicamp.bm.graph.schema.Product;
 import ic.unicamp.bm.graph.schema.Raw;
+import ic.unicamp.bm.graph.schema.enums.DataState;
 import io.dgraph.DgraphClient;
 import io.dgraph.DgraphGrpc.DgraphStub;
 import io.dgraph.DgraphProto;
@@ -47,15 +48,15 @@ public class DAOOperation {
 
   public <T> String addANode(final T element) {
     DgraphProto.Mutation mutation = getMutation(element);
-    System.out.println("Add Node");
-    System.out.println(mutation);
+    //System.out.println("Add Node");
+    //System.out.println(mutation);
     return applyMutation(mutation);
   }
 
   public String addNodeByJSON(JsonObject json) {
     String payload = new Gson().toJson(json);
-    System.out.println("Add JSON Node");
-    System.out.println(payload);
+    //System.out.println("Add JSON Node");
+    //System.out.println(payload);
     DgraphProto.Mutation mutation = DgraphProto.Mutation.newBuilder()
         .setSetJson(ByteString.copyFromUtf8(payload)).build();
     return applyMutation(mutation);
@@ -135,7 +136,7 @@ public class DAOOperation {
       if (containerBlocks.getRaw().isEmpty()) {
         return null;
       }
-      System.out.println(containerBlocks.getRaw().get(0).toString());
+      //System.out.println(containerBlocks.getRaw().get(0).toString());
       return containerBlocks.getRaw().get(0);
     } catch (Exception ex) {
       throw new RuntimeException("Result can not be cast into object." + ex);
@@ -195,6 +196,21 @@ public class DAOOperation {
       }
 
       return dataRaw.getRaw().get(0);
+    } catch (Exception ex) {
+      throw new RuntimeException("Result can not be cast into object." + ex);
+    }
+  }
+  public List<Data> getDataByState(DataState state) {
+    // Query
+    String query = config.getString("queries.getDataByState");
+    Map<String, String> vars = Collections.singletonMap("$state", state.toString());
+    try {
+      DgraphProto.Response response = dgraphClient.newTransaction().queryWithVars(query, vars);
+      // Deserialize
+      Raw<Data> records = objectMapper.readValue(response.getJson().toByteArray(),
+          new TypeReference<>() {
+          });
+      return records.getRaw();
     } catch (Exception ex) {
       throw new RuntimeException("Result can not be cast into object." + ex);
     }
