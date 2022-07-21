@@ -1,6 +1,7 @@
 package ic.unicamp.bm.graph.schema;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.JsonArray;
@@ -8,28 +9,22 @@ import com.google.gson.JsonObject;
 import java.util.LinkedList;
 import java.util.List;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-import lombok.Value;
 import lombok.experimental.FieldDefaults;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.tinkerpop.shaded.jackson.annotation.JsonInclude;
+
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @FieldDefaults(makeFinal = false, level = AccessLevel.PRIVATE)
 @Setter
 @Getter
-public class Feature {
+public class Feature extends SchemaObject {
 
   @JsonProperty("dgraph.type")
-  String type = "Feature";
-
+  String schemaType = "Feature";
   @JsonProperty("uid")
-  String uid;
+  String schemaUid;
 
   @JsonProperty("Feature.featureId")
   String featureId;
@@ -48,12 +43,12 @@ public class Feature {
   public JsonObject createJson() {
     JsonObject result = new JsonObject();
     result.addProperty("dgraph.type", "Feature");
-    result.addProperty("uid", getUid());
+    result.addProperty("uid", getSchemaUid());
 
-    if (getBelongsTo() != null && StringUtils.isNotBlank(getBelongsTo().getUid())) {
+    if (getBelongsTo() != null && StringUtils.isNotBlank(getBelongsTo().getSchemaUid())) {
       JsonObject goContent = new JsonObject();
       goContent.addProperty("dgraph.type", "Product");
-      goContent.addProperty("uid", getBelongsTo().getUid());
+      goContent.addProperty("uid", getBelongsTo().getSchemaUid());
       result.add("Feature.belongsTo", goContent);
     }
     if (!getAssociatedTo().isEmpty()) {

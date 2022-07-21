@@ -1,22 +1,17 @@
 package ic.unicamp.bm.graph.schema;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import ic.unicamp.bm.scanner.BlockState;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-import lombok.Value;
 import lombok.experimental.FieldDefaults;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.tinkerpop.shaded.jackson.annotation.JsonInclude;
+
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @FieldDefaults(makeFinal = false, level = AccessLevel.PRIVATE)
@@ -85,10 +80,10 @@ public class ContentBlock {
       jsonParent.addProperty("uid", getBelongsTo().getUid());
       result.add("ContentBlock.belongsTo", jsonParent);
     }
-    if (getAssociatedTo() != null && StringUtils.isNotBlank(getAssociatedTo().getUid())) {
+    if (getAssociatedTo() != null && StringUtils.isNotBlank(getAssociatedTo().getSchemaUid())) {
       JsonObject jsonParent = new JsonObject();
       jsonParent.addProperty("dgraph.type", "Feature");
-      jsonParent.addProperty("uid", getAssociatedTo().getUid());
+      jsonParent.addProperty("uid", getAssociatedTo().getSchemaUid());
       result.add("ContentBlock.associatedTo", jsonParent);
     }
     return result;

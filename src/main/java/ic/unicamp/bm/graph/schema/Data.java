@@ -1,6 +1,7 @@
 package ic.unicamp.bm.graph.schema;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.JsonObject;
 import ic.unicamp.bm.graph.schema.enums.DataState;
@@ -14,7 +15,6 @@ import lombok.ToString;
 import lombok.Value;
 import lombok.experimental.FieldDefaults;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.tinkerpop.shaded.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @FieldDefaults(makeFinal = false, level = AccessLevel.PRIVATE)

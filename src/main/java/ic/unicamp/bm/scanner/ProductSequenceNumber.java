@@ -1,10 +1,9 @@
 package ic.unicamp.bm.scanner;
 
-import org.apache.commons.lang.StringUtils;
-
 import java.util.concurrent.atomic.AtomicLong;
+import org.apache.commons.lang3.StringUtils;
 
-public class SequenceBlockNumber {
+public class ProductSequenceNumber {
 
   private static AtomicLong sequenceNumber = new AtomicLong(0);
 
@@ -13,12 +12,12 @@ public class SequenceBlockNumber {
   }
 
   private static String transformToString(long generateNextCode) {
-    return StringUtils.leftPad(String.valueOf(generateNextCode), 16, "0");
+    return StringUtils.leftPad(String.valueOf(generateNextCode), 6, "0");
   }
 
   private static long generateNextCode() {
     long code = sequenceNumber.getAndIncrement();
-    if (code == 10000000000000000L) {
+    if (code == 1000000L) {
       sequenceNumber = new AtomicLong(0);
       code = sequenceNumber.getAndIncrement();
     }

@@ -1,9 +1,10 @@
 package ic.unicamp.bm.scanner;
 
-import java.util.concurrent.atomic.AtomicLong;
 import org.apache.commons.lang3.StringUtils;
 
-public class SequenceAbstractBlockNumber {
+import java.util.concurrent.atomic.AtomicLong;
+
+public class BlockSequenceNumber {
 
   private static AtomicLong sequenceNumber = new AtomicLong(0);
 

@@ -9,7 +9,7 @@ class SequenceNumberTest {
   @Test
   void createBlock() {
     for (int i = 0; i < 102; i++) {
-      assertEquals(16, SequenceBlockNumber.getNextStringCode().length());
+      assertEquals(16, BlockSequenceNumber.getNextStringCode().length());
     }
   }
 }

@@ -1,12 +1,11 @@
 package ic.unicamp.bm.cli.cmd;
 
-import ic.unicamp.bm.block.BMDirUtil;
 import ic.unicamp.bm.block.GitBlock;
 import ic.unicamp.bm.block.GitBlockManager;
 import ic.unicamp.bm.block.IBlockAPI;
-import ic.unicamp.bm.graph.GraphAPI;
-import ic.unicamp.bm.graph.GraphBuilder;
-import ic.unicamp.bm.graph.RecordState;
+import ic.unicamp.bm.graph.GraphDBAPI;
+import ic.unicamp.bm.graph.GraphDBBuilder;
+import ic.unicamp.bm.graph.NodePart;
 import ic.unicamp.bm.graph.schema.ContentBlock;
 import ic.unicamp.bm.graph.schema.Data;
 import ic.unicamp.bm.graph.schema.enums.DataState;
@@ -25,7 +24,7 @@ public class BMCommit implements Runnable {
   @Override
   public void run() {
     try {
-      GraphAPI graph = GraphBuilder.createGraphInstance();
+      GraphDBAPI graph = GraphDBBuilder.createGraphInstance();
       IBlockAPI temporalGitBlock = GitBlockManager.createTemporalGitBlockInstance();
       IBlockAPI gitBlock = GitBlockManager.createGitBlockInstance();
       Git git = (Git) temporalGitBlock.retrieveDirector();
@@ -37,7 +36,7 @@ public class BMCommit implements Runnable {
         ContentBlock block = data.getBelongsTo();
         String blockId = block.getContentId();
         data.setCurrentState(DataState.COMMITTED);
-        graph.upsertData(data, RecordState.CONTENT);
+        graph.upsertData(data, NodePart.VERTEX);
       }
       git.commit().setMessage("BM Adding blocks").call();
 

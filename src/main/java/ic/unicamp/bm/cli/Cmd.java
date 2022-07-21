@@ -7,6 +7,7 @@ import ic.unicamp.bm.cli.cmd.BMCommit;
 import ic.unicamp.bm.cli.cmd.BMConfigure;
 import ic.unicamp.bm.cli.cmd.BMExit;
 import ic.unicamp.bm.cli.cmd.BMInit;
+import ic.unicamp.bm.cli.cmd.BMProject;
 import ic.unicamp.bm.cli.cmd.BMSB;
 import ic.unicamp.bm.cli.cmd.BMVersion;
 import ic.unicamp.bm.cli.util.logger.SplMgrLogger;
@@ -33,7 +34,8 @@ import static ic.unicamp.bm.cli.util.msg.InfoMessages.*;
         BMVersion.class,
         // others
         BMConfigure.class,
-        BMAnalyze.class
+        BMAnalyze.class,
+        BMProject.class
     })
 public class Cmd implements Runnable {
 

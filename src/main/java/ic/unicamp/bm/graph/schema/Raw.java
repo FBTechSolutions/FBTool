@@ -1,5 +1,6 @@
 package ic.unicamp.bm.graph.schema;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -7,7 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
-import org.apache.tinkerpop.shaded.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @EqualsAndHashCode

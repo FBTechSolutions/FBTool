@@ -7,10 +7,10 @@ import ic.unicamp.bm.block.GitBlockManager;
 import ic.unicamp.bm.block.GitDirUtil;
 import ic.unicamp.bm.block.IBlockAPI;
 import ic.unicamp.bm.cli.util.logger.SplMgrLogger;
-import ic.unicamp.bm.graph.RecordState;
+import ic.unicamp.bm.graph.NodePart;
 import ic.unicamp.bm.graph.schema.ContainerBlock;
-import ic.unicamp.bm.graph.GraphAPI;
-import ic.unicamp.bm.graph.GraphBuilder;
+import ic.unicamp.bm.graph.GraphDBAPI;
+import ic.unicamp.bm.graph.GraphDBBuilder;
 import ic.unicamp.bm.graph.schema.ContentBlock;
 import ic.unicamp.bm.graph.schema.Data;
 import ic.unicamp.bm.graph.schema.enums.ContainerType;
@@ -45,7 +45,7 @@ public class BMAnalyze implements Runnable {
   @Override
   public void run() {
     try {
-      GraphAPI graph = GraphBuilder.createGraphInstance();
+      GraphDBAPI graph = GraphDBBuilder.createGraphInstance();
       IBlockAPI temporalGitBlock = GitBlockManager.createTemporalGitBlockInstance();
       Git git = (Git) temporalGitBlock.retrieveDirector();
       git.checkout().setName(GitBlock.BMBlockMasterLabel).call();
@@ -82,7 +82,7 @@ public class BMAnalyze implements Runnable {
     }
   }
 
-  private void showTemporalData( GraphAPI graph) {
+  private void showTemporalData( GraphDBAPI graph) {
     List<Data> data = graph.retrieveDataByState(DataState.TEMPORAL);
     System.out.println("Block List:");
     for(Data record:data){
@@ -92,7 +92,7 @@ public class BMAnalyze implements Runnable {
     }
   }
 
-  private void createBlocksByFile(ContainerBlock container, GraphAPI graph) {
+  private void createBlocksByFile(ContainerBlock container, GraphDBAPI graph) {
     if (container.getContainerType() == ContainerType.FILE) {
       IBlockScanner blockScanner = new BlockScanner();
       Path path = Paths.get(container.getContainerId());
@@ -113,7 +113,7 @@ public class BMAnalyze implements Runnable {
         //data.setSha(content);
         data.setBelongsTo(block);
         data.setCurrentState(DataState.TEMPORAL);
-        graph.upsertData(data, RecordState.CONTENT);
+        graph.upsertData(data, NodePart.VERTEX);
 
         block.setGoData(data);
         block.setBelongsTo(container);
@@ -126,17 +126,17 @@ public class BMAnalyze implements Runnable {
           contentMain = block;
         }
         contentPrevious = block;
-        graph.upsertContent(block, RecordState.CONTENT);
+        graph.upsertContent(block, NodePart.VERTEX);
       }
       container.setGoContent(contentMain);
-      graph.upsertContainer(container, RecordState.RELATIONS);
+      graph.upsertContainer(container, NodePart.EDGES);
 
-      graph.upsertContent(contentMain, RecordState.RELATIONS);
+      graph.upsertContent(contentMain, NodePart.EDGES);
 
       if (contentMain != null) {
         ContentBlock next = contentMain.getGoNext();
         while (next != null) {
-          graph.upsertContent(next, RecordState.RELATIONS);
+          graph.upsertContent(next, NodePart.EDGES);
           next = next.getGoNext();
         }
       }
@@ -148,16 +148,16 @@ public class BMAnalyze implements Runnable {
 
   }
 
-  private void createContainers(ContainerBlock container, GraphAPI graph) {
-    graph.upsertContainer(container, RecordState.CONTENT);
+  private void createContainers(ContainerBlock container, GraphDBAPI graph) {
+    graph.upsertContainer(container, NodePart.VERTEX);
     for (ContainerBlock containerBlock : container.getGoChildren()) {
       createContainers(containerBlock, graph);
     }
   }
 
-  private void createContainerRelations(ContainerBlock container, GraphAPI graph) {
+  private void createContainerRelations(ContainerBlock container, GraphDBAPI graph) {
 
-    graph.upsertContainer(container, RecordState.RELATIONS);
+    graph.upsertContainer(container, NodePart.EDGES);
     for (ContainerBlock containerBlock : container.getGoChildren()) {
       createContainerRelations(containerBlock, graph);
     }

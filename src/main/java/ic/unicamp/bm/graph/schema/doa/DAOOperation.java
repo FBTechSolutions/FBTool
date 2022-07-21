@@ -25,6 +25,7 @@ import io.grpc.StatusRuntimeException;
 
 import java.net.MalformedURLException;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -46,44 +47,62 @@ public class DAOOperation {
     }
   }
 
-  public <T> String addANode(final T element) {
+  public <T> String commitANode(final T element) {
     DgraphProto.Mutation mutation = getMutation(element);
-    //System.out.println("Add Node");
-    //System.out.println(mutation);
+    return applyMutation(mutation).get(0);
+  }
+
+  public <T> List<String> commitNodes(final List<T> elements) {
+    DgraphProto.Mutation mutation = getMutation(elements);
     return applyMutation(mutation);
   }
 
-  public String addNodeByJSON(JsonObject json) {
+  public String commitNodeByJSON(JsonObject json) {
     String payload = new Gson().toJson(json);
-    //System.out.println("Add JSON Node");
-    //System.out.println(payload);
+    DgraphProto.Mutation mutation = DgraphProto.Mutation.newBuilder()
+        .setSetJson(ByteString.copyFromUtf8(payload)).build();
+    return applyMutation(mutation).get(0);
+  }
+  public List<String> commitNodesByJSON(List<JsonObject> jsons) {
+    String payload = new Gson().toJson(jsons);
     DgraphProto.Mutation mutation = DgraphProto.Mutation.newBuilder()
         .setSetJson(ByteString.copyFromUtf8(payload)).build();
     return applyMutation(mutation);
   }
 
-  private String applyMutation(Mutation mutation) {
-    String uid = "";
+  private List<String> applyMutation(Mutation mutation) {
+    List<String> uids = new LinkedList<>();
     try (Transaction txn = dgraphClient.newTransaction()) {
       try {
         Response response = txn.mutate(mutation);
         txn.commit();
         for (String key : response.getUidsMap().keySet()) {
-          uid = response.getUidsMap().get(key);
+          uids.add(response.getUidsMap().get(key));
         }
       } catch (StatusRuntimeException | TxnConflictException dgraphException) {
         txn.discard();
         throw new RuntimeException(
             "Unable to persist the transaction." + dgraphException.getMessage());
       }
-      return uid;
+      return uids;
     }
   }
 
   public <T> DgraphProto.Mutation getMutation(final T element) {
     try {
       final String inputJson = objectMapper.writeValueAsString(element);
-      //System.out.println(inputJson);
+
+      return DgraphProto.Mutation.newBuilder().setSetJson(ByteString.copyFromUtf8(inputJson))
+          .build();
+    } catch (JsonProcessingException ex) {
+      throw new RuntimeException("Error occurred while parsing." + ex.getMessage());
+    }
+  }
+
+  public <T> DgraphProto.Mutation getMutation(final List<T> element) {
+    try {
+      final String inputJson = objectMapper.writeValueAsString(element);
+
       return DgraphProto.Mutation.newBuilder().setSetJson(ByteString.copyFromUtf8(inputJson))
           .build();
     } catch (JsonProcessingException ex) {
@@ -136,7 +155,6 @@ public class DAOOperation {
       if (containerBlocks.getRaw().isEmpty()) {
         return null;
       }
-      //System.out.println(containerBlocks.getRaw().get(0).toString());
       return containerBlocks.getRaw().get(0);
     } catch (Exception ex) {
       throw new RuntimeException("Result can not be cast into object." + ex);
@@ -187,7 +205,6 @@ public class DAOOperation {
     try {
 
       DgraphProto.Response response = dgraphClient.newTransaction().queryWithVars(query, vars);
-      // Deserialize
       Raw<Data> dataRaw = objectMapper.readValue(response.getJson().toByteArray(),
           new TypeReference<Raw<Data>>() {
           });
@@ -206,7 +223,6 @@ public class DAOOperation {
     Map<String, String> vars = Collections.singletonMap("$state", state.toString());
     try {
       DgraphProto.Response response = dgraphClient.newTransaction().queryWithVars(query, vars);
-      // Deserialize
       Raw<Data> records = objectMapper.readValue(response.getJson().toByteArray(),
           new TypeReference<>() {
           });
@@ -221,7 +237,6 @@ public class DAOOperation {
     String query = config.getString("queries.getAllProducts");
     try {
       DgraphProto.Response response = dgraphClient.newTransaction().queryWithVars(query, null);
-      // Deserialize
       List<Product> products = objectMapper.readValue(response.getJson().toByteArray(),
           new TypeReference<List<Product>>() {
           });

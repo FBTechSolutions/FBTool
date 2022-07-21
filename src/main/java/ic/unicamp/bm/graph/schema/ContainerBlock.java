@@ -1,6 +1,7 @@
 package ic.unicamp.bm.graph.schema;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.JsonArray;
@@ -15,7 +16,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.tinkerpop.shaded.jackson.annotation.JsonInclude;
+
 
 
 @JsonInclude(JsonInclude.Include.NON_NULL)

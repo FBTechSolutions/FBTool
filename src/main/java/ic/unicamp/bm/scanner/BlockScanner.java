@@ -281,7 +281,7 @@ public class BlockScanner implements IBlockScanner {
     String sha256hex = DigestUtils.sha256Hex(blockKey);
     System.out.println(sha256hex);*/
 
-    blocks.put(SequenceBlockNumber.getNextStringCode(), blockBuffer.toString());
+    blocks.put(BlockSequenceNumber.getNextStringCode(), blockBuffer.toString());
   }
 
   private String generateId() {
