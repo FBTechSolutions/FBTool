@@ -359,6 +359,6 @@ public class GraphDBManager implements GraphDBAPI {
 
   @Override
   public List<String> insertObjects(LinkedList<Object> objects, NodePart none) {
-
+    return null;
   }
 }

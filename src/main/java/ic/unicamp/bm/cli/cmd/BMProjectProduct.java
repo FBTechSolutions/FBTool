@@ -5,9 +5,9 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
 @Command(
-    name = BMProject.CMD_NAME,
+    name = BMProjectProduct.CMD_NAME,
     description = "This command will project several SPL source code related to a list of products.")
-public class BMProject implements Runnable {
+public class BMProjectProduct implements Runnable {
 
   public static final String CMD_NAME = "project";
 
