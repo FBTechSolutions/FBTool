@@ -12,7 +12,7 @@ import java.util.List;
 public class DriverNeo4jTest{
 
   public static void main(String... args) throws Exception {
-    ProductService productService = new ProductServiceImpl();
+/*    ProductService productService = new ProductServiceImpl();
 
     Product product3 = new Product();
     product3.setProductId("P4");
@@ -57,6 +57,15 @@ public class DriverNeo4jTest{
     product3.setAssociatedTo(featureList);
     productService.createOrUpdate(product3);
     System.out.println("");
-    System.out.println("END");
+    System.out.println("END");*/
+    ProductService productService = new ProductServiceImpl();
+    Product product3 = new Product();
+    product3.setProductId("P1");
+    product3.setProductLabel("P4");
+    productService.createOrUpdate(product3);
+    Product productRetrieved = productService.getProductByID("P1");
+    System.out.println(productRetrieved.getId());
+    productRetrieved.setProductLabel("P4 Edited");
+    productService.createOrUpdate(productRetrieved);
   }
 }
