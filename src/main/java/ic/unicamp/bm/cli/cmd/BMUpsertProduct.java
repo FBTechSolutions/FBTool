@@ -1,11 +1,12 @@
 package ic.unicamp.bm.cli.cmd;
 
-import ic.unicamp.bm.graph.GraphDBAPI;
-import ic.unicamp.bm.graph.GraphDBBuilder;
-import ic.unicamp.bm.graph.NodePart;
-import ic.unicamp.bm.graph.schema.Feature;
-import ic.unicamp.bm.graph.schema.Product;
+import ic.unicamp.bm.graph.neo4j.schema.Feature;
+import ic.unicamp.bm.graph.neo4j.schema.Product;
+import ic.unicamp.bm.graph.neo4j.schema.relations.ProductToFeature;
+import ic.unicamp.bm.graph.neo4j.services.ProductService;
+import ic.unicamp.bm.graph.neo4j.services.ProductServiceImpl;
 import java.util.LinkedList;
+import java.util.List;
 import org.eclipse.jgit.util.StringUtils;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
@@ -23,38 +24,35 @@ public class BMUpsertProduct implements Runnable {
   @Parameters(index = "1..*")
   String[] featureIds;
 
-  private final GraphDBAPI graphDB = GraphDBBuilder.createGraphInstance();
 
   @Override
   public void run() {
+    System.out.println("Enter UPSERT");
     if(StringUtils.isEmptyOrNull(productId)){
       System.out.println("This command requires an productId");
     }
-    Product product = graphDB.retrieveProductWithFeatures(productId);
-    if(product != null){
-      //add product to JSON,
-      //add features to JSON
-      // commit all
-    }else{
-      LinkedList<Object> objects = new LinkedList<>();
+    ProductService productService = new ProductServiceImpl();
+    Product product = productService.getProductByID(productId);
+    if(product == null){
       product = new Product();
       product.setProductId(productId);
-      product.setLabel(productId);
-      objects.add(product);
-      for (String featureId : featureIds) {
-        Feature feature = new Feature();
-        feature.setFeatureId(featureId);
-        feature.setLabel(featureId);
-        objects.add(feature);
-      }
-      graphDB.insertObjects(objects, NodePart.VERTEX);
+      product.setProductLabel(productId);
     }
-    // preparateProduct
-    // preparateFeatures
+    List<ProductToFeature> featureList = new LinkedList<>();
+    //iter instead of foreach
+    for (String featureId : featureIds) {
+      ProductToFeature relation = new ProductToFeature();
+      relation.setName("relation");
 
-    //DB exists a product
-    // if exits update features (remove not used)
-    // if not create and update features
+      Feature feature = new Feature();
+      feature.setFeatureId(featureId);
+      feature.setFeatureLabel(featureId);
 
+      relation.setStartProduct(product);
+      relation.setEndFeature(feature);
+      featureList.add(relation);
+    }
+    product.setAssociatedTo(featureList);
+    productService.createOrUpdate(product);
   }
 }

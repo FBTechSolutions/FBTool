@@ -8,6 +8,7 @@ import ic.unicamp.bm.cli.cmd.BMConfigure;
 import ic.unicamp.bm.cli.cmd.BMExit;
 import ic.unicamp.bm.cli.cmd.BMInit;
 import ic.unicamp.bm.cli.cmd.BMProjectProduct;
+import ic.unicamp.bm.cli.cmd.BMUpsertProduct;
 import ic.unicamp.bm.cli.cmd.BMVersion;
 import ic.unicamp.bm.cli.util.logger.SplMgrLogger;
 import picocli.CommandLine;
@@ -34,7 +35,8 @@ import static ic.unicamp.bm.cli.util.msg.InfoMessages.*;
         // others
         BMConfigure.class,
         BMAnalyze.class,
-        BMProjectProduct.class
+        BMProjectProduct.class,
+        BMUpsertProduct.class
     })
 public class Cmd implements Runnable {
 
@@ -98,6 +100,10 @@ public class Cmd implements Runnable {
           }
           case CMD_COMMIT -> {
             CommandLine commandLine = new CommandLine(new BMCommit());
+            __executeCmd(inputs, commandLine);
+          }
+          case CMD_UPSERT ->{
+            CommandLine commandLine = new CommandLine(new BMUpsertProduct());
             __executeCmd(inputs, commandLine);
           }
           default -> __printCmdNotValid();
