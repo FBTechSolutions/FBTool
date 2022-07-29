@@ -15,7 +15,7 @@ public class FeatureServiceImpl extends GenericService<Feature> implements Featu
 
   @Override
   public Iterable<Feature> findAll() {
-    return session.loadAll(Product.class, 1);
+    return session.loadAll(Feature.class, 1);
   }
 
   @Override
@@ -34,7 +34,7 @@ public class FeatureServiceImpl extends GenericService<Feature> implements Featu
 
   @Override
   public Class<Feature> getEntityType() {
-    return Product.class;
+    return Feature.class;
   }
 
 }

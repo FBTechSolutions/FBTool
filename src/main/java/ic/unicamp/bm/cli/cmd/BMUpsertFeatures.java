@@ -8,10 +8,10 @@ import picocli.CommandLine.Parameters;
 
 @Command(
     name = BMUpsertFeatures.CMD_NAME,
-    description = "This command will subscribe a product in the current Git branch")
+    description = "This command will update or create a Feature")
 public class BMUpsertFeatures implements Runnable {
 
-  public static final String CMD_NAME = "feature";
+  public static final String CMD_NAME = "upsert-feature";
 
   @Parameters(index = "0")
   String featureId;
