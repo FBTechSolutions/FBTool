@@ -3,6 +3,8 @@ package ic.unicamp.bm.cli.cmd;
 import ic.unicamp.bm.graph.neo4j.schema.Feature;
 import ic.unicamp.bm.graph.neo4j.schema.Product;
 import ic.unicamp.bm.graph.neo4j.schema.relations.ProductToFeature;
+import ic.unicamp.bm.graph.neo4j.services.FeatureService;
+import ic.unicamp.bm.graph.neo4j.services.FeatureServiceImpl;
 import ic.unicamp.bm.graph.neo4j.services.ProductService;
 import ic.unicamp.bm.graph.neo4j.services.ProductServiceImpl;
 import java.util.LinkedList;
@@ -10,6 +12,7 @@ import java.util.List;
 import org.eclipse.jgit.util.StringUtils;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
+
 //“update” and “insert.”
 @Command(
     name = BMUpsertProduct.CMD_NAME,
@@ -28,12 +31,13 @@ public class BMUpsertProduct implements Runnable {
   @Override
   public void run() {
     System.out.println("Enter UPSERT");
-    if(StringUtils.isEmptyOrNull(productId)){
+    if (StringUtils.isEmptyOrNull(productId)) {
       System.out.println("This command requires an productId");
     }
     ProductService productService = new ProductServiceImpl();
+    FeatureService featureService = new FeatureServiceImpl();
     Product product = productService.getProductByID(productId);
-    if(product == null){
+    if (product == null) {
       product = new Product();
       product.setProductId(productId);
       product.setProductLabel(productId);
@@ -44,10 +48,12 @@ public class BMUpsertProduct implements Runnable {
       ProductToFeature relation = new ProductToFeature();
       relation.setName("relation");
 
-      Feature feature = new Feature();
-      feature.setFeatureId(featureId);
-      feature.setFeatureLabel(featureId);
-
+      Feature feature = featureService.getFeatureByID(featureId);
+      if (feature == null) {
+        feature = new Feature();
+        feature.setFeatureId(featureId);
+        feature.setFeatureLabel(featureId);
+      }
       relation.setStartProduct(product);
       relation.setEndFeature(feature);
       featureList.add(relation);

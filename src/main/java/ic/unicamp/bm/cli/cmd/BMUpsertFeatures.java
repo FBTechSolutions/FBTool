@@ -1,5 +1,8 @@
 package ic.unicamp.bm.cli.cmd;
 
+import ic.unicamp.bm.graph.neo4j.schema.Feature;
+import ic.unicamp.bm.graph.neo4j.services.FeatureService;
+import ic.unicamp.bm.graph.neo4j.services.FeatureServiceImpl;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 
@@ -8,13 +11,30 @@ import picocli.CommandLine.Parameters;
     description = "This command will subscribe a product in the current Git branch")
 public class BMUpsertFeatures implements Runnable {
 
-  public static final String CMD_NAME = "subscribe";
+  public static final String CMD_NAME = "feature";
 
   @Parameters(index = "0")
-  String product;
+  String featureId;
+
+  @Parameters(index = "1..*")
+  String[] labelInParts;
 
   @Override
   public void run() {
-    System.out.println(product);
+    System.out.println("Upsert Feature");
+    StringBuilder sb = new StringBuilder();
+    for (String s : labelInParts) {
+      sb.append(s);
+    }
+    String label = sb.toString();
+
+    FeatureService featureService = new FeatureServiceImpl();
+    Feature feature = featureService.getFeatureByID(featureId);
+    if (feature == null) {
+      feature = new Feature();
+      feature.setFeatureId(featureId);
+    }
+    feature.setFeatureLabel(label);
+    featureService.createOrUpdate(feature);
   }
 }
