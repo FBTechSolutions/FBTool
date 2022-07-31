@@ -1,12 +1,10 @@
 package ic.unicamp.bm.cli.cmd;
 
 import ic.unicamp.bm.block.GitBlock;
-import ic.unicamp.bm.block.GitBlockManager;
-import ic.unicamp.bm.block.IBlockAPI;
+import ic.unicamp.bm.block.GitVCSManager;
+import ic.unicamp.bm.block.IVCSAPI;
 import ic.unicamp.bm.graph.GraphDBAPI;
 import ic.unicamp.bm.graph.GraphDBBuilder;
-import ic.unicamp.bm.graph.NodePart;
-import java.util.List;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import picocli.CommandLine.Command;
@@ -22,10 +20,10 @@ public class BMCommit implements Runnable {
   public void run() {
     try {
       GraphDBAPI graph = GraphDBBuilder.createGraphInstance();
-      IBlockAPI temporalGitBlock = GitBlockManager.createTemporalGitBlockInstance();
-      IBlockAPI gitBlock = GitBlockManager.createGitBlockInstance();
+      IVCSAPI temporalGitBlock = GitVCSManager.createTemporalGitBlockInstance();
+      IVCSAPI gitBlock = GitVCSManager.createInstance();
       Git git = (Git) temporalGitBlock.retrieveDirector();
-      git.checkout().setName(GitBlock.BMBlockMasterLabel).call();
+      git.checkout().setName(GitBlock.BMBranchLabel).call();
 
 /*      List<Data> stateData = graph.retrieveDataByState(DataState.STAGE);
 

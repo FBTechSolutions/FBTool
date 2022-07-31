@@ -1,14 +1,12 @@
 package ic.unicamp.bm.cli.cmd;
 
-import static ic.unicamp.bm.block.GitBlock.BMBlockMasterLabel;
+import static ic.unicamp.bm.block.GitBlock.BMBranchLabel;
 
-import ic.unicamp.bm.block.BMDirUtil;
-import ic.unicamp.bm.block.GitBlockManager;
+import ic.unicamp.bm.block.BMDirectoryUtil;
+import ic.unicamp.bm.block.GitVCSManager;
 import ic.unicamp.bm.block.GitDirUtil;
-import ic.unicamp.bm.block.IBlockAPI;
+import ic.unicamp.bm.block.IVCSAPI;
 import ic.unicamp.bm.cli.util.logger.SplMgrLogger;
-import ic.unicamp.bm.graph.GraphDBAPI;
-import ic.unicamp.bm.graph.GraphDBBuilder;
 import ic.unicamp.bm.graph.neo4j.schema.Feature;
 import ic.unicamp.bm.graph.neo4j.schema.Product;
 import ic.unicamp.bm.graph.neo4j.schema.relations.ProductToFeature;
@@ -38,19 +36,19 @@ public class BMConfigure implements Runnable {
   }
 
   private void upsertBMDir() {
-    IBlockAPI gitBlock = GitBlockManager.createGitBlockInstance();
+    IVCSAPI gitForBlocks = GitVCSManager.createInstance();
 
-    if (!gitBlock.exitInternalBranch()) {
-      gitBlock.createInternalBranch();
-      SplMgrLogger.message_ln("- " + BMBlockMasterLabel + " branch was created", false);
+    if (!gitForBlocks.exitBMBranch()) {
+      gitForBlocks.createBMBranch();
+      SplMgrLogger.message_ln("- " + BMBranchLabel + " branch was created", false);
     }
-    checkoutBlockBranch(gitBlock);
-    if (!BMDirUtil.existsBmDirectory()) {
-      BMDirUtil.createBMDirectory();
+    checkoutBlockBranch(gitForBlocks);
+    if (!BMDirectoryUtil.existsBmDirectory()) {
+      BMDirectoryUtil.createBMDirectory();
       SplMgrLogger.message_ln("- BM directory was created", false);
     }
-    if (!BMDirUtil.existsBMContactFile()) {
-      BMDirUtil.createBMContactFile();
+    if (!BMDirectoryUtil.existsBMContactFile()) {
+      BMDirectoryUtil.createBMContactFile();
       commitBMDirectory();
     }
     FeatureService featureService = new FeatureServiceImpl();
@@ -78,10 +76,10 @@ public class BMConfigure implements Runnable {
 
   }
 
-  private void checkoutBlockBranch(IBlockAPI gitBlock) {
+  private void checkoutBlockBranch(IVCSAPI gitBlock) {
     Git git = (Git) gitBlock.retrieveDirector();
     try {
-      git.checkout().setName(BMBlockMasterLabel).call();
+      git.checkout().setName(BMBranchLabel).call();
     } catch (GitAPIException e) {
       throw new RuntimeException(e);
     }
@@ -96,10 +94,10 @@ public class BMConfigure implements Runnable {
   }
 
   private void commitBMDirectory() {
-    IBlockAPI gitBlockManager = GitBlockManager.createGitBlockInstance();
+    IVCSAPI gitBlockManager = GitVCSManager.createInstance();
     Git git = (Git) gitBlockManager.retrieveDirector();
     try {
-      git.checkout().setName(BMBlockMasterLabel).call();
+      git.checkout().setName(BMBranchLabel).call();
       git.add().addFilepattern(".").call();
       git.commit().setMessage("BM: Adding BM directory").call();
     } catch (GitAPIException e) {
@@ -108,7 +106,7 @@ public class BMConfigure implements Runnable {
   }
 
   private void commitGitIgnoreAsFirstCommit() {
-    IBlockAPI gitBlockManager = GitBlockManager.createGitBlockInstance();
+    IVCSAPI gitBlockManager = GitVCSManager.createInstance();
     Git git = (Git) gitBlockManager.retrieveDirector();
     File myFile =
         new File(git.getRepository().getDirectory().getParent(), ".gitignore");

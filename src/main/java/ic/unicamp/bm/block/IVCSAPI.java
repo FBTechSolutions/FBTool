@@ -1,6 +1,6 @@
 package ic.unicamp.bm.block;
 
-public interface IBlockAPI {
+public interface IVCSAPI {
 
   public void upsertContent(String blockId, String Content);
 
@@ -20,9 +20,9 @@ public interface IBlockAPI {
 
   public Object retrieveDirector(); // e.g, git
 
-  public Boolean exitInternalBranch();
+  public Boolean exitBMBranch();
 
-  public void createInternalBranch();
+  public void createBMBranch();
 
   public String getCurrentDirectory();
 }

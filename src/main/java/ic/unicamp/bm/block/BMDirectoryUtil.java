@@ -1,6 +1,5 @@
 package ic.unicamp.bm.block;
 
-import ic.unicamp.bm.cli.util.logger.SplMgrLogger;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 
-public class BMDirUtil {
+public class BMDirectoryUtil {
 
   private static final Pattern pattern = Pattern.compile("\\.bm");//, Pattern.CASE_INSENSITIVE
   public static String BMDirectoryName = ".bm";
@@ -21,27 +20,27 @@ public class BMDirUtil {
   }
 
   public static File getBMDirectoryAsFile() {
-    return new File(String.valueOf(BMDirUtil.getBMDirectoryAsPath()));
+    return new File(String.valueOf(BMDirectoryUtil.getBMDirectoryAsPath()));
   }
 
   public static boolean existsBmDirectory() {
-    return BMDirUtil.getBMDirectoryAsFile().exists();
+    return BMDirectoryUtil.getBMDirectoryAsFile().exists();
   }
 
   public static boolean createBMDirectory() {
-    File bmDirectoryAsFile = BMDirUtil.getBMDirectoryAsFile();
+    File bmDirectoryAsFile = BMDirectoryUtil.getBMDirectoryAsFile();
     boolean file_was_created = bmDirectoryAsFile.mkdir();
     if (file_was_created) {
-      setHiddenAttr(BMDirUtil.getBMDirectoryAsPath());
+      setHiddenAttr(BMDirectoryUtil.getBMDirectoryAsPath());
       return true;
     }
     return false;
   }
 
   public static boolean removeBMDirectory() {
-    if (BMDirUtil.existsBmDirectory()) {
+    if (BMDirectoryUtil.existsBmDirectory()) {
       try {
-        FileUtils.deleteDirectory(BMDirUtil.getBMDirectoryAsFile());
+        FileUtils.deleteDirectory(BMDirectoryUtil.getBMDirectoryAsFile());
         return true;
       } catch (IOException e) {
         e.printStackTrace();

@@ -4,15 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
+    <groupId>ic.unicamp.bm</groupId>
     <artifactId>bm</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <jackson.version>2.13.3</jackson.version>
-        <typesafe.version>1.4.2</typesafe.version>
     </properties>
 
     <dependencies>
@@ -38,7 +36,7 @@
         </dependency>
         <!-- CLI End Art -->
 
-        <!-- The API and its implementation using log4j -->
+        <!-- The logging frameworks API and its implementation using log4j -->
                <dependency>
                    <groupId>org.slf4j</groupId>
                    <artifactId>slf4j-log4j12</artifactId>
@@ -71,26 +69,6 @@
             <artifactId>commons-codec</artifactId>
             <version>1.15</version>
         </dependency>
-        <!--DGraph-->
-        <dependency>
-            <groupId>io.dgraph</groupId>
-            <artifactId>dgraph4j</artifactId>
-            <version>21.12.0</version>
-            <!--            <exclusions>
-                            <exclusion>
-                                <groupId>io.grpc</groupId>
-                                <artifactId>grpc-protobuf</artifactId>
-                            </exclusion>
-                            <exclusion>
-                                <groupId>io.grpc</groupId>
-                                <artifactId>grpc-stub</artifactId>
-                            </exclusion>
-                            <exclusion>
-                                <groupId>io.grpc</groupId>
-                                <artifactId>grpc-netty</artifactId>
-                            </exclusion>
-            </exclusions>-->
-        </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
@@ -102,64 +80,28 @@
             <version>1.18.24</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-protobuf</artifactId>
-            <version>1.46.0</version>
-        </dependency>
-        <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-stub</artifactId>
-            <version>1.46.0</version>
-        </dependency>
-<!--        <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-netty</artifactId>
-            <version>1.47.0</version>
-        </dependency>-->
-        <!--Jason-->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.typesafe</groupId>
-            <artifactId>config</artifactId>
-            <version>${typesafe.version}</version>
-        </dependency>
 
-<!--        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.5.13</version>
-        </dependency>-->
-        <!-- https://mvnrepository.com/artifact/org.neo4j.driver/neo4j-java-driver -->
+        <!-- neo4j -->
         <dependency>
             <groupId>org.neo4j.driver</groupId>
             <artifactId>neo4j-java-driver</artifactId>
             <version>4.4.9</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.reactivestreams/reactive-streams -->
         <dependency>
             <groupId>org.reactivestreams</groupId>
             <artifactId>reactive-streams</artifactId>
             <version>1.0.4</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.neo4j/neo4j-ogm-core -->
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j-ogm-core</artifactId>
             <version>3.2.36</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.neo4j/neo4j-ogm-http-driver -->
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j-ogm-http-driver</artifactId>
             <version>3.2.36</version>
         </dependency>
-
-        <!-- Only add if you're using the Bolt driver -->
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j-ogm-bolt-driver</artifactId>
@@ -167,5 +109,4 @@
             <scope>runtime</scope>
         </dependency>
     </dependencies>
-
 </project>

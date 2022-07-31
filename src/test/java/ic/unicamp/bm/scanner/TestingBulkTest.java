@@ -3,7 +3,6 @@ package ic.unicamp.bm.scanner;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.protobuf.ByteString;
-import ic.unicamp.bm.graph.schema.ContainerBlock;
 import io.dgraph.DgraphClient;
 import io.dgraph.DgraphGrpc.DgraphStub;
 import io.dgraph.DgraphProto;
@@ -21,7 +20,7 @@ public class TestingBulkTest {
   @Test
   void createBulkOperation() {
 
-    DgraphStub stub = null;
+/*    DgraphStub stub = null;
     try {
       stub = DgraphClient.clientStubFromCloudEndpoint(
               "https://blue-surf-590541.us-east-1.aws.cloud.dgraph.io/graphql",
@@ -31,13 +30,13 @@ public class TestingBulkTest {
     }
     DgraphClient dgraphClient = new DgraphClient(stub);
 
-    ContainerBlock container1 = new ContainerBlock();
+    Block container1 = new Block();
     container1.setContainerId("DD1Bulk");
-    ContainerBlock container2 = new ContainerBlock();
+    Block container2 = new Block();
     container2.setContainerId("DD2Bulk");
     DgraphProto.Mutation mutation = null;
     try {
-      List<ContainerBlock> list = new LinkedList<>();
+      List<Block> list = new LinkedList<>();
       list.add(container1);
       list.add(container2);
       final String inputJson = objectMapper.writeValueAsString(list);//container1
@@ -61,6 +60,6 @@ public class TestingBulkTest {
         throw new RuntimeException(
             "Unable to persist the transaction." + dgraphException.getMessage());
       }
-    }
+    }*/
   }
 }

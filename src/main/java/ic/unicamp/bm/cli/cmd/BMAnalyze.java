@@ -1,11 +1,11 @@
 package ic.unicamp.bm.cli.cmd;
 
-import ic.unicamp.bm.block.BMDirUtil;
+import ic.unicamp.bm.block.BMDirectoryUtil;
 import ic.unicamp.bm.block.BMTemporalDirUtil;
 import ic.unicamp.bm.block.GitBlock;
-import ic.unicamp.bm.block.GitBlockManager;
+import ic.unicamp.bm.block.GitVCSManager;
 import ic.unicamp.bm.block.GitDirUtil;
-import ic.unicamp.bm.block.IBlockAPI;
+import ic.unicamp.bm.block.IVCSAPI;
 import ic.unicamp.bm.cli.util.logger.SplMgrLogger;
 import ic.unicamp.bm.graph.neo4j.schema.Block;
 import ic.unicamp.bm.graph.neo4j.schema.Container;
@@ -51,9 +51,9 @@ public class BMAnalyze implements Runnable {
   @Override
   public void run() {
     try {
-      IBlockAPI temporalGitBlock = GitBlockManager.createTemporalGitBlockInstance();
+      IVCSAPI temporalGitBlock = GitVCSManager.createTemporalGitBlockInstance();
       Git git = (Git) temporalGitBlock.retrieveDirector();
-      git.checkout().setName(GitBlock.BMBlockMasterLabel).call();
+      git.checkout().setName(GitBlock.BMBranchLabel).call();
       if (!BMTemporalDirUtil.existsBmTemporalDirectory()) {
         BMTemporalDirUtil.createBMTemporalDirectory();
         SplMgrLogger.message_ln("- Temporal Directory for blocks was created", false);
@@ -102,7 +102,7 @@ public class BMAnalyze implements Runnable {
       IBlockScanner blockScanner = new BlockScanner();
       Path path = Paths.get(container.getContainerId());
       Map<String, String> scannedBlocks = blockScanner.createInitialBlocks(path); //id and data
-      IBlockAPI temporalGitBlock = GitBlockManager.createTemporalGitBlockInstance();
+      IVCSAPI temporalGitBlock = GitVCSManager.createTemporalGitBlockInstance();
 
       //previous
       Block previousBlock = null;
@@ -213,7 +213,7 @@ public class BMAnalyze implements Runnable {
     List<Path> result;
     try (Stream<Path> walk = Files.walk(path)) {
       result = walk.filter(Files::isRegularFile).filter(aPath -> !GitDirUtil.existNameInPath(aPath))
-          .filter(aPath -> !BMDirUtil.existNameInPath(aPath))
+          .filter(aPath -> !BMDirectoryUtil.existNameInPath(aPath))
           .collect(Collectors.toList());
     }
     return result;

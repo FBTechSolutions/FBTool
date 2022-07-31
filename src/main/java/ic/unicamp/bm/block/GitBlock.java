@@ -18,10 +18,10 @@ import org.eclipse.jgit.lib.Repository;
 import java.io.IOException;
 
 //https://github.com/centic9/jgit-cookbook
-public class GitBlock implements IBlockAPI {
+public class GitBlock implements IVCSAPI {
 
   private Git git;
-  public static String BMBlockMasterLabel = "bm_block_master";
+  public static String BMBranchLabel = "bm_block_master";
 
   public GitBlock() {
     FileRepositoryBuilder repositoryBuilder = new FileRepositoryBuilder();
@@ -36,7 +36,7 @@ public class GitBlock implements IBlockAPI {
   }
 
   public String getCurrentDirectory() {
-    return BMDirUtil.getBMDirectoryAsPath().toString();
+    return BMDirectoryUtil.getBMDirectoryAsPath().toString();
   }
 
   //content
@@ -111,12 +111,12 @@ public class GitBlock implements IBlockAPI {
 
   //utils
   @Override
-  public Boolean exitInternalBranch() {
+  public Boolean exitBMBranch() {
     List<Ref> call;
     try {
       call = git.branchList().setListMode(ListMode.ALL).call();
       for (Ref ref : call) {
-        if (ref.getName().contains(BMBlockMasterLabel)) {
+        if (ref.getName().contains(BMBranchLabel)) {
           return true;
         }
       }
@@ -127,10 +127,10 @@ public class GitBlock implements IBlockAPI {
   }
 
   @Override
-  public void createInternalBranch() {
+  public void createBMBranch() {
     try {
-      git.branchCreate().setName(BMBlockMasterLabel).call();
-      git.checkout().setName(BMBlockMasterLabel).call();
+      git.branchCreate().setName(BMBranchLabel).call();
+      git.checkout().setName(BMBranchLabel).call();
     } catch (GitAPIException e) {
       throw new RuntimeException(e);
     }
