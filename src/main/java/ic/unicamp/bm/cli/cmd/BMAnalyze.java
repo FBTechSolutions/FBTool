@@ -15,6 +15,9 @@ import ic.unicamp.bm.graph.GraphDBAPI;
 import ic.unicamp.bm.graph.GraphDBBuilder;
 
 import ic.unicamp.bm.graph.neo4j.schema.enums.DataState;
+import ic.unicamp.bm.graph.neo4j.schema.relations.ContainerToContainer;
+import ic.unicamp.bm.graph.neo4j.services.ProductService;
+import ic.unicamp.bm.graph.neo4j.services.ProductServiceImpl;
 import ic.unicamp.bm.scanner.BlockScanner;
 import ic.unicamp.bm.scanner.BlockState;
 import ic.unicamp.bm.scanner.IBlockScanner;
@@ -25,6 +28,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.swing.text.AbstractDocument.Content;
@@ -69,7 +73,7 @@ public class BMAnalyze implements Runnable {
       changeTreeToSchemaForm(treeWalk, main);
 
       createContainers(main);
-      createContainerRelations(main);
+
 
       //blocks
       createBlocksByFile(main);
@@ -148,11 +152,9 @@ public class BMAnalyze implements Runnable {
 
   }
 
-  private void createContainers(Container container, GraphDBAPI graph) {
-    graph.upsertContainer(container, NodePart.VERTEX);
-    for (Container Container : container.getGoChildren()) {
-      createContainers(Container, graph);
-    }
+  private void createContainers(Container container) {
+    ContainerService containerService = new ContainerServiceImpl();
+    containerService.createOrUpdate(container);
   }
 
   private void createContainerRelations(Container container, GraphDBAPI graph) {
@@ -164,97 +166,66 @@ public class BMAnalyze implements Runnable {
   }
 
   private void changeTreeToSchemaForm(TreeWalk treeWalk, Container main) throws IOException {
+    Stack<Container> stack = new Stack<Container>();
+    stack.push(main);
 
-    boolean isMainLoaded = false;
+    //boolean isMainLoaded = false;
     Container parentPivot = main;
     while (treeWalk.next()) {
       if (treeWalk.isSubtree()) {
+        //backing
+        parentPivot = backStack(treeWalk, stack, parentPivot);
         //folder
-        Container currentContainer = new Container();
-        currentContainer.setContainerId(treeWalk.getPathString());
-        currentContainer.setContainerType(ContainerType.FOLDER);
-        //main
-        if (isMainLoaded) {
-          //backing
-          boolean back = true;
-          while (back) {
-            File exists =
-                new File(parentPivot.getContainerId(), treeWalk.getNameString());
-            if (exists.exists()) {
-              back = false;
-            } else {
-              if (parentPivot.getContainerType() != ContainerType.MAIN) {
-                parentPivot = parentPivot.getGoParent();
-              } else {
-                back = false;
-              }
-            }
-          }
+        Container container = new Container();
+        container.setContainerId(treeWalk.getPathString());
+        container.setContainerType(ContainerType.FOLDER);
 
-          currentContainer.setGoParent(parentPivot);
-          List<Container> list = parentPivot.getGoChildren();
-          list.add(currentContainer);
-          parentPivot.setGoChildren(list);
+        ContainerToContainer relation = new ContainerToContainer();
+        relation.setStartContainer(parentPivot);
+        relation.setEndContainer(container);
+        List<ContainerToContainer> relations = parentPivot.getGetContainers();
+        relations.add(relation);
+        parentPivot.setGetContainers(relations);
+        parentPivot = container;
+        stack.push(container);
+        treeWalk.enterSubtree();
 
-          parentPivot = currentContainer;
-          System.out.println("dir: " + treeWalk.getPathString());
-          treeWalk.enterSubtree();
-        } else {
-          //loading main
-          List<Container> list = main.getGoChildren();
-          list.add(currentContainer);
-          main.setGoChildren(list);
-
-          currentContainer.setGoParent(main);
-
-          parentPivot = currentContainer;
-          isMainLoaded = true;
-          System.out.println("dir: " + treeWalk.getPathString());
-          treeWalk.enterSubtree();
-        }
       } else {
+        //backing
+        parentPivot = backStack(treeWalk, stack, parentPivot);
         //file
-        Container currentContainer = new Container();
-        currentContainer.setContainerId(treeWalk.getPathString());
-        currentContainer.setContainerType(ContainerType.FILE);
+        Container container = new Container();
+        container.setContainerId(treeWalk.getPathString());
+        container.setContainerType(ContainerType.FILE);
 
-        if (isMainLoaded) {
-          //backing
-          boolean back = true;
-          while (back) {
-            File exists =
-                new File(parentPivot.getContainerId(), treeWalk.getNameString());
-            if (exists.exists()) {
-              back = false;
-            } else {
-              if (parentPivot.getContainerType() != ContainerType.MAIN) {
-                parentPivot = parentPivot.getGoParent();
-              } else {
-                back = false;
-              }
-            }
-          }
-          List<Container> list = parentPivot.getGoChildren();
-          list.add(currentContainer);
-          parentPivot.setGoChildren(list);
-
-          currentContainer.setGoParent(parentPivot);
-          System.out.println("file: " + treeWalk.getPathString());
-        } else {
-          //loading main
-          List<Container> list = main.getGoChildren();
-          list.add(currentContainer);
-          main.setGoChildren(list);
-
-          currentContainer.setGoParent(main);
-
-          isMainLoaded = true;
-          System.out.println("file: " + treeWalk.getPathString());
-        }
+        ContainerToContainer relation = new ContainerToContainer();
+        relation.setStartContainer(parentPivot);
+        relation.setEndContainer(container);
+        List<ContainerToContainer> relations = parentPivot.getGetContainers();
+        relations.add(relation);
+        parentPivot.setGetContainers(relations);
       }
     }
   }
 
+  private static Container backStack(TreeWalk treeWalk, Stack<Container> stack,
+      Container parentPivot) {
+    boolean back = true;
+    while (back) {
+      File exists =
+          new File(parentPivot.getContainerId(), treeWalk.getNameString());
+      if (exists.exists()) {
+        back = false;
+      } else {
+        if (parentPivot.getContainerType() != ContainerType.MAIN) {
+          parentPivot = stack.peek();
+        } else {
+          back = false;
+        }
+      }
+    }
+    return parentPivot;
+  }
   public static List<Path> listFiles(Path path) throws IOException {
     List<Path> result;
     try (Stream<Path> walk = Files.walk(path)) {
