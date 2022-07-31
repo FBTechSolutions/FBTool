@@ -8,13 +8,13 @@ import ic.unicamp.bm.block.GitDirUtil;
 import ic.unicamp.bm.block.IBlockAPI;
 import ic.unicamp.bm.cli.util.logger.SplMgrLogger;
 import ic.unicamp.bm.graph.NodePart;
-import ic.unicamp.bm.graph.schema.ContainerBlock;
+import ic.unicamp.bm.graph.neo4j.schema.Container;
+import ic.unicamp.bm.graph.neo4j.schema.enums.ContainerType;
+
 import ic.unicamp.bm.graph.GraphDBAPI;
 import ic.unicamp.bm.graph.GraphDBBuilder;
-import ic.unicamp.bm.graph.schema.ContentBlock;
-import ic.unicamp.bm.graph.schema.Data;
-import ic.unicamp.bm.graph.schema.enums.ContainerType;
-import ic.unicamp.bm.graph.schema.enums.DataState;
+
+import ic.unicamp.bm.graph.neo4j.schema.enums.DataState;
 import ic.unicamp.bm.scanner.BlockScanner;
 import ic.unicamp.bm.scanner.BlockState;
 import ic.unicamp.bm.scanner.IBlockScanner;
@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.swing.text.AbstractDocument.Content;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Ref;
@@ -45,7 +46,6 @@ public class BMAnalyze implements Runnable {
   @Override
   public void run() {
     try {
-      GraphDBAPI graph = GraphDBBuilder.createGraphInstance();
       IBlockAPI temporalGitBlock = GitBlockManager.createTemporalGitBlockInstance();
       Git git = (Git) temporalGitBlock.retrieveDirector();
       git.checkout().setName(GitBlock.BMBlockMasterLabel).call();
@@ -63,18 +63,18 @@ public class BMAnalyze implements Runnable {
       treeWalk.setRecursive(false);
 
       //spl main container
-      ContainerBlock main = new ContainerBlock();
+      Container main = new Container();
       main.setContainerId(GitDirUtil.getGitDirAsPath().toString());
       main.setContainerType(ContainerType.MAIN);
       changeTreeToSchemaForm(treeWalk, main);
 
-      createContainers(main, graph);
-      createContainerRelations(main, graph);
+      createContainers(main);
+      createContainerRelations(main);
 
       //blocks
-      createBlocksByFile(main, graph);
+      createBlocksByFile(main);
 
-      showTemporalData(graph);
+      showTemporalData();
 
 
     } catch (IOException | GitAPIException e) {
@@ -83,16 +83,16 @@ public class BMAnalyze implements Runnable {
   }
 
   private void showTemporalData( GraphDBAPI graph) {
-    List<Data> data = graph.retrieveDataByState(DataState.TEMPORAL);
+    List<DataRaw> data = graph.retrieveDataByState(DataState.TEMPORAL);
     System.out.println("Block List:");
     for(Data record:data){
-      ContentBlock block = record.getBelongsTo();
+      Content block = record.getBelongsTo();
       String blockId = block.getContentId();
       System.out.println("blockId - " + blockId + "  state - "+ DataState.TEMPORAL+ " FROM "+block.getBelongsTo().getContainerId());
     }
   }
 
-  private void createBlocksByFile(ContainerBlock container, GraphDBAPI graph) {
+  private void createBlocksByFile(Container container, GraphDBAPI graph) {
     if (container.getContainerType() == ContainerType.FILE) {
       IBlockScanner blockScanner = new BlockScanner();
       Path path = Paths.get(container.getContainerId());
@@ -100,15 +100,15 @@ public class BMAnalyze implements Runnable {
       IBlockAPI temporalGitBlock = GitBlockManager.createTemporalGitBlockInstance();
 
       //previous
-      ContentBlock contentPrevious = null;
-      ContentBlock contentMain = null;
+      Content contentPrevious = null;
+      Content contentMain = null;
       for (String key : scannedBlocks.keySet()) {
         String content = scannedBlocks.get(key);
         //path
-        temporalGitBlock.upsertContentBlock(key, content);
+        temporalGitBlock.upsertContent(key, content);
         //db
-        ContentBlock block = new ContentBlock();
-        Data data = new Data();
+        Content block = new Content();
+        DataRaw data = new DataRaw();
         data.setDataId(key);
         //data.setSha(content);
         data.setBelongsTo(block);
@@ -134,45 +134,45 @@ public class BMAnalyze implements Runnable {
       graph.upsertContent(contentMain, NodePart.EDGES);
 
       if (contentMain != null) {
-        ContentBlock next = contentMain.getGoNext();
+        Content next = contentMain.getGoNext();
         while (next != null) {
           graph.upsertContent(next, NodePart.EDGES);
           next = next.getGoNext();
         }
       }
     } else {
-      for (ContainerBlock containerBlock : container.getGoChildren()) {
-        createBlocksByFile(containerBlock, graph);
+      for (Container Container : container.getGoChildren()) {
+        createBlocksByFile(Container, graph);
       }
     }
 
   }
 
-  private void createContainers(ContainerBlock container, GraphDBAPI graph) {
+  private void createContainers(Container container, GraphDBAPI graph) {
     graph.upsertContainer(container, NodePart.VERTEX);
-    for (ContainerBlock containerBlock : container.getGoChildren()) {
-      createContainers(containerBlock, graph);
+    for (Container Container : container.getGoChildren()) {
+      createContainers(Container, graph);
     }
   }
 
-  private void createContainerRelations(ContainerBlock container, GraphDBAPI graph) {
+  private void createContainerRelations(Container container, GraphDBAPI graph) {
 
     graph.upsertContainer(container, NodePart.EDGES);
-    for (ContainerBlock containerBlock : container.getGoChildren()) {
-      createContainerRelations(containerBlock, graph);
+    for (Container Container : container.getGoChildren()) {
+      createContainerRelations(Container, graph);
     }
   }
 
-  private void changeTreeToSchemaForm(TreeWalk treeWalk, ContainerBlock main) throws IOException {
+  private void changeTreeToSchemaForm(TreeWalk treeWalk, Container main) throws IOException {
 
     boolean isMainLoaded = false;
-    ContainerBlock parentPivot = main;
+    Container parentPivot = main;
     while (treeWalk.next()) {
       if (treeWalk.isSubtree()) {
         //folder
-        ContainerBlock currentContainerBlock = new ContainerBlock();
-        currentContainerBlock.setContainerId(treeWalk.getPathString());
-        currentContainerBlock.setContainerType(ContainerType.FOLDER);
+        Container currentContainer = new Container();
+        currentContainer.setContainerId(treeWalk.getPathString());
+        currentContainer.setContainerType(ContainerType.FOLDER);
         //main
         if (isMainLoaded) {
           //backing
@@ -191,32 +191,32 @@ public class BMAnalyze implements Runnable {
             }
           }
 
-          currentContainerBlock.setGoParent(parentPivot);
-          List<ContainerBlock> list = parentPivot.getGoChildren();
-          list.add(currentContainerBlock);
+          currentContainer.setGoParent(parentPivot);
+          List<Container> list = parentPivot.getGoChildren();
+          list.add(currentContainer);
           parentPivot.setGoChildren(list);
 
-          parentPivot = currentContainerBlock;
+          parentPivot = currentContainer;
           System.out.println("dir: " + treeWalk.getPathString());
           treeWalk.enterSubtree();
         } else {
           //loading main
-          List<ContainerBlock> list = main.getGoChildren();
-          list.add(currentContainerBlock);
+          List<Container> list = main.getGoChildren();
+          list.add(currentContainer);
           main.setGoChildren(list);
 
-          currentContainerBlock.setGoParent(main);
+          currentContainer.setGoParent(main);
 
-          parentPivot = currentContainerBlock;
+          parentPivot = currentContainer;
           isMainLoaded = true;
           System.out.println("dir: " + treeWalk.getPathString());
           treeWalk.enterSubtree();
         }
       } else {
         //file
-        ContainerBlock currentContainerBlock = new ContainerBlock();
-        currentContainerBlock.setContainerId(treeWalk.getPathString());
-        currentContainerBlock.setContainerType(ContainerType.FILE);
+        Container currentContainer = new Container();
+        currentContainer.setContainerId(treeWalk.getPathString());
+        currentContainer.setContainerType(ContainerType.FILE);
 
         if (isMainLoaded) {
           //backing
@@ -234,19 +234,19 @@ public class BMAnalyze implements Runnable {
               }
             }
           }
-          List<ContainerBlock> list = parentPivot.getGoChildren();
-          list.add(currentContainerBlock);
+          List<Container> list = parentPivot.getGoChildren();
+          list.add(currentContainer);
           parentPivot.setGoChildren(list);
 
-          currentContainerBlock.setGoParent(parentPivot);
+          currentContainer.setGoParent(parentPivot);
           System.out.println("file: " + treeWalk.getPathString());
         } else {
           //loading main
-          List<ContainerBlock> list = main.getGoChildren();
-          list.add(currentContainerBlock);
+          List<Container> list = main.getGoChildren();
+          list.add(currentContainer);
           main.setGoChildren(list);
 
-          currentContainerBlock.setGoParent(main);
+          currentContainer.setGoParent(main);
 
           isMainLoaded = true;
           System.out.println("file: " + treeWalk.getPathString());

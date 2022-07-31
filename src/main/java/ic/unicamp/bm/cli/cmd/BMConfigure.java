@@ -9,8 +9,17 @@ import ic.unicamp.bm.block.IBlockAPI;
 import ic.unicamp.bm.cli.util.logger.SplMgrLogger;
 import ic.unicamp.bm.graph.GraphDBAPI;
 import ic.unicamp.bm.graph.GraphDBBuilder;
+import ic.unicamp.bm.graph.neo4j.schema.Feature;
+import ic.unicamp.bm.graph.neo4j.schema.Product;
+import ic.unicamp.bm.graph.neo4j.schema.relations.ProductToFeature;
+import ic.unicamp.bm.graph.neo4j.services.FeatureService;
+import ic.unicamp.bm.graph.neo4j.services.FeatureServiceImpl;
+import ic.unicamp.bm.graph.neo4j.services.ProductService;
+import ic.unicamp.bm.graph.neo4j.services.ProductServiceImpl;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -22,7 +31,6 @@ import picocli.CommandLine.Command;
 public class BMConfigure implements Runnable {
 
   public static final String CMD_NAME = "configure";
-  private final GraphDBAPI graph = GraphDBBuilder.createGraphInstance();
   @Override
   public void run() {
     upsertGitDir();
@@ -45,22 +53,29 @@ public class BMConfigure implements Runnable {
       BMDirUtil.createBMContactFile();
       commitBMDirectory();
     }
-    //creating Default Feature and default product
-/*    Product splProduct = new Product();
-    splProduct.setProductId(ProductSequenceNumber.getNextStringCode());
-    splProduct.setLabel("BM_SPL_PRODUCT");
+    FeatureService featureService = new FeatureServiceImpl();
+    ProductService productService = new ProductServiceImpl();
+    Product product = productService.getProductByID("BM_SPL");
+    if (product == null) {
+      Feature feature = featureService.getFeatureByID("BM_Feature");
+      if (feature == null) {
+        feature = new Feature();
+        feature.setFeatureId("BM_Feature");
+        feature.setFeatureLabel("BM_Feature");
+      }
+      product = new Product();
+      product.setProductId("BM_SPL");
+      product.setProductLabel("BM_SPL");
+      List<ProductToFeature> featureList = new LinkedList<>();
+      ProductToFeature relation = new ProductToFeature();
+      relation.setName("BM_Relation");
+      relation.setStartProduct(product);
+      relation.setEndFeature(feature);
+      featureList.add(relation);
+      product.setAssociatedTo(featureList);
+      productService.createOrUpdate(product);
+    }
 
-    Feature defaultFeature = new Feature();
-    defaultFeature.setFeatureId(FeatureSequenceNumber.getNextStringCode());
-    defaultFeature.setLabel("BM_DEFAULT_FEATURE");
-    defaultFeature.setBelongsTo(splProduct);
-    LinkedList<Feature> list = new LinkedList<>();
-    list.add(defaultFeature);
-    splProduct.setAssociatedTo(list);
-    graph.upsertProduct(splProduct, RecordState.CONTENT);
-    graph.upsertFeature(defaultFeature, RecordState.CONTENT);
-    graph.upsertProduct(splProduct, RecordState.RELATIONS);
-    graph.upsertFeature(defaultFeature, RecordState.RELATIONS);*/
   }
 
   private void checkoutBlockBranch(IBlockAPI gitBlock) {
