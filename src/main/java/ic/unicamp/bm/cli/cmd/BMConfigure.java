@@ -29,6 +29,10 @@ import picocli.CommandLine.Command;
 public class BMConfigure implements Runnable {
 
   public static final String CMD_NAME = "configure";
+
+  public static final String BM_SPL = "BM_SPL";
+  public static final String BM_FEATURE = "BM_Feature";
+
   @Override
   public void run() {
     upsertGitDir();
@@ -36,26 +40,18 @@ public class BMConfigure implements Runnable {
   }
 
   private void upsertBMDir() {
-    IVCSAPI gitForBlocks = GitVCSManager.createInstance();
+    //set up environment
+    setUpHiddenFolderAndBMBranch();
+    //set up initial db state
+    setUpDB();
+  }
 
-    if (!gitForBlocks.exitBMBranch()) {
-      gitForBlocks.createBMBranch();
-      SplMgrLogger.message_ln("- " + BMBranchLabel + " branch was created", false);
-    }
-    checkoutBlockBranch(gitForBlocks);
-    if (!BMDirectoryUtil.existsBmDirectory()) {
-      BMDirectoryUtil.createBMDirectory();
-      SplMgrLogger.message_ln("- BM directory was created", false);
-    }
-    if (!BMDirectoryUtil.existsBMContactFile()) {
-      BMDirectoryUtil.createBMContactFile();
-      commitBMDirectory();
-    }
+  private static void setUpDB() {
     FeatureService featureService = new FeatureServiceImpl();
     ProductService productService = new ProductServiceImpl();
-    Product product = productService.getProductByID("BM_SPL");
+    Product product = productService.getProductByID(BM_SPL);
     if (product == null) {
-      Feature feature = featureService.getFeatureByID("BM_Feature");
+      Feature feature = featureService.getFeatureByID(BM_FEATURE);
       if (feature == null) {
         feature = new Feature();
         feature.setFeatureId("BM_Feature");
@@ -73,10 +69,26 @@ public class BMConfigure implements Runnable {
       product.setAssociatedTo(featureList);
       productService.createOrUpdate(product);
     }
-
   }
 
-  private void checkoutBlockBranch(IVCSAPI gitBlock) {
+  private void setUpHiddenFolderAndBMBranch() {
+    IVCSAPI gitForBlocks = GitVCSManager.createInstance();
+    if (!gitForBlocks.exitBMBranch()) {
+      gitForBlocks.createBMBranch();
+      SplMgrLogger.message_ln("- " + BMBranchLabel + " branch was created", false);
+    }
+    doCheckoutToBMBranch(gitForBlocks);
+    if (!BMDirectoryUtil.existsBmDirectory()) {
+      BMDirectoryUtil.createBMDirectory();
+      SplMgrLogger.message_ln("- BM directory was created", false);
+    }
+    if (!BMDirectoryUtil.existsBMContactFile()) {
+      BMDirectoryUtil.createBMContactFile();
+      commitBMDirectory();
+    }
+  }
+
+  private void doCheckoutToBMBranch(IVCSAPI gitBlock) {
     Git git = (Git) gitBlock.retrieveDirector();
     try {
       git.checkout().setName(BMBranchLabel).call();
