@@ -1,4 +1,4 @@
-package ic.unicamp.bm.block;
+package ic.unicamp.bm.block.utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.apache.commons.io.FileUtils;
 
-public class BMTemporalDirUtil {
+public class TempBMDirectoryUtil {
 
   public static String BMTemporalDirName = "temporal";
 
@@ -16,22 +16,22 @@ public class BMTemporalDirUtil {
   }
 
   public static File getBMDirectoryAsFile() {
-    return new File(String.valueOf(BMTemporalDirUtil.getBMDirectoryAsPath()));
+    return new File(String.valueOf(TempBMDirectoryUtil.getBMDirectoryAsPath()));
   }
 
   public static boolean existsBmTemporalDirectory() {
-    return BMTemporalDirUtil.getBMDirectoryAsFile().exists();
+    return TempBMDirectoryUtil.getBMDirectoryAsFile().exists();
   }
 
   public static boolean createBMTemporalDirectory() {
-    File bmDirectoryAsFile = BMTemporalDirUtil.getBMDirectoryAsFile();
+    File bmDirectoryAsFile = TempBMDirectoryUtil.getBMDirectoryAsFile();
     return bmDirectoryAsFile.mkdir();
   }
 
   public static boolean removeBMDirectory() {
-    if (BMTemporalDirUtil.existsBmTemporalDirectory()) {
+    if (TempBMDirectoryUtil.existsBmTemporalDirectory()) {
       try {
-        FileUtils.deleteDirectory(BMTemporalDirUtil.getBMDirectoryAsFile());
+        FileUtils.deleteDirectory(TempBMDirectoryUtil.getBMDirectoryAsFile());
         return true;
       } catch (IOException e) {
         e.printStackTrace();

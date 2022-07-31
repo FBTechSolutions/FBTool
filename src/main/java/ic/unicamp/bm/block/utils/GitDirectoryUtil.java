@@ -1,4 +1,4 @@
-package ic.unicamp.bm.block;
+package ic.unicamp.bm.block.utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
-public class GitDirUtil {
+public class GitDirectoryUtil {
 
   private static final Pattern pattern = Pattern.compile("\\.git");
 
@@ -21,11 +21,11 @@ public class GitDirUtil {
   }
 
   public static File getGitDirAsFile() {
-    return new File(String.valueOf(GitDirUtil.getGitDirAsPath()));
+    return new File(String.valueOf(GitDirectoryUtil.getGitDirAsPath()));
   }
 
   public static boolean existsGitDir() {
-    return GitDirUtil.getGitDirAsFile().exists();
+    return GitDirectoryUtil.getGitDirAsFile().exists();
   }
 
   public static boolean createGitDir() {
@@ -41,9 +41,9 @@ public class GitDirUtil {
   }
 
   public static boolean removeGitDir() {
-    if (GitDirUtil.existsGitDir()) {
+    if (GitDirectoryUtil.existsGitDir()) {
       try {
-        FileUtils.deleteDirectory(GitDirUtil.getGitDirAsFile());
+        FileUtils.deleteDirectory(GitDirectoryUtil.getGitDirAsFile());
         return true;
       } catch (IOException e) {
         e.printStackTrace();

@@ -7,14 +7,14 @@ public class GitVCSManager {
 
   public static IVCSAPI createInstance() {
     if (instance == null) {
-      instance = new GitBlock();
+      instance = new GitVCS();
     }
     return instance;
   }
 
   public static IVCSAPI createTemporalGitBlockInstance() {
     if (temporal == null) {
-      temporal = new GitBlockTemporal();
+      temporal = new TempGitVCS();
     }
     return temporal;
   }

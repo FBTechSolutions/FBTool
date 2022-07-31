@@ -1,6 +1,8 @@
 package ic.unicamp.bm.block;
 
 
+import ic.unicamp.bm.block.utils.BMDirectoryUtil;
+import ic.unicamp.bm.block.utils.GitDirectoryUtil;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -18,15 +20,15 @@ import org.eclipse.jgit.lib.Repository;
 import java.io.IOException;
 
 //https://github.com/centic9/jgit-cookbook
-public class GitBlock implements IVCSAPI {
+public class GitVCS implements IVCSAPI {
 
   private Git git;
   public static String BMBranchLabel = "bm_block_master";
 
-  public GitBlock() {
+  public GitVCS() {
     FileRepositoryBuilder repositoryBuilder = new FileRepositoryBuilder();
     repositoryBuilder.setMustExist(true);
-    repositoryBuilder.setGitDir(GitDirUtil.getGitDirAsFile());
+    repositoryBuilder.setGitDir(GitDirectoryUtil.getGitDirAsFile());
     try {
       Repository repository = repositoryBuilder.build();
       this.git = new Git(repository);

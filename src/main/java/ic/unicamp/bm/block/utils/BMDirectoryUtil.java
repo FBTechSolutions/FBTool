@@ -1,4 +1,4 @@
-package ic.unicamp.bm.block;
+package ic.unicamp.bm.block.utils;
 
 import java.io.File;
 import java.io.IOException;

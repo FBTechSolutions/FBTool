@@ -1,6 +1,6 @@
 package ic.unicamp.bm.cli.cmd;
 
-import ic.unicamp.bm.block.GitBlock;
+import ic.unicamp.bm.block.GitVCS;
 import ic.unicamp.bm.block.GitVCSManager;
 import ic.unicamp.bm.block.IVCSAPI;
 import ic.unicamp.bm.graph.GraphDBAPI;
@@ -23,7 +23,7 @@ public class BMCommit implements Runnable {
       IVCSAPI temporalGitBlock = GitVCSManager.createTemporalGitBlockInstance();
       IVCSAPI gitBlock = GitVCSManager.createInstance();
       Git git = (Git) temporalGitBlock.retrieveDirector();
-      git.checkout().setName(GitBlock.BMBranchLabel).call();
+      git.checkout().setName(GitVCS.BMBranchLabel).call();
 
 /*      List<Data> stateData = graph.retrieveDataByState(DataState.STAGE);
 

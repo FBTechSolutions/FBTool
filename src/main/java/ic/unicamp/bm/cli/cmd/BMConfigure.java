@@ -1,10 +1,10 @@
 package ic.unicamp.bm.cli.cmd;
 
-import static ic.unicamp.bm.block.GitBlock.BMBranchLabel;
+import static ic.unicamp.bm.block.GitVCS.BMBranchLabel;
 
-import ic.unicamp.bm.block.BMDirectoryUtil;
+import ic.unicamp.bm.block.utils.BMDirectoryUtil;
 import ic.unicamp.bm.block.GitVCSManager;
-import ic.unicamp.bm.block.GitDirUtil;
+import ic.unicamp.bm.block.utils.GitDirectoryUtil;
 import ic.unicamp.bm.block.IVCSAPI;
 import ic.unicamp.bm.cli.util.logger.SplMgrLogger;
 import ic.unicamp.bm.graph.neo4j.schema.Feature;
@@ -86,8 +86,8 @@ public class BMConfigure implements Runnable {
   }
 
   private void upsertGitDir() {
-    if (!GitDirUtil.existsGitDir()) {
-      GitDirUtil.createGitDir();
+    if (!GitDirectoryUtil.existsGitDir()) {
+      GitDirectoryUtil.createGitDir();
       SplMgrLogger.message_ln("- Git directory was created", false);
       commitGitIgnoreAsFirstCommit();
     }

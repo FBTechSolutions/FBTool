@@ -1,10 +1,10 @@
 package ic.unicamp.bm.cli.cmd;
 
-import ic.unicamp.bm.block.BMDirectoryUtil;
-import ic.unicamp.bm.block.BMTemporalDirUtil;
-import ic.unicamp.bm.block.GitBlock;
+import ic.unicamp.bm.block.utils.BMDirectoryUtil;
+import ic.unicamp.bm.block.utils.TempBMDirectoryUtil;
+import ic.unicamp.bm.block.GitVCS;
 import ic.unicamp.bm.block.GitVCSManager;
-import ic.unicamp.bm.block.GitDirUtil;
+import ic.unicamp.bm.block.utils.GitDirectoryUtil;
 import ic.unicamp.bm.block.IVCSAPI;
 import ic.unicamp.bm.cli.util.logger.SplMgrLogger;
 import ic.unicamp.bm.graph.neo4j.schema.Block;
@@ -53,9 +53,9 @@ public class BMAnalyze implements Runnable {
     try {
       IVCSAPI temporalGitBlock = GitVCSManager.createTemporalGitBlockInstance();
       Git git = (Git) temporalGitBlock.retrieveDirector();
-      git.checkout().setName(GitBlock.BMBranchLabel).call();
-      if (!BMTemporalDirUtil.existsBmTemporalDirectory()) {
-        BMTemporalDirUtil.createBMTemporalDirectory();
+      git.checkout().setName(GitVCS.BMBranchLabel).call();
+      if (!TempBMDirectoryUtil.existsBmTemporalDirectory()) {
+        TempBMDirectoryUtil.createBMTemporalDirectory();
         SplMgrLogger.message_ln("- Temporal Directory for blocks was created", false);
       }
 
@@ -69,7 +69,7 @@ public class BMAnalyze implements Runnable {
 
       //spl main container
       Container main = new Container();
-      main.setContainerId(GitDirUtil.getGitDirAsPath().toString());
+      main.setContainerId(GitDirectoryUtil.getGitDirAsPath().toString());
       main.setContainerType(ContainerType.MAIN);
       changeTreeToSchemaForm(treeWalk, main);
 
@@ -212,7 +212,7 @@ public class BMAnalyze implements Runnable {
   public static List<Path> listFiles(Path path) throws IOException {
     List<Path> result;
     try (Stream<Path> walk = Files.walk(path)) {
-      result = walk.filter(Files::isRegularFile).filter(aPath -> !GitDirUtil.existNameInPath(aPath))
+      result = walk.filter(Files::isRegularFile).filter(aPath -> !GitDirectoryUtil.existNameInPath(aPath))
           .filter(aPath -> !BMDirectoryUtil.existNameInPath(aPath))
           .collect(Collectors.toList());
     }
