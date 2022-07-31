@@ -6,9 +6,6 @@ import ic.unicamp.bm.block.IBlockAPI;
 import ic.unicamp.bm.graph.GraphDBAPI;
 import ic.unicamp.bm.graph.GraphDBBuilder;
 import ic.unicamp.bm.graph.NodePart;
-import ic.unicamp.bm.graph.schema.ContentBlock;
-import ic.unicamp.bm.graph.schema.Data;
-import ic.unicamp.bm.graph.schema.enums.DataState;
 import ic.unicamp.bm.scanner.BlockState;
 import java.util.List;
 import org.eclipse.jgit.api.Git;
@@ -29,7 +26,7 @@ public class BMAdd implements Runnable {
 
   @Override
   public void run() {
-    try {
+ /*   try {
       git.checkout().setName(GitBlock.BMBlockMasterLabel).call();
       List<Data> temporalDataList = graphDB.retrieveDataByState(DataState.TEMPORAL);
       for (Data data : temporalDataList) {
@@ -57,6 +54,7 @@ public class BMAdd implements Runnable {
 
     } catch (GitAPIException e) {
       throw new RuntimeException(e);
-    }
-  }
+    }    }
+    */
+}
 }

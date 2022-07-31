@@ -6,9 +6,6 @@ import ic.unicamp.bm.block.IBlockAPI;
 import ic.unicamp.bm.graph.GraphDBAPI;
 import ic.unicamp.bm.graph.GraphDBBuilder;
 import ic.unicamp.bm.graph.NodePart;
-import ic.unicamp.bm.graph.schema.ContentBlock;
-import ic.unicamp.bm.graph.schema.Data;
-import ic.unicamp.bm.graph.schema.enums.DataState;
 import java.util.List;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -30,7 +27,7 @@ public class BMCommit implements Runnable {
       Git git = (Git) temporalGitBlock.retrieveDirector();
       git.checkout().setName(GitBlock.BMBlockMasterLabel).call();
 
-      List<Data> stateData = graph.retrieveDataByState(DataState.STAGE);
+/*      List<Data> stateData = graph.retrieveDataByState(DataState.STAGE);
 
       for(Data data:stateData){
         ContentBlock block = data.getBelongsTo();
@@ -46,7 +43,7 @@ public class BMCommit implements Runnable {
         ContentBlock block = record.getBelongsTo();
         String blockId = block.getContentId();
         System.out.println("blockId - " + blockId + "  state - "+ DataState.COMMITTED+ " FROM "+block.getBelongsTo().getContainerId());
-      }
+      }*/
 
     } catch (GitAPIException e) {
       throw new RuntimeException(e);

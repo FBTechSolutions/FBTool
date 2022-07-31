@@ -1,18 +1,9 @@
 package ic.unicamp.bm.graph;
 
-import com.google.gson.JsonObject;
-import ic.unicamp.bm.graph.schema.ContainerBlock;
-import ic.unicamp.bm.graph.schema.ContentBlock;
-import ic.unicamp.bm.graph.schema.Data;
-import ic.unicamp.bm.graph.schema.Feature;
-import ic.unicamp.bm.graph.schema.Product;
-import ic.unicamp.bm.graph.schema.doa.DAOOperation;
-import ic.unicamp.bm.graph.schema.enums.DataState;
-import java.util.LinkedList;
-import java.util.List;
-import org.apache.commons.lang3.StringUtils;
+
 
 public class GraphDBManager implements GraphDBAPI {
+/*
 
   private final DAOOperation daoOperation;
 
@@ -289,7 +280,8 @@ public class GraphDBManager implements GraphDBAPI {
         feature.setBelongsTo(null);
         List<ContentBlock> temp2 = feature.getAssociatedTo();
         feature.setAssociatedTo(null);
-        /*ContentBlock temp1 = data.getBelongsTo();
+        */
+/*ContentBlock temp1 = data.getBelongsTo();
         temp1.setBelongsTo(null);
         String dataUid = daoOperation.findUidFromADataNode(data.getDataId());
         if (StringUtils.isBlank(dataUid)) {
@@ -301,10 +293,12 @@ public class GraphDBManager implements GraphDBAPI {
           data.setUid(dataUid);
           daoOperation.addANode(data);
         }
-        data.setBelongsTo(temp1);*/
+        data.setBelongsTo(temp1);*//*
+
       }
       case EDGES -> {
         //core
+*/
 /*        String dataUid = daoOperation.findUidFromADataNode(data.getDataId());
         if (StringUtils.isNotBlank(dataUid)) {
           data.setUid(dataUid);
@@ -318,12 +312,14 @@ public class GraphDBManager implements GraphDBAPI {
             contentBlock.setUid(contentUid);
             daoOperation.addNodeByJSON(contentBlock.createJson());
           }
-        }*/
+        }*//*
+
       }
     }
   }
+*/
 
-  @Override
+/*  @Override
   public void updateFeatureInBulk(Feature feature, NodePart element) {
 
   }
@@ -360,5 +356,5 @@ public class GraphDBManager implements GraphDBAPI {
   @Override
   public List<String> insertObjects(LinkedList<Object> objects, NodePart none) {
     return null;
-  }
+  }*/
 }

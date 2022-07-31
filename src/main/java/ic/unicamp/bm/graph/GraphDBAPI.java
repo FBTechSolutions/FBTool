@@ -1,21 +1,16 @@
 package ic.unicamp.bm.graph;
 
-import ic.unicamp.bm.graph.schema.ContainerBlock;
-import ic.unicamp.bm.graph.schema.ContentBlock;
-import ic.unicamp.bm.graph.schema.Data;
-import ic.unicamp.bm.graph.schema.Feature;
-import ic.unicamp.bm.graph.schema.Product;
-import ic.unicamp.bm.graph.schema.enums.DataState;
+
 import java.util.LinkedList;
 import java.util.List;
 
 public interface GraphDBAPI {
 
-  void upsertContainer(ContainerBlock containerBlock, NodePart element);
+/*  void upsertContainer(ContainerBlock containerBlock);
 
-  void updateContainerInBulk(List<ContainerBlock> containerBlockList, NodePart element)
+  void updateContainerInBulk(List<ContainerBlock> containerBlockList)
       throws Exception;
-  void createContainersInBulk(List<ContainerBlock> containerBlockList, NodePart element)
+  void createContainersInBulk(List<ContainerBlock> containerBlockList)
       throws Exception;
 
   void upsertContent(ContentBlock contentBlock, NodePart element);
@@ -43,5 +38,5 @@ public interface GraphDBAPI {
 
   Product retrieveProductWithFeatures(String productId);
 
-  List<String> insertObjects(LinkedList<Object> objects,NodePart none);
+  List<String> insertObjects(LinkedList<Object> objects,NodePart none);*/
 }
