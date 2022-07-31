@@ -1,7 +1,7 @@
 package ic.unicamp.bm.graph.neo4j.schema;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import ic.unicamp.bm.graph.schema.enums.DataState;
+import ic.unicamp.bm.graph.neo4j.schema.enums.DataState;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

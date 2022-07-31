@@ -2,13 +2,13 @@ package ic.unicamp.bm.block;
 
 public interface IBlockAPI {
 
-  public void upsertContentBlock(String blockId, String Content);
+  public void upsertContent(String blockId, String Content);
 
-  public void removeContentBlock(String blockId);
+  public void removeContent(String blockId);
 
-  public String retrieveContentBlock(String blockId);
+  public String retrieveContent(String blockId);
 
-  public Boolean exitContentBlock(String blockId);
+  public Boolean exitContent(String blockId);
 
   public void upsertContainerBlock(String blockId, String Content);
 

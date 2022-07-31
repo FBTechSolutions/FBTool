@@ -42,7 +42,7 @@ public class GitBlock implements IBlockAPI {
 
   //content
   @Override
-  public void upsertContentBlock(String blockId, String Content) {
+  public void upsertContent(String blockId, String Content) {
     Path path = Paths.get(getCurrentDirectory(), blockId);
     try {
       if (!Files.exists(path, LinkOption.NOFOLLOW_LINKS)) {
@@ -55,7 +55,7 @@ public class GitBlock implements IBlockAPI {
   }
 
   @Override
-  public void removeContentBlock(String blockId) {
+  public void removeContent(String blockId) {
     Path path = Paths.get(getCurrentDirectory(), blockId);
     try {
       if (Files.exists(path, LinkOption.NOFOLLOW_LINKS)) {
@@ -67,7 +67,7 @@ public class GitBlock implements IBlockAPI {
   }
 
   @Override
-  public String retrieveContentBlock(String blockId) {
+  public String retrieveContent(String blockId) {
     Path path = Paths.get(getCurrentDirectory(), blockId);
     String read = "";
     try {
@@ -84,7 +84,7 @@ public class GitBlock implements IBlockAPI {
   }
 
   @Override
-  public Boolean exitContentBlock(String blockId) {
+  public Boolean exitContent(String blockId) {
     Path content = Paths.get(getCurrentDirectory(), blockId);
     return Files.exists(content, LinkOption.NOFOLLOW_LINKS);
   }
@@ -92,22 +92,22 @@ public class GitBlock implements IBlockAPI {
   //container
   @Override
   public void upsertContainerBlock(String blockId, String path) {
-    upsertContentBlock(blockId, path);
+    upsertContent(blockId, path);
   }
 
   @Override
   public void removeContainerBlock(String blockId) {
-    removeContentBlock(blockId);
+    removeContent(blockId);
   }
 
   @Override
   public String retrieveContainerBlock(String blockId) {
-    return retrieveContentBlock(blockId);
+    return retrieveContent(blockId);
   }
 
   @Override
   public Boolean exitContainerBlock(String blockId) {
-    return exitContentBlock(blockId);
+    return exitContent(blockId);
   }
 
   //utils

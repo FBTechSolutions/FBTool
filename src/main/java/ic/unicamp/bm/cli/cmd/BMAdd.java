@@ -35,9 +35,9 @@ public class BMAdd implements Runnable {
       for (Data data : temporalDataList) {
         ContentBlock contentBlock = data.getBelongsTo();
         String blockId = contentBlock.getContentId();
-        String content = temporalGitBlock.retrieveContentBlock(blockId);
-        gitBlock.upsertContentBlock(blockId, content);
-        temporalGitBlock.removeContentBlock(blockId);
+        String content = temporalGitBlock.retrieveContent(blockId);
+        gitBlock.upsertContent(blockId, content);
+        temporalGitBlock.removeContent(blockId);
         git.add().addFilepattern(".bm/" + blockId).call();
 
         data.setCurrentState(DataState.STAGE);
