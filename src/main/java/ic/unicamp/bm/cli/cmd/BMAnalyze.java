@@ -1,6 +1,7 @@
 package ic.unicamp.bm.cli.cmd;
 
 import ic.unicamp.bm.block.utils.BMDirectoryUtil;
+import ic.unicamp.bm.block.utils.DirectoryUtil;
 import ic.unicamp.bm.block.utils.TempBMDirectoryUtil;
 import ic.unicamp.bm.block.GitVCS;
 import ic.unicamp.bm.block.GitVCSManager;
@@ -15,6 +16,7 @@ import ic.unicamp.bm.graph.neo4j.schema.enums.ContainerType;
 
 import ic.unicamp.bm.graph.neo4j.schema.enums.DataState;
 import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToBlock;
+import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToRawData;
 import ic.unicamp.bm.graph.neo4j.schema.relations.ContainerToBlock;
 import ic.unicamp.bm.graph.neo4j.schema.relations.ContainerToContainer;
 import ic.unicamp.bm.graph.neo4j.services.ContainerService;
@@ -22,12 +24,14 @@ import ic.unicamp.bm.graph.neo4j.services.ContainerServiceImpl;
 
 import ic.unicamp.bm.scanner.BlockScanner;
 //import ic.unicamp.bm.scanner.BlockState;
+import ic.unicamp.bm.scanner.BlockSequenceNumber;
 import ic.unicamp.bm.scanner.IBlockScanner;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -69,16 +73,16 @@ public class BMAnalyze implements Runnable {
 
       //spl main container
       Container main = new Container();
-      main.setContainerId(GitDirectoryUtil.getGitDirAsPath().toString());
+      main.setContainerId(DirectoryUtil.getDirectoryAsPath().toString());
       main.setContainerType(ContainerType.MAIN);
       changeTreeToSchemaForm(treeWalk, main);
 
-      createContainers(main);
 
 
+      System.out.println("End Containers");
       //blocks
       createBlocksByFile(main);
-
+      createContainers(main);
       showTemporalData();
 
 
@@ -99,6 +103,7 @@ public class BMAnalyze implements Runnable {
 
   private void createBlocksByFile(Container container) {
     if (container.getContainerType() == ContainerType.FILE) {
+
       IBlockScanner blockScanner = new BlockScanner();
       Path path = Paths.get(container.getContainerId());
       Map<String, String> scannedBlocks = blockScanner.createInitialBlocks(path); //id and data
@@ -108,6 +113,7 @@ public class BMAnalyze implements Runnable {
       Block previousBlock = null;
       Block firstBlock = null;
       for (String key : scannedBlocks.keySet()) {
+        System.out.println("key");
         String contentData = scannedBlocks.get(key);
         //path
         temporalGitBlock.upsertContent(key, contentData);
@@ -117,8 +123,16 @@ public class BMAnalyze implements Runnable {
         data.setDataId(key);
         data.setCurrentState(DataState.TEMPORAL);
 
+
         Block block = new Block();
+        block.setBlockId(key);
+        System.out.println(block.getBlockId());
         block.setCurrentState(BlockState.TO_INSERT);
+
+        BlockToRawData relationRawData = new BlockToRawData();
+        relationRawData.setStartBlock(block);
+        relationRawData.setEndRawData(data);
+        block.setGetRawData(relationRawData);
         if(previousBlock == null){
           firstBlock = block;
           previousBlock = block;
@@ -132,6 +146,7 @@ public class BMAnalyze implements Runnable {
       }
       ContainerToBlock relation = new ContainerToBlock();
       relation.setStartContainer(container);
+      System.out.println(firstBlock.getBlockId());
       relation.setEndBlock(firstBlock);
       container.setGetFirstBlock(relation);
 
@@ -167,6 +182,9 @@ public class BMAnalyze implements Runnable {
         relation.setStartContainer(parentPivot);
         relation.setEndContainer(container);
         List<ContainerToContainer> relations = parentPivot.getGetContainers();
+        if(relations == null){
+          relations = new LinkedList<>();
+        }
         relations.add(relation);
         parentPivot.setGetContainers(relations);
         parentPivot = container;
@@ -185,6 +203,9 @@ public class BMAnalyze implements Runnable {
         relation.setStartContainer(parentPivot);
         relation.setEndContainer(container);
         List<ContainerToContainer> relations = parentPivot.getGetContainers();
+        if(relations == null){
+          relations = new LinkedList<>();
+        }
         relations.add(relation);
         parentPivot.setGetContainers(relations);
       }
@@ -201,7 +222,7 @@ public class BMAnalyze implements Runnable {
         back = false;
       } else {
         if (parentPivot.getContainerType() != ContainerType.MAIN) {
-          parentPivot = stack.peek();
+          parentPivot = stack.pop();
         } else {
           back = false;
         }

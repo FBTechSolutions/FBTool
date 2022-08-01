@@ -2,17 +2,6 @@ package ic.unicamp.bm.scanner;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.protobuf.ByteString;
-import io.dgraph.DgraphClient;
-import io.dgraph.DgraphGrpc.DgraphStub;
-import io.dgraph.DgraphProto;
-import io.dgraph.DgraphProto.Response;
-import io.dgraph.Transaction;
-import io.dgraph.TxnConflictException;
-import io.grpc.StatusRuntimeException;
-import java.net.MalformedURLException;
-import java.util.LinkedList;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 
 public class TestingBulkTest {

@@ -22,7 +22,7 @@ public class Container extends AbstractNode{
   @GeneratedValue
   @Id
   private Long id;
-  @Id
+
   @Property(name = "containerId")
   private String containerId;
 

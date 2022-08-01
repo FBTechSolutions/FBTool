@@ -23,7 +23,7 @@ public class RawDataServiceImpl extends GenericService<RawData> implements RawDa
    /* String queryTemplate = "MATCH (p:Product {productId: '%s'}) return p";
     String query = String.format(queryTemplate, productId);
     return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query, Collections.EMPTY_MAP);*/
-    Filter filter = new Filter("productId", ComparisonOperator.EQUALS, productId);
+    Filter filter = new Filter("dataId", ComparisonOperator.EQUALS, productId);
     Collection<RawData> products = session.loadAll(RawData.class, new Filters().add(filter));
     if(products.size()>1){
       System.out.println("Two IDs for Product is not good");

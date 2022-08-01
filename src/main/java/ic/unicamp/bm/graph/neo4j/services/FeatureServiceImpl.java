@@ -19,8 +19,8 @@ public class FeatureServiceImpl extends GenericService<Feature> implements Featu
   }
 
   @Override
-  public Feature getFeatureByID(String productId) {
-    Filter filter = new Filter("featureId", ComparisonOperator.EQUALS, productId);
+  public Feature getFeatureByID(String featureId) {
+    Filter filter = new Filter("featureId", ComparisonOperator.EQUALS, featureId);
     Collection<Feature> features = session.loadAll(Feature.class, new Filters().add(filter));
     if(features.size()>1){
       System.out.println("Two IDs for Product is not good");

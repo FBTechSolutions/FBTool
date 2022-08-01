@@ -17,7 +17,7 @@ public class ContainerServiceImpl extends GenericService<Container> implements C
 
   @Override
   public Container getContainerByID(String productId) {
-    Filter filter = new Filter("featureId", ComparisonOperator.EQUALS, productId);
+    Filter filter = new Filter("containerId", ComparisonOperator.EQUALS, productId);
     Collection<Container> features = session.loadAll(Container.class, new Filters().add(filter));
     if(features.size()>1){
       System.out.println("Two IDs for Product is not good");

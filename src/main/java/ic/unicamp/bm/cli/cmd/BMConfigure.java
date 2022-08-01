@@ -54,15 +54,14 @@ public class BMConfigure implements Runnable {
       Feature feature = featureService.getFeatureByID(BM_FEATURE);
       if (feature == null) {
         feature = new Feature();
-        feature.setFeatureId("BM_Feature");
-        feature.setFeatureLabel("BM_Feature");
+        feature.setFeatureId(BM_FEATURE);
+        feature.setFeatureLabel(BM_FEATURE);
       }
       product = new Product();
-      product.setProductId("BM_SPL");
-      product.setProductLabel("BM_SPL");
+      product.setProductId(BM_SPL);
+      product.setProductLabel(BM_SPL);
       List<ProductToFeature> featureList = new LinkedList<>();
       ProductToFeature relation = new ProductToFeature();
-      relation.setName("BM_Relation");
       relation.setStartProduct(product);
       relation.setEndFeature(feature);
       featureList.add(relation);

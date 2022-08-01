@@ -3,8 +3,17 @@ package ic.unicamp.bm.cli.cmd;
 import ic.unicamp.bm.block.GitVCS;
 import ic.unicamp.bm.block.GitVCSManager;
 import ic.unicamp.bm.block.IVCSAPI;
-import ic.unicamp.bm.graph.GraphDBAPI;
-import ic.unicamp.bm.graph.GraphDBBuilder;
+import ic.unicamp.bm.graph.neo4j.schema.Block;
+import ic.unicamp.bm.graph.neo4j.schema.RawData;
+import ic.unicamp.bm.graph.neo4j.schema.enums.DataState;
+import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToRawData;
+import ic.unicamp.bm.graph.neo4j.services.BlockService;
+import ic.unicamp.bm.graph.neo4j.services.BlockServiceImpl;
+import ic.unicamp.bm.graph.neo4j.services.ProductService;
+import ic.unicamp.bm.graph.neo4j.services.ProductServiceImpl;
+import ic.unicamp.bm.graph.neo4j.services.RawDataService;
+import ic.unicamp.bm.graph.neo4j.services.RawDataServiceImpl;
+import java.util.List;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import picocli.CommandLine.Command;
@@ -19,29 +28,30 @@ public class BMCommit implements Runnable {
   @Override
   public void run() {
     try {
-      GraphDBAPI graph = GraphDBBuilder.createGraphInstance();
       IVCSAPI temporalGitBlock = GitVCSManager.createTemporalGitBlockInstance();
       IVCSAPI gitBlock = GitVCSManager.createInstance();
       Git git = (Git) temporalGitBlock.retrieveDirector();
       git.checkout().setName(GitVCS.BMBranchLabel).call();
 
-/*      List<Data> stateData = graph.retrieveDataByState(DataState.STAGE);
+      BlockService blockService = new BlockServiceImpl();
+      RawDataService rawDataService = new RawDataServiceImpl();
+      List<Block> stageBlocks = blockService.getBlockByRawState(DataState.STAGE);
+      // List<RawData> stateData = graph.retrieveDataByState(DataState.STAGE);
 
-      for(Data data:stateData){
-        ContentBlock block = data.getBelongsTo();
-        String blockId = block.getContentId();
-        data.setCurrentState(DataState.COMMITTED);
-        graph.upsertData(data, NodePart.VERTEX);
+      for (Block block : stageBlocks) {
+        BlockToRawData relation = block.getGetRawData();
+        RawData raw = relation.getEndRawData();
+        raw.setCurrentState(DataState.COMMITTED);
+        rawDataService.createOrUpdate(raw);
       }
       git.commit().setMessage("BM Adding blocks").call();
+      List<Block> committedBlocks = blockService.getBlockByRawState(DataState.COMMITTED);
 
-      List<Data> stageData = graph.retrieveDataByState(DataState.COMMITTED);
       System.out.println("Block List:");
-      for(Data record:stageData){
-        ContentBlock block = record.getBelongsTo();
-        String blockId = block.getContentId();
-        System.out.println("blockId - " + blockId + "  state - "+ DataState.COMMITTED+ " FROM "+block.getBelongsTo().getContainerId());
-      }*/
+      for(Block block:committedBlocks){
+        String blockId = block.getBlockId();
+        System.out.println("blockId - " + blockId + "  state - "+ DataState.COMMITTED);
+      }
 
     } catch (GitAPIException e) {
       throw new RuntimeException(e);

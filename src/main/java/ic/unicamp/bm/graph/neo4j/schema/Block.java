@@ -23,8 +23,8 @@ public class Block extends AbstractNode{
   @Id
   private Long id;
 
-  @Property(name = "contentId")
-  private String contentId;
+  @Property(name = "blockId")
+  private String blockId;
 
   @Property(name = "currentState")
   private BlockState currentState;
