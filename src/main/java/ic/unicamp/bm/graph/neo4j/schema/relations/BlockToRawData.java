@@ -1,9 +1,6 @@
 package ic.unicamp.bm.graph.neo4j.schema.relations;
 
 import ic.unicamp.bm.graph.neo4j.schema.Block;
-import ic.unicamp.bm.graph.neo4j.schema.Feature;
-import ic.unicamp.bm.graph.neo4j.schema.Product;
-import ic.unicamp.bm.graph.neo4j.schema.RawData;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

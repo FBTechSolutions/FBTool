@@ -2,10 +2,7 @@ package ic.unicamp.bm.graph.neo4j.services;
 
 import ic.unicamp.bm.graph.neo4j.factory.Neo4jSessionFactory;
 import ic.unicamp.bm.graph.neo4j.schema.Block;
-import ic.unicamp.bm.graph.neo4j.schema.Feature;
-import ic.unicamp.bm.graph.neo4j.schema.RawData;
 import ic.unicamp.bm.graph.neo4j.schema.enums.DataState;
-import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToRawData;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;

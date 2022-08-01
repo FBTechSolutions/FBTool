@@ -1,6 +1,7 @@
 package ic.unicamp.bm.graph.neo4j.schema;
 
 import ic.unicamp.bm.graph.neo4j.schema.enums.BlockState;
+import ic.unicamp.bm.graph.neo4j.schema.enums.DataState;
 import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToBlock;
 import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToFeature;
 import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToRawData;
@@ -28,6 +29,13 @@ public class Block extends AbstractNode{
 
   @Property(name = "currentState")
   private BlockState currentState;
+
+  @Property(name = "rawDataSha")
+  private String rawDataSha;
+
+  @Property(name = "rawDataCurrentState")
+  private DataState rawDataCurrentState;
+
 
   @Relationship(type = "GO_NEXT_BLOCK", direction = Relationship.OUTGOING)
   private BlockToBlock goNextBlock;

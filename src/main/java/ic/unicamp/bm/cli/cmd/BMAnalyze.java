@@ -10,7 +10,6 @@ import ic.unicamp.bm.block.IVCSAPI;
 import ic.unicamp.bm.cli.util.logger.SplMgrLogger;
 import ic.unicamp.bm.graph.neo4j.schema.Block;
 import ic.unicamp.bm.graph.neo4j.schema.Container;
-import ic.unicamp.bm.graph.neo4j.schema.RawData;
 import ic.unicamp.bm.graph.neo4j.schema.enums.BlockState;
 import ic.unicamp.bm.graph.neo4j.schema.enums.ContainerType;
 
@@ -24,7 +23,6 @@ import ic.unicamp.bm.graph.neo4j.services.ContainerServiceImpl;
 
 import ic.unicamp.bm.scanner.BlockScanner;
 //import ic.unicamp.bm.scanner.BlockState;
-import ic.unicamp.bm.scanner.BlockSequenceNumber;
 import ic.unicamp.bm.scanner.IBlockScanner;
 import java.io.File;
 import java.io.IOException;
