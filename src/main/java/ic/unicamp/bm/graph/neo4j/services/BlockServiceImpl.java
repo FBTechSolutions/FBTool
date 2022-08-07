@@ -48,7 +48,6 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
       Block block = (Block)map.get("b");
       Block blockWithRelations =  blockService.getBlockByID(block.getBlockId());
       result.add(blockWithRelations);
-      System.out.println(blockWithRelations.getGetRawData());
       System.out.println(blockWithRelations.getBlockId());
     });
     return result;

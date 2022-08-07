@@ -4,7 +4,6 @@ import ic.unicamp.bm.graph.neo4j.schema.enums.BlockState;
 import ic.unicamp.bm.graph.neo4j.schema.enums.DataState;
 import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToBlock;
 import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToFeature;
-import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToRawData;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,21 +26,18 @@ public class Block extends AbstractNode{
   @Property(name = "blockId")
   private String blockId;
 
-  @Property(name = "currentState")
-  private BlockState currentState;
+  @Property(name = "blockState")
+  private BlockState blockState;
 
-  @Property(name = "rawDataSha")
-  private String rawDataSha;
+  @Property(name = "blockSha")
+  private String blockSha;
 
-  @Property(name = "rawDataCurrentState")
-  private DataState rawDataCurrentState;
-
+  // version control
+  @Property(name = "vcBlockState")
+  private DataState vcBlockState;
 
   @Relationship(type = "GO_NEXT_BLOCK", direction = Relationship.OUTGOING)
   private BlockToBlock goNextBlock;
-
-  @Relationship(type = "GET_RAW_DATA", direction = Relationship.OUTGOING)
-  private BlockToRawData getRawData;
 
   @Relationship(type = "ASSOCIATED_TO", direction = Relationship.OUTGOING)
   private BlockToFeature associatedTo;

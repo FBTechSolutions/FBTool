@@ -36,11 +36,8 @@ public class BMAdd implements Runnable {
         gitBlock.upsertContent(blockId, content);
         temporalGitBlock.removeContent(blockId);
         git.add().addFilepattern(".bm/" + blockId).call();
-
-        RawData rawData = contentBlock.getGetRawData().getEndRawData();
-        rawData.setCurrentState(DataState.STAGE);
-
-        contentBlock.setCurrentState(BlockState.TO_INSERT);
+        contentBlock.setVcBlockState(DataState.STAGE);
+        contentBlock.setBlockState(BlockState.TO_INSERT);
         blockService.createOrUpdate(contentBlock);
       }
       List<Block> stageData = blockService.getBlockByRawState(DataState.STAGE);

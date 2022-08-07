@@ -1,5 +1,7 @@
 package ic.unicamp.bm.cli.cmd;
 
+import static ic.unicamp.bm.cli.cmd.BMConfigure.BM_FEATURE;
+
 import ic.unicamp.bm.block.utils.BMDirectoryUtil;
 import ic.unicamp.bm.block.utils.DirectoryUtil;
 import ic.unicamp.bm.block.utils.TempBMDirectoryUtil;
@@ -10,17 +12,22 @@ import ic.unicamp.bm.block.IVCSAPI;
 import ic.unicamp.bm.cli.util.logger.SplMgrLogger;
 import ic.unicamp.bm.graph.neo4j.schema.Block;
 import ic.unicamp.bm.graph.neo4j.schema.Container;
+import ic.unicamp.bm.graph.neo4j.schema.Feature;
 import ic.unicamp.bm.graph.neo4j.schema.enums.BlockState;
 import ic.unicamp.bm.graph.neo4j.schema.enums.ContainerType;
 
 import ic.unicamp.bm.graph.neo4j.schema.enums.DataState;
 import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToBlock;
-import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToRawData;
+import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToFeature;
 import ic.unicamp.bm.graph.neo4j.schema.relations.ContainerToBlock;
 import ic.unicamp.bm.graph.neo4j.schema.relations.ContainerToContainer;
+import ic.unicamp.bm.graph.neo4j.services.BlockService;
+import ic.unicamp.bm.graph.neo4j.services.BlockServiceImpl;
 import ic.unicamp.bm.graph.neo4j.services.ContainerService;
 import ic.unicamp.bm.graph.neo4j.services.ContainerServiceImpl;
 
+import ic.unicamp.bm.graph.neo4j.services.FeatureService;
+import ic.unicamp.bm.graph.neo4j.services.FeatureServiceImpl;
 import ic.unicamp.bm.scanner.BlockScanner;
 //import ic.unicamp.bm.scanner.BlockState;
 import ic.unicamp.bm.scanner.IBlockScanner;
@@ -35,6 +42,7 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Ref;
@@ -53,8 +61,8 @@ public class BMAnalyze implements Runnable {
   @Override
   public void run() {
     try {
-      IVCSAPI temporalGitBlock = GitVCSManager.createTemporalGitBlockInstance();
-      Git git = (Git) temporalGitBlock.retrieveDirector();
+      IVCSAPI temporalVC = GitVCSManager.createTemporalGitBlockInstance();
+      Git git = (Git) temporalVC.retrieveDirector();
       git.checkout().setName(GitVCS.BMBranchLabel).call();
       if (!TempBMDirectoryUtil.existsBmTemporalDirectory()) {
         TempBMDirectoryUtil.createBMTemporalDirectory();
@@ -74,10 +82,6 @@ public class BMAnalyze implements Runnable {
       main.setContainerId(DirectoryUtil.getDirectoryAsPath().toString());
       main.setContainerType(ContainerType.MAIN);
       changeTreeToSchemaForm(treeWalk, main);
-
-
-
-      System.out.println("End Containers");
       //blocks
       createBlocksByFile(main);
       createContainers(main);
@@ -90,7 +94,7 @@ public class BMAnalyze implements Runnable {
   }
 
   private void showTemporalData( ) {
-    List<RawData> dataList = null;
+ /*   List<RawData> dataList = null;*/
     System.out.println("Block List:");
 /*    for(RawData record:dataList){
       Content block = record.getBelongsTo();
@@ -100,6 +104,7 @@ public class BMAnalyze implements Runnable {
   }
 
   private void createBlocksByFile(Container container) {
+
     if (container.getContainerType() == ContainerType.FILE) {
 
       IBlockScanner blockScanner = new BlockScanner();
@@ -110,28 +115,33 @@ public class BMAnalyze implements Runnable {
       //previous
       Block previousBlock = null;
       Block firstBlock = null;
+      FeatureService featureService = new FeatureServiceImpl();
+      Feature defaultFeature = featureService.getFeatureByID(BM_FEATURE);
+      if(defaultFeature == null){
+        defaultFeature = new Feature();
+        defaultFeature.setFeatureId(BM_FEATURE);
+        defaultFeature.setFeatureLabel(BM_FEATURE);
+      }
       for (String key : scannedBlocks.keySet()) {
         System.out.println("key");
-        String contentData = scannedBlocks.get(key);
+        String data = scannedBlocks.get(key);
+        String shaData = DigestUtils.sha256Hex(data);
         //path
-        temporalGitBlock.upsertContent(key, contentData);
+        temporalGitBlock.upsertContent(key, data);
+
+        //here to not repeat same blocks wiht same content
         //db
-
-        RawData data = new RawData();
-        data.setDataId(key);
-        data.setCurrentState(DataState.TEMPORAL);
-
-
         Block block = new Block();
         block.setBlockId(key);
+        block.setBlockSha(shaData);
         System.out.println(block.getBlockId());
-        block.setCurrentState(BlockState.TO_INSERT);
-
-        BlockToRawData relationRawData = new BlockToRawData();
-        relationRawData.setStartBlock(block);
-        relationRawData.setEndRawData(data);
-        block.setGetRawData(relationRawData);
+        block.setBlockState(BlockState.TO_INSERT);
+        block.setVcBlockState(DataState.TEMPORAL);
         if(previousBlock == null){
+          BlockToFeature blockToFeature = new BlockToFeature();
+          blockToFeature.setStartBlock(block);
+          blockToFeature.setEndFeature(defaultFeature);
+          block.setAssociatedTo(blockToFeature);
           firstBlock = block;
           previousBlock = block;
         }else{
@@ -144,7 +154,6 @@ public class BMAnalyze implements Runnable {
       }
       ContainerToBlock relation = new ContainerToBlock();
       relation.setStartContainer(container);
-      System.out.println(firstBlock.getBlockId());
       relation.setEndBlock(firstBlock);
       container.setGetFirstBlock(relation);
 
@@ -162,10 +171,8 @@ public class BMAnalyze implements Runnable {
   }
 
   private void changeTreeToSchemaForm(TreeWalk treeWalk, Container main) throws IOException {
-    Stack<Container> stack = new Stack<Container>();
+    Stack<Container> stack = new Stack<>();
     stack.push(main);
-
-    //boolean isMainLoaded = false;
     Container parentPivot = main;
     while (treeWalk.next()) {
       if (treeWalk.isSubtree()) {
@@ -219,9 +226,9 @@ public class BMAnalyze implements Runnable {
       if (exists.exists()) {
         back = false;
       } else {
-        if (parentPivot.getContainerType() != ContainerType.MAIN) {
-          parentPivot = stack.pop();
-        } else {
+        stack.pop();
+        parentPivot = stack.peek();
+        if (parentPivot.getContainerType() == ContainerType.MAIN) {
           back = false;
         }
       }
