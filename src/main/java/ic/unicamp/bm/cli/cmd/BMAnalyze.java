@@ -18,6 +18,7 @@ import ic.unicamp.bm.graph.neo4j.schema.enums.ContainerType;
 
 import ic.unicamp.bm.graph.neo4j.schema.enums.DataState;
 import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToBlock;
+import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToDefaultFeature;
 import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToFeature;
 import ic.unicamp.bm.graph.neo4j.schema.relations.ContainerToBlock;
 import ic.unicamp.bm.graph.neo4j.schema.relations.ContainerToContainer;
@@ -138,10 +139,10 @@ public class BMAnalyze implements Runnable {
         block.setBlockState(BlockState.TO_INSERT);
         block.setVcBlockState(DataState.TEMPORAL);
         if(previousBlock == null){
-          BlockToFeature blockToFeature = new BlockToFeature();
+          BlockToDefaultFeature blockToFeature = new BlockToDefaultFeature();
           blockToFeature.setStartBlock(block);
           blockToFeature.setEndFeature(defaultFeature);
-          block.setAssociatedTo(blockToFeature);
+          block.setAssociatedToDefaultFeature(blockToFeature);
           firstBlock = block;
           previousBlock = block;
         }else{

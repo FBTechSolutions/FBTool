@@ -22,20 +22,19 @@ public class BMCommit implements Runnable {
   @Override
   public void run() {
     try {
-      IVCSAPI temporalGitBlock = GitVCSManager.createTemporalGitBlockInstance();
+      //IVCSAPI temporalGitBlock = GitVCSManager.createTemporalGitBlockInstance();
       IVCSAPI gitBlock = GitVCSManager.createInstance();
-      Git git = (Git) temporalGitBlock.retrieveDirector();
+      Git git = (Git) gitBlock.retrieveDirector();
       git.checkout().setName(GitVCS.BMBranchLabel).call();
 
       BlockService blockService = new BlockServiceImpl();
-      List<Block> stageBlocks = blockService.getBlockByRawState(DataState.STAGE);
-      // List<RawData> stateData = graph.retrieveDataByState(DataState.STAGE);
+      List<Block> stageBlocks = blockService.getBlockByVCBlockState(DataState.STAGE);
 
       for (Block block : stageBlocks) {
         block.setVcBlockState(DataState.COMMITTED);
       }
       git.commit().setMessage("BM Adding blocks").call();
-      List<Block> committedBlocks = blockService.getBlockByRawState(DataState.COMMITTED);
+      List<Block> committedBlocks = blockService.getBlockByVCBlockState(DataState.COMMITTED);
 
       System.out.println("Block List:");
       for(Block block:committedBlocks){

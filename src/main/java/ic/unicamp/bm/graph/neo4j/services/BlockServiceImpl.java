@@ -35,10 +35,10 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
   }
 
   @Override
-  public List<Block> getBlockByRawState(DataState dataState) {
+  public List<Block> getBlockByVCBlockState(DataState dataState) {
     BlockService blockService = new BlockServiceImpl();
     System.out.println("Enter Query");
-    String queryTemplate = "MATCH (b:Block)-[r:GET_RAW_DATA]->(e:RawData {currentState: '%s'}) return b";
+    String queryTemplate = "MATCH (b:Block{vcBlockState: '%s'}) return b";
     String query = String.format(queryTemplate, dataState);
     System.out.println(query);
     Iterable<Map<String, Object>> queryResult = Neo4jSessionFactory.getInstance().getNeo4jSession().query(query, Collections.EMPTY_MAP);

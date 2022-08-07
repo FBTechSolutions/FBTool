@@ -29,7 +29,7 @@ public class BMAdd implements Runnable {
     BlockService blockService = new BlockServiceImpl();
     try {
       git.checkout().setName(GitVCS.BMBranchLabel).call();
-      List<Block> temporalDataList = blockService.getBlockByRawState(DataState.TEMPORAL);
+      List<Block> temporalDataList = blockService.getBlockByVCBlockState(DataState.TEMPORAL);
       for (Block contentBlock : temporalDataList) {
         String blockId = contentBlock.getBlockId();
         String content = temporalGitBlock.retrieveContent(blockId);
@@ -40,7 +40,7 @@ public class BMAdd implements Runnable {
         contentBlock.setBlockState(BlockState.TO_INSERT);
         blockService.createOrUpdate(contentBlock);
       }
-      List<Block> stageData = blockService.getBlockByRawState(DataState.STAGE);
+      List<Block> stageData = blockService.getBlockByVCBlockState(DataState.STAGE);
       System.out.println("Block List:");
       for (Block block : stageData) {
         String blockId = block.getBlockId();
