@@ -8,6 +8,7 @@ import ic.unicamp.bm.cli.cmd.BMConfigure;
 import ic.unicamp.bm.cli.cmd.BMExit;
 import ic.unicamp.bm.cli.cmd.BMInit;
 import ic.unicamp.bm.cli.cmd.BMProjectProduct;
+import ic.unicamp.bm.cli.cmd.BMTagBlocks;
 import ic.unicamp.bm.cli.cmd.BMUpsertProduct;
 import ic.unicamp.bm.cli.cmd.BMVersion;
 import ic.unicamp.bm.cli.util.logger.SplMgrLogger;
@@ -104,6 +105,10 @@ public class Cmd implements Runnable {
           }
           case CMD_UPSERT ->{
             CommandLine commandLine = new CommandLine(new BMUpsertProduct());
+            __executeCmd(inputs, commandLine);
+          }
+          case CMD_TAGBLOCKS ->{
+            CommandLine commandLine = new CommandLine(new BMTagBlocks());
             __executeCmd(inputs, commandLine);
           }
           default -> __printCmdNotValid();

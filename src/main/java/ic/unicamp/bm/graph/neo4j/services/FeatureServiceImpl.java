@@ -6,6 +6,7 @@ import ic.unicamp.bm.graph.neo4j.schema.Product;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import org.neo4j.ogm.cypher.ComparisonOperator;
 import org.neo4j.ogm.cypher.Filter;
@@ -29,6 +30,11 @@ public class FeatureServiceImpl extends GenericService<Feature> implements Featu
     if(iter.hasNext()){
       return iter.next();
     }
+    return null;
+  }
+
+  @Override
+  public List<Feature> getFeaturesByProductId() {
     return null;
   }
 

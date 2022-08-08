@@ -8,6 +8,7 @@ import ic.unicamp.bm.cli.cmd.BMConfigure;
 import ic.unicamp.bm.cli.cmd.BMExit;
 import ic.unicamp.bm.cli.cmd.BMInit;
 import ic.unicamp.bm.cli.cmd.BMSB;
+import ic.unicamp.bm.cli.cmd.BMTagBlocks;
 import ic.unicamp.bm.cli.cmd.BMUpsertProduct;
 import ic.unicamp.bm.cli.cmd.BMVersion;
 
@@ -24,4 +25,5 @@ public interface CmdTag {
   String CMD_ADD = BMAdd.CMD_NAME;
   String CMD_COMMIT = BMCommit.CMD_NAME;
   String CMD_UPSERT = BMUpsertProduct.CMD_NAME;
+  String CMD_TAGBLOCKS = BMTagBlocks.CMD_NAME;
 }
