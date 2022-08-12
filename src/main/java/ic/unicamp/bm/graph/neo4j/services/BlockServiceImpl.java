@@ -2,7 +2,9 @@ package ic.unicamp.bm.graph.neo4j.services;
 
 import ic.unicamp.bm.graph.neo4j.factory.Neo4jSessionFactory;
 import ic.unicamp.bm.graph.neo4j.schema.Block;
+import ic.unicamp.bm.graph.neo4j.schema.Feature;
 import ic.unicamp.bm.graph.neo4j.schema.enums.DataState;
+import ic.unicamp.bm.graph.neo4j.schema.relations.ContainerToBlock;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -34,6 +36,7 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
     return null;
   }
 
+
   @Override
   public List<Block> getBlockByVCBlockState(DataState dataState) {
     BlockService blockService = new BlockServiceImpl();
@@ -49,6 +52,19 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
       Block blockWithRelations =  blockService.getBlockByID(block.getBlockId());
       result.add(blockWithRelations);
       System.out.println(blockWithRelations.getBlockId());
+    });
+    return result;
+  }
+
+  @Override
+  public List<ContainerToBlock> getContainerToBlockRelations() {
+    String queryTemplate = "MATCH (c:Container)-[rel:GET_FIRST_BLOCK]->(b:Block) return rel";
+    //String query = String.format(queryTemplate, productId);
+    Iterable<Map<String, Object>> queryResult = Neo4jSessionFactory.getInstance().getNeo4jSession().query(queryTemplate, Collections.EMPTY_MAP);
+    List<ContainerToBlock> result = new LinkedList<>();
+    queryResult.forEach(map -> {
+      ContainerToBlock relation = (ContainerToBlock)map.get("rel");
+      result.add(relation);
     });
     return result;
   }

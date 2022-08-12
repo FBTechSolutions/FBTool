@@ -103,7 +103,7 @@ public class BMAnalyze implements Runnable {
       System.out.println("blockId - " + blockId + "  state - "+ DataState.TEMPORAL+ " FROM "+block.getBelongsTo().getContainerId());
     }*/
   }
-
+ // algorithm
   private void createBlocksByFile(Container container) {
 
     if (container.getContainerType() == ContainerType.FILE) {
@@ -142,7 +142,7 @@ public class BMAnalyze implements Runnable {
           BlockToDefaultFeature blockToFeature = new BlockToDefaultFeature();
           blockToFeature.setStartBlock(block);
           blockToFeature.setEndFeature(defaultFeature);
-          block.setAssociatedToDefaultFeature(blockToFeature);
+          //block.setAssociatedToDefaultFeature(blockToFeature);
           firstBlock = block;
           previousBlock = block;
         }else{

@@ -34,6 +34,7 @@ public class Container extends AbstractNode{
 
   @Relationship(type = "GET_FIRST_BLOCK", direction = Relationship.OUTGOING)
   private ContainerToBlock getFirstBlock;
+
   @Override
   public Long getId() {
     return id;

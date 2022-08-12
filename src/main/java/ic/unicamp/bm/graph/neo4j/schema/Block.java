@@ -3,7 +3,6 @@ package ic.unicamp.bm.graph.neo4j.schema;
 import ic.unicamp.bm.graph.neo4j.schema.enums.BlockState;
 import ic.unicamp.bm.graph.neo4j.schema.enums.DataState;
 import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToBlock;
-import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToDefaultFeature;
 import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToFeature;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -43,8 +42,10 @@ public class Block extends AbstractNode{
   @Relationship(type = "ASSOCIATED_TO", direction = Relationship.OUTGOING)
   private BlockToFeature associatedTo;
 
+/*
+  for now it is not necesary
   @Relationship(type = "ASSOCIATED_TO_DEFAULT_FEATURE", direction = Relationship.OUTGOING)
-  private BlockToDefaultFeature associatedToDefaultFeature;
+  private BlockToDefaultFeature associatedToDefaultFeature;*/
 
   @Override
   public Long getId() {
