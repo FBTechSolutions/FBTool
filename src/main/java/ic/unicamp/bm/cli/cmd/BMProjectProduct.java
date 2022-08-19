@@ -1,10 +1,13 @@
 package ic.unicamp.bm.cli.cmd;
 
+import static ic.unicamp.bm.block.GitVCS.BMBranchLabel;
+
 import ic.unicamp.bm.block.GitVCSManager;
 import ic.unicamp.bm.block.IVCSAPI;
 import ic.unicamp.bm.graph.neo4j.schema.Block;
 import ic.unicamp.bm.graph.neo4j.schema.Container;
 import ic.unicamp.bm.graph.neo4j.schema.Feature;
+import ic.unicamp.bm.graph.neo4j.schema.enums.DataState;
 import ic.unicamp.bm.graph.neo4j.schema.relations.ContainerToBlock;
 import ic.unicamp.bm.graph.neo4j.services.BlockService;
 import ic.unicamp.bm.graph.neo4j.services.BlockServiceImpl;
@@ -19,6 +22,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.ListBranchCommand.ListMode;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.Ref;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
@@ -60,31 +66,102 @@ public class BMProjectProduct implements Runnable {
       Container container = containerToBlock.getStartContainer();
       Block block = containerToBlock.getEndBlock();
       List<Block> blockRetrieved = retrieveBlockInBatches(block, featureList);
-      blockService.getBlockByID(block.getBlockId());
-      if(!blockRetrieved.isEmpty()){
-        map.put(container.getContainerId(),blockRetrieved);
+      List<Block> blockRetrievedCommitted = retrieveBlockCommitted(blockRetrieved);
+      //blockService.getBlockByID(block.getBlockId());
+      if(!blockRetrievedCommitted.isEmpty()){
+        map.put(container.getContainerId(), blockRetrievedCommitted);
       }
     }
     try {
-      projectFiles(map,clean);
+      Map<String, List<String>> rawMap  = retrieveContents(map);
+      //creating branch
+      try {
+        if(!exitsBranch(productId)){
+          //git.branchCreate().setName(productId).call();
+          git.checkout().setOrphan(true).setName(productId).call();
+          git.rm().addFilepattern(".").call();
+          git.rm().setCached(true).addFilepattern(".").call();
+          git.commit().setMessage("BM: Projecting").call();
+        }else{
+          //git.checkout().setName(productId).call();
+          //git.checkout().setOrphan(true).setName(productId).call();
+          //git.rm().setCached(true).call();
+        }
+      } catch (GitAPIException e) {
+        throw new RuntimeException(e);
+      }
+      //project in files
+      projectRawFiles(rawMap, clean);
+
+      //commit
+      try {
+        git.checkout().setName(productId).call();
+        git.add().addFilepattern(".").call();
+        git.commit().setMessage("BM: Projecting").call();
+      } catch (GitAPIException e) {
+        throw new RuntimeException(e);
+      }
+
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  private boolean exitsBranch(String productId) {
+    List<Ref> call;
+    try {
+      call = git.branchList().setListMode(ListMode.ALL).call();
+      for (Ref ref : call) {
+        if (ref.getName().contains(productId)) {
+          return true;
+        }
+      }
+    } catch (GitAPIException e) {
+      throw new RuntimeException(e);
+    }
+    return false;
+  }
+
+  private Map<String, List<String>> retrieveContents(Map<String, List<Block>> map) {
+    Map<String, List<String>> result = new LinkedHashMap<>();
+    for (String path : map.keySet()) {
+      List<String> rawBlock = new LinkedList<>();
+      for (Block block : map.get(path)) {
+        String rawContent = gitBlock.retrieveContent(block.getBlockId());
+        rawBlock.add(rawContent);
+      }
+      result.put(path,rawBlock);
+    }
+    return result;
+  }
+
+  private List<Block> retrieveBlockCommitted(List<Block> blockRetrieved) {
+    List<Block> result = new LinkedList<>();
+    for (Block block : blockRetrieved) {
+      if(block.getVcBlockState() == DataState.COMMITTED){
+        result.add(block);
+      }
+    }
+    return result;
   }
 
   private List<Block> retrieveBlockInBatches(Block block, List<Feature> featureList) {
     List<Block> result = new LinkedList<>();
     BlockService blockService = new BlockServiceImpl();
     Block blockFull = blockService.getBlockByID(block.getBlockId());
-    String feature = blockFull.getAssociatedTo().getEndFeature().getFeatureId();
-    if(featureIsInTheList(featureList, feature)){
-      result.add(block);
+    if(blockFull.getAssociatedTo()!=null){
+      String feature = blockFull.getAssociatedTo().getEndFeature().getFeatureId();
+      if(featureIsInTheList(featureList, feature)){
+        result.add(block);
+      }
     }
     while(blockFull.getGoNextBlock() != null){
       blockFull = blockFull.getGoNextBlock().getEndBlock();
-      feature =  blockFull.getAssociatedTo().getEndFeature().getFeatureId();
-      if(featureIsInTheList(featureList, feature)){
-        result.add(block);
+      if(blockFull.getAssociatedTo()!=null){
+        String feature =  blockFull.getAssociatedTo().getEndFeature().getFeatureId();
+        if(featureIsInTheList(featureList, feature)){
+          result.add(block);
+        }
       }
     }
     return result;
@@ -99,7 +176,7 @@ public class BMProjectProduct implements Runnable {
     return false;
   }
 
-  private void projectFiles(Map<String, List<Block>> map, boolean clean) throws IOException {
+/*  private void projectRawFiles(Map<String, List<Block>> map, boolean clean) throws IOException {
     for (String path : map.keySet()) {
       File file = new File(path);
       if (!file.exists()) {
@@ -110,7 +187,18 @@ public class BMProjectProduct implements Runnable {
         Files.writeString(Paths.get(file.toURI()), rawContent);
       }
     }
+  }*/
+private void projectRawFiles(Map<String, List<String>> map, boolean clean) throws IOException {
+  for (String path : map.keySet()) {
+    File file = new File(path);
+    if (!file.exists()) {
+      Files.createFile(file.toPath());
+    }
+    for (String block : map.get(path)) {
+      Files.writeString(Paths.get(file.toURI()), block);
+    }
   }
+}
 }
 /*  private final GraphAPI graph = GraphBuilder.createGraphInstance();
   private final IBlockAPI gitBlock = GitBlockManager.createGitBlockInstance();
