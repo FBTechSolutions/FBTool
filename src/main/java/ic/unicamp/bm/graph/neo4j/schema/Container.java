@@ -18,7 +18,8 @@ import org.neo4j.ogm.annotation.Relationship;
 @Setter
 @Getter
 @NodeEntity(label = "Container")
-public class Container extends AbstractNode{
+public class Container extends AbstractNode {
+
   @GeneratedValue
   @Id
   private Long id;

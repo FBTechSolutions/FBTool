@@ -11,7 +11,8 @@ public class BMRestore implements Runnable {
 
   public static final String CMD_NAME = "restore";
 
-  @Option(names = "-clean")     boolean clean;
+  @Option(names = "-clean")
+  boolean clean;
 
   @Parameters(index = "0..*")
   String[] products;

@@ -19,11 +19,11 @@ public class ContainerServiceImpl extends GenericService<Container> implements C
   public Container getContainerByID(String productId) {
     Filter filter = new Filter("containerId", ComparisonOperator.EQUALS, productId);
     Collection<Container> features = session.loadAll(Container.class, new Filters().add(filter));
-    if(features.size()>1){
+    if (features.size() > 1) {
       System.out.println("Two IDs for Product is not good");
     }
     Iterator<Container> iter = features.iterator();
-    if(iter.hasNext()){
+    if (iter.hasNext()) {
       return iter.next();
     }
     return null;

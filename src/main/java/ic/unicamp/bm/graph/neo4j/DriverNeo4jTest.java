@@ -9,7 +9,7 @@ import ic.unicamp.bm.graph.neo4j.services.ProductServiceImpl;
 import java.util.LinkedList;
 import java.util.List;
 
-public class DriverNeo4jTest{
+public class DriverNeo4jTest {
 
   public static void main(String... args) throws Exception {
 /*    ProductService productService = new ProductServiceImpl();

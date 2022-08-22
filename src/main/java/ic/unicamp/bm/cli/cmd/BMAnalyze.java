@@ -94,8 +94,8 @@ public class BMAnalyze implements Runnable {
     }
   }
 
-  private void showTemporalData( ) {
- /*   List<RawData> dataList = null;*/
+  private void showTemporalData() {
+    /*   List<RawData> dataList = null;*/
     System.out.println("Block List:");
 /*    for(RawData record:dataList){
       Content block = record.getBelongsTo();
@@ -103,7 +103,8 @@ public class BMAnalyze implements Runnable {
       System.out.println("blockId - " + blockId + "  state - "+ DataState.TEMPORAL+ " FROM "+block.getBelongsTo().getContainerId());
     }*/
   }
- // algorithm
+
+  // algorithm
   private void createBlocksByFile(Container container) {
 
     if (container.getContainerType() == ContainerType.FILE) {
@@ -118,7 +119,7 @@ public class BMAnalyze implements Runnable {
       Block firstBlock = null;
       FeatureService featureService = new FeatureServiceImpl();
       Feature defaultFeature = featureService.getFeatureByID(BM_FEATURE);
-      if(defaultFeature == null){
+      if (defaultFeature == null) {
         defaultFeature = new Feature();
         defaultFeature.setFeatureId(BM_FEATURE);
         defaultFeature.setFeatureLabel(BM_FEATURE);
@@ -138,7 +139,7 @@ public class BMAnalyze implements Runnable {
         System.out.println(block.getBlockId());
         block.setBlockState(BlockState.TO_INSERT);
         block.setVcBlockState(DataState.TEMPORAL);
-        if(previousBlock == null){
+        if (previousBlock == null) {
           BlockToFeature blockToFeature = new BlockToFeature();
           blockToFeature.setStartBlock(block);
           blockToFeature.setEndFeature(defaultFeature);
@@ -146,7 +147,7 @@ public class BMAnalyze implements Runnable {
           //block.setAssociatedToDefaultFeature(blockToFeature);
           firstBlock = block;
           previousBlock = block;
-        }else{
+        } else {
           BlockToBlock relation = new BlockToBlock();
           relation.setStartBlock(previousBlock);
           relation.setEndBlock(block);
@@ -189,7 +190,7 @@ public class BMAnalyze implements Runnable {
         relation.setStartContainer(parentPivot);
         relation.setEndContainer(container);
         List<ContainerToContainer> relations = parentPivot.getGetContainers();
-        if(relations == null){
+        if (relations == null) {
           relations = new LinkedList<>();
         }
         relations.add(relation);
@@ -210,7 +211,7 @@ public class BMAnalyze implements Runnable {
         relation.setStartContainer(parentPivot);
         relation.setEndContainer(container);
         List<ContainerToContainer> relations = parentPivot.getGetContainers();
-        if(relations == null){
+        if (relations == null) {
           relations = new LinkedList<>();
         }
         relations.add(relation);
@@ -237,10 +238,12 @@ public class BMAnalyze implements Runnable {
     }
     return parentPivot;
   }
+
   public static List<Path> listFiles(Path path) throws IOException {
     List<Path> result;
     try (Stream<Path> walk = Files.walk(path)) {
-      result = walk.filter(Files::isRegularFile).filter(aPath -> !GitDirectoryUtil.existNameInPath(aPath))
+      result = walk.filter(Files::isRegularFile)
+          .filter(aPath -> !GitDirectoryUtil.existNameInPath(aPath))
           .filter(aPath -> !BMDirectoryUtil.existNameInPath(aPath))
           .collect(Collectors.toList());
     }

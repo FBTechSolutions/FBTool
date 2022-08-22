@@ -39,9 +39,9 @@ public class BMCommit implements Runnable {
       List<Block> committedBlocks = blockService.getBlockByVCBlockState(DataState.COMMITTED);
 
       System.out.println("Block List:");
-      for(Block block:committedBlocks){
+      for (Block block : committedBlocks) {
         String blockId = block.getBlockId();
-        System.out.println("blockId - " + blockId + "  state - "+ DataState.COMMITTED);
+        System.out.println("blockId - " + blockId + "  state - " + DataState.COMMITTED);
       }
 
     } catch (GitAPIException e) {

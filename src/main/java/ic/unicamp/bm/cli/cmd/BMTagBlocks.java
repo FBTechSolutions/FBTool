@@ -9,7 +9,7 @@ import ic.unicamp.bm.graph.neo4j.services.FeatureService;
 import ic.unicamp.bm.graph.neo4j.services.FeatureServiceImpl;
 import picocli.CommandLine;
 import picocli.CommandLine.Parameters;
-
+//ok
 @CommandLine.Command(name = BMTagBlocks.CMD_NAME)
 public class BMTagBlocks implements Runnable {
 
@@ -19,26 +19,35 @@ public class BMTagBlocks implements Runnable {
   String featureId;
 
   @Parameters(index = "1..*")
-  String[] blockIds;
+  String[] blockList;
 
   @Override
   public void run() {
     FeatureService featureService = new FeatureServiceImpl();
-    BlockService blockService = new BlockServiceImpl();
     Feature feature = featureService.getFeatureByID(featureId);
     if (feature == null) {
-      System.out.println("There is not a feature with that Id");
+      System.out.println("No Feature with the given ID could be found");
+      return;
     }
-    for (String blockId : blockIds) {
+    if (blockList == null) {
+      System.out.println("This command requires block ids");
+      return;
+    }
+
+    BlockService blockService = new BlockServiceImpl();
+    for (String blockId : blockList) {
       Block block = blockService.getBlockByID(blockId);
       if (block == null) {
-        System.out.println("There is not a Block with Id " + blockId);
-      }else{
+        String message = String.format("No Block with the given ID (%s) could be found", blockId);
+        System.out.println(message);
+      } else {
         BlockToFeature relation = new BlockToFeature();
         relation.setStartBlock(block);
         relation.setEndFeature(feature);
         block.setAssociatedTo(relation);
         blockService.createOrUpdate(block);
+        String message = String.format("Block %s tagged", blockId);
+        System.out.println(message);
       }
     }
   }

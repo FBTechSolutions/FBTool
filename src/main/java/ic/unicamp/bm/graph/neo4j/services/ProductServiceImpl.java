@@ -32,11 +32,11 @@ public class ProductServiceImpl extends GenericService<Product> implements Produ
     return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query, Collections.EMPTY_MAP);*/
     Filter filter = new Filter("productId", ComparisonOperator.EQUALS, productId);
     Collection<Product> products = session.loadAll(Product.class, new Filters().add(filter));
-    if(products.size()>1){
+    if (products.size() > 1) {
       System.out.println("Two IDs for Product is not good");
     }
     Iterator<Product> iter = products.iterator();
-    if(iter.hasNext()){
+    if (iter.hasNext()) {
       return iter.next();
     }
     return null;

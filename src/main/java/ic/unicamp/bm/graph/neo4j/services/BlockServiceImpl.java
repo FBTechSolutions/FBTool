@@ -27,11 +27,11 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
   public Block getBlockByID(String productId) {
     Filter filter = new Filter("blockId", ComparisonOperator.EQUALS, productId);
     Collection<Block> features = session.loadAll(Block.class, new Filters().add(filter));
-    if(features.size()>1){
+    if (features.size() > 1) {
       System.out.println("Two IDs for Product is not good");
     }
     Iterator<Block> iter = features.iterator();
-    if(iter.hasNext()){
+    if (iter.hasNext()) {
       return iter.next();
     }
     return null;
@@ -45,12 +45,13 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
     String queryTemplate = "MATCH (b:Block{vcBlockState: '%s'}) return b";
     String query = String.format(queryTemplate, dataState);
     System.out.println(query);
-    Iterable<Map<String, Object>> queryResult = Neo4jSessionFactory.getInstance().getNeo4jSession().query(query, Collections.EMPTY_MAP);
+    Iterable<Map<String, Object>> queryResult = Neo4jSessionFactory.getInstance().getNeo4jSession()
+        .query(query, Collections.EMPTY_MAP);
     System.out.println(queryResult);
     List<Block> result = new LinkedList<>();
     queryResult.forEach(map -> {
-      Block block = (Block)map.get("b");
-      Block blockWithRelations =  blockService.getBlockByID(block.getBlockId());
+      Block block = (Block) map.get("b");
+      Block blockWithRelations = blockService.getBlockByID(block.getBlockId());
       result.add(blockWithRelations);
       System.out.println(blockWithRelations.getBlockId());
     });
@@ -61,12 +62,13 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
   public List<ContainerToBlock> getContainerToBlockRelations() {
     String queryTemplate = "MATCH (c:Container)-[r:GET_FIRST_BLOCK]->(b:Block) return c,b";
     //String query = String.format(queryTemplate, productId);
-    Iterable<Map<String, Object>> queryResult = Neo4jSessionFactory.getInstance().getNeo4jSession().query(queryTemplate, Collections.EMPTY_MAP);
+    Iterable<Map<String, Object>> queryResult = Neo4jSessionFactory.getInstance().getNeo4jSession()
+        .query(queryTemplate, Collections.EMPTY_MAP);
     List<ContainerToBlock> result = new LinkedList<>();
     queryResult.forEach(map -> {
       //ContainerToBlock relation = (ContainerToBlock)map.get("r");
-      Container container = (Container)map.get("c");
-      Block block = (Block)map.get("b");
+      Container container = (Container) map.get("c");
+      Block block = (Block) map.get("b");
       ContainerToBlock rel = new ContainerToBlock();
       rel.setStartContainer(container);
       rel.setEndBlock(block);

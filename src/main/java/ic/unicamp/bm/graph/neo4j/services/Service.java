@@ -1,6 +1,7 @@
 package ic.unicamp.bm.graph.neo4j.services;
 
 public interface Service<T> {
+
   Iterable<T> findAll();
 
   T find(Long id);

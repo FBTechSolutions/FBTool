@@ -38,7 +38,8 @@ public class BMProjectProduct implements Runnable {
   private final Git git = (Git) gitBlock.retrieveDirector();
   public static final String CMD_NAME = "project";
 
-  @Option(names = "-clean")     boolean clean;
+  @Option(names = "-clean")
+  boolean clean;
 
   @Parameters(index = "0..*")
   String[] products;
@@ -68,28 +69,28 @@ public class BMProjectProduct implements Runnable {
       List<Block> blockRetrieved = retrieveBlockInBatches(block, featureList);
       List<Block> blockRetrievedCommitted = retrieveBlockCommitted(blockRetrieved);
       //blockService.getBlockByID(block.getBlockId());
-      if(!blockRetrievedCommitted.isEmpty()){
+      if (!blockRetrievedCommitted.isEmpty()) {
         map.put(container.getContainerId(), blockRetrievedCommitted);
       }
     }
     try {
-      Map<String, List<String>> rawMap  = retrieveContents(map);
+      Map<String, List<String>> rawMap = retrieveContents(map);
       //creating branch
       try {
-        if(!exitsBranch(productId)){
+        if (!exitsBranch(productId)) {
           //git.branchCreate().setName(productId).call();
-          git.checkout().setCreateBranch(true).setOrphan(true).setName(productId).call(); // mepty branch
+          git.checkout().setCreateBranch(true).setOrphan(true).setName(productId)
+              .call(); // mepty branch
           git.rm().setCached(true).addFilepattern(".").call();
           git.rm().addFilepattern(".").call();
 
           git.commit().setMessage("BM: Projecting create").call();
-        }else{
+        } else {
           git.checkout().setName(BMBranchLabel).call();
           git.branchDelete().setBranchNames(productId).setForce(true).call();
           git.checkout().setCreateBranch(true).setOrphan(true).setName(productId).call();
           git.rm().setCached(true).addFilepattern(".").call();
           git.rm().addFilepattern(".").call();
-
 
           git.commit().setMessage("BM: Projecting updated").call();
           //git.checkout().setName(productId).call();
@@ -139,7 +140,7 @@ public class BMProjectProduct implements Runnable {
         String rawContent = gitBlock.retrieveContent(block.getBlockId());
         rawBlock.add(rawContent);
       }
-      result.put(path,rawBlock);
+      result.put(path, rawBlock);
     }
     return result;
   }
@@ -147,7 +148,7 @@ public class BMProjectProduct implements Runnable {
   private List<Block> retrieveBlockCommitted(List<Block> blockRetrieved) {
     List<Block> result = new LinkedList<>();
     for (Block block : blockRetrieved) {
-      if(block.getVcBlockState() == DataState.COMMITTED){
+      if (block.getVcBlockState() == DataState.COMMITTED) {
         result.add(block);
       }
     }
@@ -158,17 +159,17 @@ public class BMProjectProduct implements Runnable {
     List<Block> result = new LinkedList<>();
     BlockService blockService = new BlockServiceImpl();
     Block blockFull = blockService.getBlockByID(block.getBlockId());
-    if(blockFull.getAssociatedTo()!=null){
+    if (blockFull.getAssociatedTo() != null) {
       String feature = blockFull.getAssociatedTo().getEndFeature().getFeatureId();
-      if(featureIsInTheList(featureList, feature)){
+      if (featureIsInTheList(featureList, feature)) {
         result.add(block);
       }
     }
-    while(blockFull.getGoNextBlock() != null){
+    while (blockFull.getGoNextBlock() != null) {
       blockFull = blockFull.getGoNextBlock().getEndBlock();
-      if(blockFull.getAssociatedTo()!=null){
-        String feature =  blockFull.getAssociatedTo().getEndFeature().getFeatureId();
-        if(featureIsInTheList(featureList, feature)){
+      if (blockFull.getAssociatedTo() != null) {
+        String feature = blockFull.getAssociatedTo().getEndFeature().getFeatureId();
+        if (featureIsInTheList(featureList, feature)) {
           result.add(block);
         }
       }
@@ -178,38 +179,38 @@ public class BMProjectProduct implements Runnable {
 
   private static boolean featureIsInTheList(List<Feature> featureList, String feature) {
     for (Feature featureNode : featureList) {
-      if(featureNode.getFeatureId().equals(feature)){
+      if (featureNode.getFeatureId().equals(feature)) {
         return true;
       }
     }
     return false;
   }
 
-/*  private void projectRawFiles(Map<String, List<Block>> map, boolean clean) throws IOException {
+  /*  private void projectRawFiles(Map<String, List<Block>> map, boolean clean) throws IOException {
+      for (String path : map.keySet()) {
+        File file = new File(path);
+        if (!file.exists()) {
+            Files.createFile(file.toPath());
+        }
+        for (Block block : map.get(path)) {
+          String rawContent = gitBlock.retrieveContent(block.getBlockId());
+          Files.writeString(Paths.get(file.toURI()), rawContent);
+        }
+      }
+    }*/
+  private void projectRawFiles(Map<String, List<String>> map, boolean clean) throws IOException {
+    System.out.println("Enter Project Files");
     for (String path : map.keySet()) {
+      System.out.println(path);
       File file = new File(path);
       if (!file.exists()) {
-          Files.createFile(file.toPath());
+        Files.createFile(file.toPath());
       }
-      for (Block block : map.get(path)) {
-        String rawContent = gitBlock.retrieveContent(block.getBlockId());
-        Files.writeString(Paths.get(file.toURI()), rawContent);
+      for (String block : map.get(path)) {
+        Files.writeString(Paths.get(file.toURI()), block);
       }
-    }
-  }*/
-private void projectRawFiles(Map<String, List<String>> map, boolean clean) throws IOException {
-  System.out.println("Enter Project Files");
-  for (String path : map.keySet()) {
-    System.out.println(path);
-    File file = new File(path);
-    if (!file.exists()) {
-      Files.createFile(file.toPath());
-    }
-    for (String block : map.get(path)) {
-      Files.writeString(Paths.get(file.toURI()), block);
     }
   }
-}
 }
 /*  private final GraphAPI graph = GraphBuilder.createGraphInstance();
   private final IBlockAPI gitBlock = GitBlockManager.createGitBlockInstance();

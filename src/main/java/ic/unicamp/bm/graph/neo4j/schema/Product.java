@@ -16,7 +16,8 @@ import org.neo4j.ogm.annotation.Relationship;
 @Setter
 @Getter
 @NodeEntity(label = "Product")
-public class Product extends AbstractNode{
+public class Product extends AbstractNode {
+
   @GeneratedValue
   @Id
   private Long id;
@@ -29,6 +30,7 @@ public class Product extends AbstractNode{
 
   @Relationship(type = "ASSOCIATED_TO", direction = Relationship.OUTGOING)
   private List<ProductToFeature> associatedTo;
+
   @Override
   public Long getId() {
     return id;

@@ -106,19 +106,19 @@ public class Cmd implements Runnable {
             CommandLine commandLine = new CommandLine(new BMCommit());
             __executeCmd(inputs, commandLine);
           }
-          case CMD_UPSERT_PRODUCT ->{
+          case CMD_UPSERT_PRODUCT -> {
             CommandLine commandLine = new CommandLine(new BMUpsertProduct());
             __executeCmd(inputs, commandLine);
           }
-          case CMD_UPSERT_FEATURES ->{
+          case CMD_UPSERT_FEATURES -> {
             CommandLine commandLine = new CommandLine(new BMUpsertFeatures());
             __executeCmd(inputs, commandLine);
           }
-          case CMD_PROJECT_PRODUCT->{
+          case CMD_PROJECT_PRODUCT -> {
             CommandLine commandLine = new CommandLine(new BMProjectProduct());
             __executeCmd(inputs, commandLine);
           }
-          case CMD_TAGBLOCKS ->{
+          case CMD_TAGBLOCKS -> {
             CommandLine commandLine = new CommandLine(new BMTagBlocks());
             __executeCmd(inputs, commandLine);
           }

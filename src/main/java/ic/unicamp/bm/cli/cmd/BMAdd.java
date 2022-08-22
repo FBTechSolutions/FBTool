@@ -44,12 +44,12 @@ public class BMAdd implements Runnable {
       System.out.println("Block List:");
       for (Block block : stageData) {
         String blockId = block.getBlockId();
-        System.out.println("blockId - " + blockId + "  state - " + DataState.STAGE );
+        System.out.println("blockId - " + blockId + "  state - " + DataState.STAGE);
       }
 
     } catch (GitAPIException e) {
       throw new RuntimeException(e);
     }
 
-}
+  }
 }

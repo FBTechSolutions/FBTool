@@ -13,7 +13,7 @@ import org.eclipse.jgit.util.StringUtils;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 
-//“update” and “insert.”
+//ok
 @Command(
     name = BMUpsertProduct.CMD_NAME,
     description = "This command will create or update a product")
@@ -27,13 +27,13 @@ public class BMUpsertProduct implements Runnable {
   @Parameters(index = "1..*")
   String[] featureIds;
 
-
   @Override
   public void run() {
-    System.out.println("Enter UPSERT");
     if (StringUtils.isEmptyOrNull(productId)) {
       System.out.println("This command requires an productId");
+      return;
     }
+
     ProductService productService = new ProductServiceImpl();
     FeatureService featureService = new FeatureServiceImpl();
     Product product = productService.getProductByID(productId);
@@ -42,12 +42,9 @@ public class BMUpsertProduct implements Runnable {
       product.setProductId(productId);
       product.setProductLabel(productId);
     }
-    List<ProductToFeature> featureList = new LinkedList<>();
-    //iter instead of foreach
+    List<ProductToFeature> updatedFeatures = new LinkedList<>();
     for (String featureId : featureIds) {
       ProductToFeature relation = new ProductToFeature();
-      relation.setName("relation");
-
       Feature feature = featureService.getFeatureByID(featureId);
       if (feature == null) {
         feature = new Feature();
@@ -56,9 +53,9 @@ public class BMUpsertProduct implements Runnable {
       }
       relation.setStartProduct(product);
       relation.setEndFeature(feature);
-      featureList.add(relation);
+      updatedFeatures.add(relation);
     }
-    product.setAssociatedTo(featureList);
+    product.setAssociatedTo(updatedFeatures);
     productService.createOrUpdate(product);
   }
 }

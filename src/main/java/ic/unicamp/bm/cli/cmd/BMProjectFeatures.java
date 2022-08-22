@@ -11,7 +11,8 @@ public class BMProjectFeatures implements Runnable {
 
   public static final String CMD_NAME = "project-features";
 
-  @Option(names = "-clean")     boolean clean;
+  @Option(names = "-clean")
+  boolean clean;
 
   @Parameters(index = "0..*")
   String[] features;

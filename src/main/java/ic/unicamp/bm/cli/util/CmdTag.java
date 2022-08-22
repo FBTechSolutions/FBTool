@@ -8,7 +8,6 @@ import ic.unicamp.bm.cli.cmd.BMConfigure;
 import ic.unicamp.bm.cli.cmd.BMExit;
 import ic.unicamp.bm.cli.cmd.BMInit;
 import ic.unicamp.bm.cli.cmd.BMProjectProduct;
-import ic.unicamp.bm.cli.cmd.BMSB;
 import ic.unicamp.bm.cli.cmd.BMTagBlocks;
 import ic.unicamp.bm.cli.cmd.BMUpsertFeatures;
 import ic.unicamp.bm.cli.cmd.BMUpsertProduct;
