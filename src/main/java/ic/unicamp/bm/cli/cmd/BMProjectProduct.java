@@ -78,11 +78,20 @@ public class BMProjectProduct implements Runnable {
       try {
         if(!exitsBranch(productId)){
           //git.branchCreate().setName(productId).call();
-          git.checkout().setOrphan(true).setName(productId).call();
-          git.rm().addFilepattern(".").call();
+          git.checkout().setCreateBranch(true).setOrphan(true).setName(productId).call(); // mepty branch
           git.rm().setCached(true).addFilepattern(".").call();
-          git.commit().setMessage("BM: Projecting").call();
+          git.rm().addFilepattern(".").call();
+
+          git.commit().setMessage("BM: Projecting create").call();
         }else{
+          git.checkout().setName(BMBranchLabel).call();
+          git.branchDelete().setBranchNames(productId).setForce(true).call();
+          git.checkout().setCreateBranch(true).setOrphan(true).setName(productId).call();
+          git.rm().setCached(true).addFilepattern(".").call();
+          git.rm().addFilepattern(".").call();
+
+
+          git.commit().setMessage("BM: Projecting updated").call();
           //git.checkout().setName(productId).call();
           //git.checkout().setOrphan(true).setName(productId).call();
           //git.rm().setCached(true).call();
@@ -97,7 +106,7 @@ public class BMProjectProduct implements Runnable {
       try {
         git.checkout().setName(productId).call();
         git.add().addFilepattern(".").call();
-        git.commit().setMessage("BM: Projecting").call();
+        git.commit().setMessage("BM: Projecting Commit").call();
       } catch (GitAPIException e) {
         throw new RuntimeException(e);
       }
@@ -189,7 +198,9 @@ public class BMProjectProduct implements Runnable {
     }
   }*/
 private void projectRawFiles(Map<String, List<String>> map, boolean clean) throws IOException {
+  System.out.println("Enter Project Files");
   for (String path : map.keySet()) {
+    System.out.println(path);
     File file = new File(path);
     if (!file.exists()) {
       Files.createFile(file.toPath());

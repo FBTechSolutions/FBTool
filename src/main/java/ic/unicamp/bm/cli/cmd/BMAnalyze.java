@@ -139,9 +139,10 @@ public class BMAnalyze implements Runnable {
         block.setBlockState(BlockState.TO_INSERT);
         block.setVcBlockState(DataState.TEMPORAL);
         if(previousBlock == null){
-          BlockToDefaultFeature blockToFeature = new BlockToDefaultFeature();
+          BlockToFeature blockToFeature = new BlockToFeature();
           blockToFeature.setStartBlock(block);
           blockToFeature.setEndFeature(defaultFeature);
+          block.setAssociatedTo(blockToFeature);
           //block.setAssociatedToDefaultFeature(blockToFeature);
           firstBlock = block;
           previousBlock = block;
