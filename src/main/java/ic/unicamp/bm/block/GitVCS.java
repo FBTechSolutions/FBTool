@@ -23,7 +23,7 @@ import java.io.IOException;
 public class GitVCS implements IVCSAPI {
 
   private Git git;
-  public static String BMBranchLabel = "bm_block_master";
+  public static String BMBranchLabel = "bm_block";
 
   public GitVCS() {
     FileRepositoryBuilder repositoryBuilder = new FileRepositoryBuilder();

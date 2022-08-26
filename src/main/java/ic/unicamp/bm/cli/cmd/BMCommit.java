@@ -18,32 +18,26 @@ import picocli.CommandLine.Command;
 public class BMCommit implements Runnable {
 
   public static final String CMD_NAME = "commit";
+  private final IVCSAPI gitVC = GitVCSManager.createInstance();
+  private final Git git = (Git) gitVC.retrieveDirector();
 
   @Override
   public void run() {
     try {
-      //IVCSAPI temporalGitBlock = GitVCSManager.createTemporalGitBlockInstance();
-      IVCSAPI gitBlock = GitVCSManager.createInstance();
-      Git git = (Git) gitBlock.retrieveDirector();
       git.checkout().setName(GitVCS.BMBranchLabel).call();
 
       BlockService blockService = new BlockServiceImpl();
       List<Block> stageBlocks = blockService.getBlockByVCBlockState(DataState.STAGE);
-
       for (Block block : stageBlocks) {
         block.setVcBlockState(DataState.COMMITTED);
         blockService.createOrUpdate(block);
       }
-
       git.commit().setMessage("BM Adding blocks").call();
       List<Block> committedBlocks = blockService.getBlockByVCBlockState(DataState.COMMITTED);
-
-      System.out.println("Block List:");
       for (Block block : committedBlocks) {
         String blockId = block.getBlockId();
-        System.out.println("blockId - " + blockId + "  state - " + DataState.COMMITTED);
+        System.out.println("blockId - " + blockId + "  state - " + block.getVcBlockState());
       }
-
     } catch (GitAPIException e) {
       throw new RuntimeException(e);
     }

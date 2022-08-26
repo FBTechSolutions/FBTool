@@ -1,5 +1,8 @@
 package ic.unicamp.bm.cli.cmd;
 
+import ic.unicamp.bm.graph.neo4j.schema.Feature;
+import ic.unicamp.bm.graph.neo4j.services.FeatureService;
+import ic.unicamp.bm.graph.neo4j.services.FeatureServiceImpl;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 
@@ -12,5 +15,10 @@ public class BMListFeatures implements Runnable {
 
   @Override
   public void run() {
+    FeatureService featureService = new FeatureServiceImpl();
+    for (Feature feature :  featureService.findAll()) {
+      String message = String.format("%s : %s", feature.getFeatureId(), feature.getFeatureLabel());
+      System.out.println(message);
+    }
   }
 }

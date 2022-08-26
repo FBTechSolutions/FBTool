@@ -31,29 +31,28 @@ import picocli.CommandLine.Parameters;
 
 @Command(
     name = BMProjectProduct.CMD_NAME,
-    description = "This command will project several SPL source code related to a list of products.")
+    description = "This command will project the source code of a product.")
 public class BMProjectProduct implements Runnable {
 
-  private final IVCSAPI gitBlock = GitVCSManager.createInstance();
-  private final Git git = (Git) gitBlock.retrieveDirector();
+  private final IVCSAPI gitVC = GitVCSManager.createInstance();
+  private final Git git = (Git) gitVC.retrieveDirector();
   public static final String CMD_NAME = "project";
 
-  @Option(names = "-clean")
+  @Option(names = "-clean",  defaultValue = "false")
   boolean clean;
 
   @Parameters(index = "0..*")
-  String[] products;
+  String[] productList;
 
   @Override
   public void run() {
-    for (String productId : products) {
+    if(productList == null){
+      System.out.println("You need to specify at least one Product Id");
+      return;
+    }
+    for (String productId : productList) {
       projectProduct(productId, clean);
     }
-  }
-
-  private void projectCleanProduct(String productId) {
-
-    //blockService.getBlockByFeatures(featureList);
   }
 
   private void projectProduct(String productId, boolean clean) {
@@ -78,21 +77,23 @@ public class BMProjectProduct implements Runnable {
       //creating branch
       try {
         if (!exitsBranch(productId)) {
-          //git.branchCreate().setName(productId).call();
-          git.checkout().setCreateBranch(true).setOrphan(true).setName(productId)
-              .call(); // mepty branch
+          git.checkout().setCreateBranch(true).setName(productId).setForced(true).setOrphan(true).call();
+          /*git.checkout().setCreateBranch(true).setOrphan(true).setName(productId)
+              .call();
           git.rm().setCached(true).addFilepattern(".").call();
-          git.rm().addFilepattern(".").call();
+          git.rm().addFilepattern(".").call();*/
 
-          git.commit().setMessage("BM: Projecting create").call();
+          //git.commit().setMessage("BM: Projecting create").call();
         } else {
-          git.checkout().setName(BMBranchLabel).call();
+        /*  git.checkout().setName(BMBranchLabel).call();
           git.branchDelete().setBranchNames(productId).setForce(true).call();
           git.checkout().setCreateBranch(true).setOrphan(true).setName(productId).call();
           git.rm().setCached(true).addFilepattern(".").call();
           git.rm().addFilepattern(".").call();
 
-          git.commit().setMessage("BM: Projecting updated").call();
+          git.commit().setMessage("BM: Projecting updated").call();*/
+
+
           //git.checkout().setName(productId).call();
           //git.checkout().setOrphan(true).setName(productId).call();
           //git.rm().setCached(true).call();
@@ -137,7 +138,7 @@ public class BMProjectProduct implements Runnable {
     for (String path : map.keySet()) {
       List<String> rawBlock = new LinkedList<>();
       for (Block block : map.get(path)) {
-        String rawContent = gitBlock.retrieveContent(block.getBlockId());
+        String rawContent = gitVC.retrieveContent(block.getBlockId());
         rawBlock.add(rawContent);
       }
       result.put(path, rawBlock);

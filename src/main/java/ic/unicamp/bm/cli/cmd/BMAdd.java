@@ -15,12 +15,12 @@ import picocli.CommandLine.Command;
 
 @Command(
     name = BMAdd.CMD_NAME,
-    description = "This command will add the blocks")
+    description = "This command will add the blocks from the temporal folder to the real folder")
 public class BMAdd implements Runnable {
 
-  private final IVCSAPI temporalGitBlock = GitVCSManager.createTemporalGitBlockInstance();
-  private final IVCSAPI gitBlock = GitVCSManager.createInstance();
-  private final Git git = (Git) temporalGitBlock.retrieveDirector();
+  private final IVCSAPI temporalGitVC = GitVCSManager.createTemporalGitBlockInstance();
+  private final IVCSAPI gitVC = GitVCSManager.createInstance();
+  private final Git git = (Git) temporalGitVC.retrieveDirector();
 
   public static final String CMD_NAME = "add";
 
@@ -29,27 +29,24 @@ public class BMAdd implements Runnable {
     BlockService blockService = new BlockServiceImpl();
     try {
       git.checkout().setName(GitVCS.BMBranchLabel).call();
-      List<Block> temporalDataList = blockService.getBlockByVCBlockState(DataState.TEMPORAL);
-      for (Block contentBlock : temporalDataList) {
-        String blockId = contentBlock.getBlockId();
-        String content = temporalGitBlock.retrieveContent(blockId);
-        gitBlock.upsertContent(blockId, content);
-        temporalGitBlock.removeContent(blockId);
+      List<Block> temporalBlockList = blockService.getBlockByVCBlockState(DataState.TEMPORAL);
+      for (Block block : temporalBlockList) {
+        String blockId = block.getBlockId();
+        String content = temporalGitVC.retrieveContent(blockId);
+        gitVC.upsertContent(blockId, content);
+        temporalGitVC.removeContent(blockId);
         git.add().addFilepattern(".bm/" + blockId).call();
-        contentBlock.setVcBlockState(DataState.STAGE);
-        contentBlock.setBlockState(BlockState.TO_INSERT);
-        blockService.createOrUpdate(contentBlock);
+        block.setVcBlockState(DataState.STAGE);
+        block.setBlockState(BlockState.TO_INSERT);
+        blockService.createOrUpdate(block);
       }
       List<Block> stageData = blockService.getBlockByVCBlockState(DataState.STAGE);
-      System.out.println("Block List:");
       for (Block block : stageData) {
         String blockId = block.getBlockId();
-        System.out.println("blockId - " + blockId + "  state - " + DataState.STAGE);
+        System.out.println("blockId - " + blockId + "  state - " + block.getVcBlockState());
       }
-
     } catch (GitAPIException e) {
       throw new RuntimeException(e);
     }
-
   }
 }

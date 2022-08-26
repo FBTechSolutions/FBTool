@@ -2,35 +2,29 @@ package ic.unicamp.bm.cli.cmd;
 
 import static ic.unicamp.bm.cli.cmd.BMConfigure.BM_FEATURE;
 
-import ic.unicamp.bm.block.utils.BMDirectoryUtil;
-import ic.unicamp.bm.block.utils.DirectoryUtil;
-import ic.unicamp.bm.block.utils.TempBMDirectoryUtil;
 import ic.unicamp.bm.block.GitVCS;
 import ic.unicamp.bm.block.GitVCSManager;
-import ic.unicamp.bm.block.utils.GitDirectoryUtil;
 import ic.unicamp.bm.block.IVCSAPI;
+import ic.unicamp.bm.block.utils.BMDirectoryUtil;
+import ic.unicamp.bm.block.utils.DirectoryUtil;
+import ic.unicamp.bm.block.utils.GitDirectoryUtil;
+import ic.unicamp.bm.block.utils.TempBMDirectoryUtil;
 import ic.unicamp.bm.cli.util.logger.SplMgrLogger;
 import ic.unicamp.bm.graph.neo4j.schema.Block;
 import ic.unicamp.bm.graph.neo4j.schema.Container;
 import ic.unicamp.bm.graph.neo4j.schema.Feature;
 import ic.unicamp.bm.graph.neo4j.schema.enums.BlockState;
 import ic.unicamp.bm.graph.neo4j.schema.enums.ContainerType;
-
 import ic.unicamp.bm.graph.neo4j.schema.enums.DataState;
 import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToBlock;
-import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToDefaultFeature;
 import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToFeature;
 import ic.unicamp.bm.graph.neo4j.schema.relations.ContainerToBlock;
 import ic.unicamp.bm.graph.neo4j.schema.relations.ContainerToContainer;
-import ic.unicamp.bm.graph.neo4j.services.BlockService;
-import ic.unicamp.bm.graph.neo4j.services.BlockServiceImpl;
 import ic.unicamp.bm.graph.neo4j.services.ContainerService;
 import ic.unicamp.bm.graph.neo4j.services.ContainerServiceImpl;
-
 import ic.unicamp.bm.graph.neo4j.services.FeatureService;
 import ic.unicamp.bm.graph.neo4j.services.FeatureServiceImpl;
 import ic.unicamp.bm.scanner.BlockScanner;
-//import ic.unicamp.bm.scanner.BlockState;
 import ic.unicamp.bm.scanner.IBlockScanner;
 import java.io.File;
 import java.io.IOException;
