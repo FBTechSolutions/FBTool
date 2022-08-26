@@ -1,6 +1,13 @@
 https://www.tabnine.com/code/java/methods/org.eclipse.jgit.api.CheckoutCommand/setOrphan
 
 
+https://neo4j.com/developer/docker-run-neo4j/
+
+docker run     --name neo4jphd     -p7474:7474 -p7687:7687     -d     -v $HOME/neo4j/data:/data     -v $HOME/neo4j/logs:/logs     -v $HOME/neo4j/import:/var/lib/neo4j/import     -v $HOME/neo4j/plugins:/plugins     --env NEO4J_AUTH=neo4j/test     neo4j:latest
+
+docker exec -it testneo4j bash
+cypher-shell -u neo4j -p test
+
 MATCH (n)
 DETACH DELETE n;
 

@@ -17,9 +17,9 @@ public interface CmdTag {
 
   // basic
   String CMD_EXIT = BMExit.CMD_NAME;
-  String CMD_INIT = BMInit.CMD_NAME;
+  //String CMD_INIT = BMInit.CMD_NAME;
   String CMD_VERSION = BMVersion.CMD_NAME;
-  String CMD_SP = BMSB.CMD_NAME;
+  //String CMD_SP = BMSB.CMD_NAME;
   String CMD_CONFIGURE = BMConfigure.CMD_NAME;
   String CMD_ANALYSE = BMAnalyze.CMD_NAME;
 
