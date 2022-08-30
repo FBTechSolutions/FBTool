@@ -79,11 +79,12 @@ public class BMProjectProduct implements Runnable {
         if (!exitsBranch(productId)) {
           git.checkout().setCreateBranch(true).setName(productId).setForced(true).setOrphan(true).call();
           /*git.checkout().setCreateBranch(true).setOrphan(true).setName(productId)
-              .call();
+              .call();*/
+          git.clean().setForce(true).call();
+          git.rm().addFilepattern(".").call();
           git.rm().setCached(true).addFilepattern(".").call();
-          git.rm().addFilepattern(".").call();*/
 
-          //git.commit().setMessage("BM: Projecting create").call();
+          git.commit().setMessage("BM: Projecting create").call();
         } else {
         /*  git.checkout().setName(BMBranchLabel).call();
           git.branchDelete().setBranchNames(productId).setForce(true).call();

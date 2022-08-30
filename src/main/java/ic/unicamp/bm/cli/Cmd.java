@@ -7,6 +7,8 @@ import ic.unicamp.bm.cli.cmd.BMCommit;
 import ic.unicamp.bm.cli.cmd.BMConfigure;
 import ic.unicamp.bm.cli.cmd.BMExit;
 import ic.unicamp.bm.cli.cmd.BMInit;
+import ic.unicamp.bm.cli.cmd.BMListBlocks;
+import ic.unicamp.bm.cli.cmd.BMListFeatures;
 import ic.unicamp.bm.cli.cmd.BMProjectProduct;
 import ic.unicamp.bm.cli.cmd.BMTagBlocks;
 import ic.unicamp.bm.cli.cmd.BMUpsertFeatures;
@@ -39,7 +41,9 @@ import static ic.unicamp.bm.cli.util.msg.InfoMessages.*;
         BMAnalyze.class,
         BMProjectProduct.class,
         BMUpsertProduct.class,
-        BMUpsertFeatures.class
+        BMUpsertFeatures.class,
+        BMListFeatures.class,
+        BMListBlocks.class
 
     })
 public class Cmd implements Runnable {
@@ -120,6 +124,14 @@ public class Cmd implements Runnable {
           }
           case CMD_TAGBLOCKS -> {
             CommandLine commandLine = new CommandLine(new BMTagBlocks());
+            __executeCmd(inputs, commandLine);
+          }
+          case CMD_LIST_FEATURES -> {
+            CommandLine commandLine = new CommandLine(new BMListFeatures());
+            __executeCmd(inputs, commandLine);
+          }
+          case CMD_LIST_BLOCKS -> {
+            CommandLine commandLine = new CommandLine(new BMListBlocks());
             __executeCmd(inputs, commandLine);
           }
           default -> __printCmdNotValid();

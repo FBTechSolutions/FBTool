@@ -6,7 +6,8 @@ import ic.unicamp.bm.cli.cmd.BMAnalyze;
 import ic.unicamp.bm.cli.cmd.BMCommit;
 import ic.unicamp.bm.cli.cmd.BMConfigure;
 import ic.unicamp.bm.cli.cmd.BMExit;
-import ic.unicamp.bm.cli.cmd.BMInit;
+import ic.unicamp.bm.cli.cmd.BMListBlocks;
+import ic.unicamp.bm.cli.cmd.BMListFeatures;
 import ic.unicamp.bm.cli.cmd.BMProjectProduct;
 import ic.unicamp.bm.cli.cmd.BMTagBlocks;
 import ic.unicamp.bm.cli.cmd.BMUpsertFeatures;
@@ -29,4 +30,6 @@ public interface CmdTag {
   String CMD_UPSERT_FEATURES = BMUpsertFeatures.CMD_NAME;
   String CMD_PROJECT_PRODUCT = BMProjectProduct.CMD_NAME;
   String CMD_TAGBLOCKS = BMTagBlocks.CMD_NAME;
+  String CMD_LIST_FEATURES = BMListFeatures.CMD_NAME;
+  String CMD_LIST_BLOCKS = BMListBlocks.CMD_NAME;
 }

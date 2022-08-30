@@ -11,13 +11,13 @@ import picocli.CommandLine.Parameters;
     description = "This command will subscribe a product in the current Git branch")
 public class BMListFeatures implements Runnable {
 
-  public static final String CMD_NAME = "subscribe";
+  public static final String CMD_NAME = "list-features";
 
   @Override
   public void run() {
     FeatureService featureService = new FeatureServiceImpl();
     for (Feature feature :  featureService.findAll()) {
-      String message = String.format("%s : %s", feature.getFeatureId(), feature.getFeatureLabel());
+      String message = String.format("FeatureId: %s FeatureLabel: %s", feature.getFeatureId(), feature.getFeatureLabel());
       System.out.println(message);
     }
   }

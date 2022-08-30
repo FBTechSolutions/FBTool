@@ -9,4 +9,9 @@ public class DirectoryUtil {
     String currentDirectory = System.getProperty("user.dir");
     return Paths.get(currentDirectory);
   }
+  public static Path getOutDirectoryAsPath() {
+    String currentDirectory = System.getProperty("user.dir");
+    Path path = Paths.get(currentDirectory);
+    return path.getParent();
+  }
 }
