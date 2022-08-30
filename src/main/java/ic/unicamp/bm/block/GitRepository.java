@@ -1,7 +1,7 @@
 package ic.unicamp.bm.block;
 
 import ic.unicamp.bm.block.utils.DirectoryUtil;
-import ic.unicamp.bm.block.utils.TempBMDirectoryUtil;
+import ic.unicamp.bm.block.utils.GitDirectoryUtil;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,12 +9,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.InitCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
 public class GitRepository implements  IVCRepository {
 
   private final Path path = DirectoryUtil.getOutDirectoryAsPath();
-
   @Override
   public Path upsertRepository(String repositoryName) {
 
@@ -45,15 +47,25 @@ public class GitRepository implements  IVCRepository {
   public void getOutDirectory() {
 
   }
-
-  public boolean createGitDir() {
+  @Override
+  public Git createGitDir(Path repositoryPath) {
     try {
-      File currentDirectoryFile = new File(String.valueOf(path));
+      File currentDirectoryFile = new File(String.valueOf(repositoryPath));
       Git.init().setDirectory(currentDirectoryFile).call();
-      return true;
+      FileRepositoryBuilder repositoryBuilder = new FileRepositoryBuilder();
+      repositoryBuilder.setMustExist(true);
+      repositoryBuilder.setGitDir(currentDirectoryFile);
+
+      try {
+        Repository repository = repositoryBuilder.build();
+        return new Git(repository);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     } catch (GitAPIException e) {
       e.printStackTrace();
-      return false;
+      return null;
     }
+    return null;
   }
 }

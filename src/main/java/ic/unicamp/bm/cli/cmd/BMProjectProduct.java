@@ -1,8 +1,7 @@
 package ic.unicamp.bm.cli.cmd;
 
-import static ic.unicamp.bm.block.GitVCS.BMBranchLabel;
-
 import ic.unicamp.bm.block.GitVCSManager;
+import ic.unicamp.bm.block.IVCRepository;
 import ic.unicamp.bm.block.IVCSAPI;
 import ic.unicamp.bm.graph.neo4j.schema.Block;
 import ic.unicamp.bm.graph.neo4j.schema.Container;
@@ -16,6 +15,7 @@ import ic.unicamp.bm.graph.neo4j.services.FeatureServiceImpl;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -74,42 +74,19 @@ public class BMProjectProduct implements Runnable {
     }
     try {
       Map<String, List<String>> rawMap = retrieveContents(map);
-      //creating branch
-      try {
-        if (!exitsBranch(productId)) {
-          git.checkout().setCreateBranch(true).setName(productId).setForced(true).setOrphan(true).call();
-          /*git.checkout().setCreateBranch(true).setOrphan(true).setName(productId)
-              .call();*/
-          git.clean().setForce(true).call();
-          git.rm().addFilepattern(".").call();
-          git.rm().setCached(true).addFilepattern(".").call();
+      //creating repositories
+      IVCRepository repository = GitVCSManager.createGitRepositoryInstance();
+      Path path = repository.upsertRepository(productId);
 
-          git.commit().setMessage("BM: Projecting create").call();
-        } else {
-        /*  git.checkout().setName(BMBranchLabel).call();
-          git.branchDelete().setBranchNames(productId).setForce(true).call();
-          git.checkout().setCreateBranch(true).setOrphan(true).setName(productId).call();
-          git.rm().setCached(true).addFilepattern(".").call();
-          git.rm().addFilepattern(".").call();
-
-          git.commit().setMessage("BM: Projecting updated").call();*/
-
-
-          //git.checkout().setName(productId).call();
-          //git.checkout().setOrphan(true).setName(productId).call();
-          //git.rm().setCached(true).call();
-        }
-      } catch (GitAPIException e) {
-        throw new RuntimeException(e);
-      }
       //project in files
-      projectRawFiles(rawMap, clean);
+      projectRawFiles(rawMap, clean, path);
 
       //commit
       try {
-        git.checkout().setName(productId).call();
-        git.add().addFilepattern(".").call();
-        git.commit().setMessage("BM: Projecting Commit").call();
+        Git gitRepository = repository.createGitDir(path);
+        gitRepository.checkout().setName(productId).call();
+        gitRepository.add().addFilepattern(".").call();
+        gitRepository.commit().setMessage("BM: Projecting Commit").call();
       } catch (GitAPIException e) {
         throw new RuntimeException(e);
       }
@@ -200,15 +177,17 @@ public class BMProjectProduct implements Runnable {
         }
       }
     }*/
-  private void projectRawFiles(Map<String, List<String>> map, boolean clean) throws IOException {
+  private void projectRawFiles(Map<String, List<String>> map, boolean clean, Path path) throws IOException {
     System.out.println("Enter Project Files");
-    for (String path : map.keySet()) {
+    for (String filePath : map.keySet()) {
       System.out.println(path);
-      File file = new File(path);
-      if (!file.exists()) {
+      Path productRepository = Paths.get(String.valueOf(path), filePath);
+      System.out.println(productRepository);
+      File file = new File(String.valueOf(productRepository));
+      if (!file.exists() && file.getParentFile().mkdirs()) {
         Files.createFile(file.toPath());
       }
-      for (String block : map.get(path)) {
+      for (String block : map.get(filePath)) {
         Files.writeString(Paths.get(file.toURI()), block);
       }
     }

@@ -12,6 +12,7 @@ public class DirectoryUtil {
   public static Path getOutDirectoryAsPath() {
     String currentDirectory = System.getProperty("user.dir");
     Path path = Paths.get(currentDirectory);
-    return path.getParent();
+    Path pathDirectory = path.getParent();
+    return Paths.get(String.valueOf(pathDirectory), "BM_out");
   }
 }
