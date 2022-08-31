@@ -50,18 +50,28 @@ public class GitRepository implements  IVCRepository {
   @Override
   public Git createGitDir(Path repositoryPath) {
     try {
-      File currentDirectoryFile = new File(String.valueOf(repositoryPath));
-      Git.init().setDirectory(currentDirectoryFile).call();
-      FileRepositoryBuilder repositoryBuilder = new FileRepositoryBuilder();
-      repositoryBuilder.setMustExist(true);
-      repositoryBuilder.setGitDir(currentDirectoryFile);
 
-      try {
-        Repository repository = repositoryBuilder.build();
-        return new Git(repository);
-      } catch (IOException e) {
-        e.printStackTrace();
+
+      System.out.println(String.valueOf(repositoryPath));
+      File currentDirectoryFile = new File(String.valueOf(repositoryPath));
+      System.out.println(currentDirectoryFile.getAbsolutePath());
+      Git.init().setDirectory(currentDirectoryFile).call();
+      Path repositoryGit = Paths.get(String.valueOf(repositoryPath), ".git");
+      File currentDirectoryFile2 = new File(String.valueOf(repositoryGit));
+      if(currentDirectoryFile2.exists()){
+
+        FileRepositoryBuilder repositoryBuilder = new FileRepositoryBuilder();
+        repositoryBuilder.setMustExist(true);
+        repositoryBuilder.setGitDir(currentDirectoryFile2);
+
+        try {
+          Repository repository = repositoryBuilder.build();
+          return new Git(repository);
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
       }
+
     } catch (GitAPIException e) {
       e.printStackTrace();
       return null;

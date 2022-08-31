@@ -84,7 +84,7 @@ public class BMProjectProduct implements Runnable {
       //commit
       try {
         Git gitRepository = repository.createGitDir(path);
-        gitRepository.checkout().setName(productId).call();
+        //gitRepository.checkout().setName(productId).call();
         gitRepository.add().addFilepattern(".").call();
         gitRepository.commit().setMessage("BM: Projecting Commit").call();
       } catch (GitAPIException e) {
