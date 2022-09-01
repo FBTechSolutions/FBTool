@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -115,13 +116,29 @@ public class BMProjectProduct implements Runnable {
     Map<String, List<String>> result = new LinkedHashMap<>();
     for (String path : map.keySet()) {
       List<String> rawBlock = new LinkedList<>();
+
       for (Block block : map.get(path)) {
+        rawBlock.add(createBeginTag(block.getBlockId()));
         String rawContent = gitVC.retrieveContent(block.getBlockId());
         rawBlock.add(rawContent);
+        rawBlock.add(createEndTag(block.getBlockId()));
       }
+
       result.put(path, rawBlock);
     }
     return result;
+  }
+
+  private String createEndTag(String blockId) {
+    String template = "[%s]<-b";
+    String message = String.format(template, blockId);
+    return message;
+  }
+
+  private String createBeginTag(String blockId) {
+    String template = "b->[%s]";
+    String message = String.format(template, blockId);
+    return message;
   }
 
   private List<Block> retrieveBlockCommitted(List<Block> blockRetrieved) {
@@ -180,16 +197,16 @@ public class BMProjectProduct implements Runnable {
   private void projectRawFiles(Map<String, List<String>> map, boolean clean, Path path) throws IOException {
     System.out.println("Enter Project Files");
     for (String filePath : map.keySet()) {
-      System.out.println(path);
       Path productRepository = Paths.get(String.valueOf(path), filePath);
-      System.out.println(productRepository);
       File file = new File(String.valueOf(productRepository));
       if (!file.exists() && file.getParentFile().mkdirs()) {
         Files.createFile(file.toPath());
       }
+
       for (String block : map.get(filePath)) {
-        Files.writeString(Paths.get(file.toURI()), block);
+        Files.writeString(Paths.get(file.toURI()), block,  StandardOpenOption.APPEND);
       }
+
     }
   }
 }
