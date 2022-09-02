@@ -4,6 +4,7 @@ import ic.unicamp.bm.block.GitVCS;
 import ic.unicamp.bm.block.GitVCSManager;
 import ic.unicamp.bm.block.IVCSAPI;
 import ic.unicamp.bm.graph.neo4j.schema.Block;
+import ic.unicamp.bm.graph.neo4j.schema.enums.BlockState;
 import ic.unicamp.bm.graph.neo4j.schema.enums.DataState;
 import ic.unicamp.bm.graph.neo4j.services.BlockService;
 import ic.unicamp.bm.graph.neo4j.services.BlockServiceImpl;
@@ -30,6 +31,7 @@ public class BMCommit implements Runnable {
       List<Block> stageBlocks = blockService.getBlockByVCBlockState(DataState.STAGE);
       for (Block block : stageBlocks) {
         block.setVcBlockState(DataState.COMMITTED);
+        block.setBlockState(BlockState.SYNC);
         blockService.createOrUpdate(block);
       }
       git.commit().setMessage("BM Adding blocks").call();

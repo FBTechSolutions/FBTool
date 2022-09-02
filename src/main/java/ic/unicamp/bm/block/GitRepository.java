@@ -1,7 +1,6 @@
 package ic.unicamp.bm.block;
 
 import ic.unicamp.bm.block.utils.DirectoryUtil;
-import ic.unicamp.bm.block.utils.GitDirectoryUtil;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,7 +8,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.InitCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
@@ -44,8 +42,8 @@ public class GitRepository implements  IVCRepository {
   }
 
   @Override
-  public void getOutDirectory() {
-
+  public Path getOutDirectory(String name) {
+    return Paths.get(String.valueOf(path), name);
   }
   @Override
   public Git createGitDir(Path repositoryPath) {

@@ -7,6 +7,6 @@ public interface IVCRepository {
 
   Path upsertRepository(String repositoryName);
   void updateOutDirectory(String path);
-  void getOutDirectory();
+  Path getOutDirectory(String name);
   Git createGitDir(Path repositoryPath);
 }

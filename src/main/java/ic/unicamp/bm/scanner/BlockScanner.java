@@ -69,7 +69,7 @@ public class BlockScanner implements IBlockScanner {
               blockFreeSpace = BLOCK_CONTENT_MAX_SIZE;
               currentBlockFilled = 0;
             }
-            blockBuffer.append(line);
+            blockBuffer.append(line + System.lineSeparator()); //TO DELETE O CHECK
             currentBlockFilled = currentBlockFilled + line.length();
           }
           addNewBlockToMap(blocks, blockBuffer);
