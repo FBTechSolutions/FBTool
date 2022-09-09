@@ -108,5 +108,12 @@
             <version>3.2.36</version>
             <scope>runtime</scope>
         </dependency>
+
+        <!-- GUAVA GOOGLE-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>31.1-jre</version>
+        </dependency>
     </dependencies>
 </project>

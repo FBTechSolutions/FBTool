@@ -1,9 +1,9 @@
 package ic.unicamp.bm.graph.neo4j.services;
 
+import com.google.common.collect.Lists;
 import ic.unicamp.bm.graph.neo4j.factory.Neo4jSessionFactory;
 import ic.unicamp.bm.graph.neo4j.schema.Block;
 import ic.unicamp.bm.graph.neo4j.schema.Container;
-import ic.unicamp.bm.graph.neo4j.schema.Feature;
 import ic.unicamp.bm.graph.neo4j.schema.enums.DataState;
 import ic.unicamp.bm.graph.neo4j.schema.relations.ContainerToBlock;
 import java.util.Collection;
@@ -78,8 +78,40 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
   }
 
   @Override
+  public List<Block> getBlocksByFile(String pathFile) {
+      LinkedList<Block> blocks = Lists.newLinkedList();
+      ContainerService containerService = new ContainerServiceImpl();
+      Container container = containerService.getContainerByID(pathFile);
+      ContainerToBlock blockRelation = container.getGetFirstBlock();
+      Block block = blockRelation.getEndBlock();
+      BlockService blockService = new BlockServiceImpl();
+      Block initial = blockService.getBlockByID(block.getBlockId());
+      blocks.add(initial);
+      while(initial.getGoNextBlock()!=null && initial.getGoNextBlock().getEndBlock()!=null){
+        Block newBlock = initial.getGoNextBlock().getEndBlock();
+        initial = newBlock;
+        blocks.add(newBlock);
+      }
+      return blocks;
+  }
+
+  @Override
+  public Block getFirstBlockByFile(String pathFile) {
+    LinkedList<Block> blocks = Lists.newLinkedList();
+    ContainerService containerService = new ContainerServiceImpl();
+    Container container = containerService.getContainerByID(pathFile);
+    ContainerToBlock blockRelation = container.getGetFirstBlock();
+    Block block = blockRelation.getEndBlock();
+    BlockService blockService = new BlockServiceImpl();
+    Block initial = blockService.getBlockByID(block.getBlockId());
+    return initial;
+  }
+
+  @Override
   public Class<Block> getEntityType() {
     return Block.class;
   }
+
+
 
 }

@@ -15,7 +15,7 @@ public class ContainerServiceImpl extends GenericService<Container> implements C
     return session.loadAll(Container.class, 1);
   }
 
-  @Override
+/*  @Override
   public Container getContainerByID(String productId) {
     Filter filter = new Filter("containerId", ComparisonOperator.EQUALS, productId);
     Collection<Container> features = session.loadAll(Container.class, new Filters().add(filter));
@@ -27,7 +27,20 @@ public class ContainerServiceImpl extends GenericService<Container> implements C
       return iter.next();
     }
     return null;
+  }*/
+@Override
+public Container getContainerByID(String containerId) {
+  Filter filter = new Filter("containerId", ComparisonOperator.EQUALS, containerId);
+  Collection<Container> features = session.loadAll(Container.class, new Filters().add(filter));
+  if (features.size() > 1) {
+    System.out.println("Two IDs for Product is not good");
   }
+  Iterator<Container> iter = features.iterator();
+  if (iter.hasNext()) {
+    return iter.next();
+  }
+  return null;
+}
 
   @Override
   public Class<Container> getEntityType() {

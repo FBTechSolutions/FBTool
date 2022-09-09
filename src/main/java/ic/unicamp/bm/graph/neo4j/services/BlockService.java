@@ -13,4 +13,8 @@ public interface BlockService extends Service<Block> {
   List<Block> getBlockByVCBlockState(DataState dataState);
 
   List<ContainerToBlock> getContainerToBlockRelations();
+
+  List<Block> getBlocksByFile(String pathFile);
+
+  Block getFirstBlockByFile(String pathFile);
 }

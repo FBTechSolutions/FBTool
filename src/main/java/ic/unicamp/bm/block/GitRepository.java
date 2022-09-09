@@ -50,7 +50,6 @@ public class GitRepository implements  IVCRepository {
     try {
 
 
-      System.out.println(String.valueOf(repositoryPath));
       File currentDirectoryFile = new File(String.valueOf(repositoryPath));
       System.out.println(currentDirectoryFile.getAbsolutePath());
       Git.init().setDirectory(currentDirectoryFile).call();
