@@ -97,44 +97,21 @@ public class BMSync implements Runnable {
             List<String> updatedBlocksReverse = new ArrayList<>(updatedBlocks.keySet());
 
             LinkedHashMap<String, String> temporalNewBlocks = new LinkedHashMap<>(); //news
-            for (String reverseKey : updatedBlocksReverse) {
-              if(reverseKey.charAt(0)=='a'){
-                temporalNewBlocks.put(reverseKey, updatedBlocks.get(reverseKey));
+            for (String key : updatedBlocksReverse) {
+              if(key.charAt(0)=='a'){
+                temporalNewBlocks.put(key, updatedBlocks.get(key));
               }else{
                 if(!temporalNewBlocks.isEmpty()){
-                  //inverse order
-                  List<String> reverseNewBlocks = new ArrayList<>(temporalNewBlocks.keySet());
-                  Collections.reverse(reverseNewBlocks);
-                  for (String key : reverseNewBlocks) {
-                    BlockToBlock blockTo = new BlockToBlock();
-                    blockTo.setEndBlock(blockService.getBlockByID(endPivotId));
-                    Block newBlock = new Block();
-                    newBlock.setBlockState(BlockState.TO_INSERT);
-                    newBlock.setVcBlockState(DataState.TEMPORAL);
-                    String newBlockId = BlockSequenceNumber.getNextStringCode();
-                    newBlock.setBlockId( BlockSequenceNumber.getNextStringCode());
-                    blockTo.setStartBlock(newBlock);
-                    newBlock.setGoNextBlock(blockTo);
-                    blockService.createOrUpdate(newBlock);
-                    temporalVC.upsertContent(newBlockId, temporalNewBlocks.get(key));
-                    endPivotId = newBlockId;
-                  }
-                  temporalNewBlocks.clear();
-                  blockToBlock.setEndBlock(blockService.getBlockByID(endPivotId));
-                  Block temp = blockService.getBlockByID(beginPivotId);
-                  temp.setGoNextBlock(blockToBlock);
-                  blockService.createOrUpdate(temp);
+                  processNewBlocks(blockService, beginPivotId, endPivotId, temporalNewBlocks);
                 }else{
-
-                  Block block = blockService.getBlockByID(reverseKey);
-                  block.setBlockState(BlockState.TO_UPDATE);
-                  block.setVcBlockState(DataState.TEMPORAL);
-                  BlockToBlock blockToBlock1 = block.getGoNextBlock();
-                  //blockToBlock1.setEndBlock(blockService.getBlockByID(endPivotId));
-                  temporalVC.upsertContent(reverseKey, updatedBlocks.get(reverseKey));
-                  blockService.createOrUpdate(block);
-                  endPivotId = blockToBlock1.getEndBlock().getBlockId();
-                  beginPivotId = block.getBlockId();
+                  Block updatedBlock = blockService.getBlockByID(key);
+                  updatedBlock.setBlockState(BlockState.TO_UPDATE);
+                  updatedBlock.setVcBlockState(DataState.TEMPORAL);
+                  BlockToBlock relationUpdated = updatedBlock.getGoNextBlock();
+                  beginPivotId = updatedBlock.getBlockId();
+                  endPivotId = relationUpdated.getEndBlock().getBlockId();
+                  temporalVC.upsertContent(key, updatedBlocks.get(key));
+                  blockService.createOrUpdate(updatedBlock);
                 }
               }
             }
