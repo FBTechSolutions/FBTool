@@ -14,7 +14,7 @@ import java.util.UUID;
 
 public class BlockScanner implements IBlockScanner {
 
-  public static int BLOCK_CONTENT_MAX_SIZE = 40000;
+  public static int BLOCK_CONTENT_MAX_SIZE = 10;//40000;
   public static int BLOCK_ID_SIZE = 16;
 
   @Override
