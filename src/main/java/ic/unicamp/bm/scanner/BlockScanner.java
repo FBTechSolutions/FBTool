@@ -311,7 +311,7 @@ public class BlockScanner implements IBlockScanner {
   }
 
   private String getFirstBeginMarkId(String line) {
-    int idx = getFirstEndMark(line) + 5;
+    int idx = getFirstBeginMark(line) + 4;
     return line.substring(idx, idx + BLOCK_ID_SIZE);
   }
 

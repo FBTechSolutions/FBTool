@@ -10,6 +10,7 @@ import ic.unicamp.bm.cli.cmd.BMInit;
 import ic.unicamp.bm.cli.cmd.BMListBlocks;
 import ic.unicamp.bm.cli.cmd.BMListFeatures;
 import ic.unicamp.bm.cli.cmd.BMProjectProduct;
+import ic.unicamp.bm.cli.cmd.BMSync;
 import ic.unicamp.bm.cli.cmd.BMTagBlocks;
 import ic.unicamp.bm.cli.cmd.BMUpsertFeatures;
 import ic.unicamp.bm.cli.cmd.BMUpsertProduct;
@@ -43,7 +44,8 @@ import static ic.unicamp.bm.cli.util.msg.InfoMessages.*;
         BMUpsertProduct.class,
         BMUpsertFeatures.class,
         BMListFeatures.class,
-        BMListBlocks.class
+        BMListBlocks.class,
+        BMSync.class
 
     })
 public class Cmd implements Runnable {
@@ -134,6 +136,11 @@ public class Cmd implements Runnable {
             CommandLine commandLine = new CommandLine(new BMListBlocks());
             __executeCmd(inputs, commandLine);
           }
+          case CMD_SYNC -> {
+            CommandLine commandLine = new CommandLine(new BMSync());
+            __executeCmd(inputs, commandLine);
+          }
+
           default -> __printCmdNotValid();
         }
       }

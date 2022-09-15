@@ -158,15 +158,15 @@ public class BMProjectProduct implements Runnable {
     if (blockFull.getAssociatedTo() != null) {
       String feature = blockFull.getAssociatedTo().getEndFeature().getFeatureId();
       if (featureIsInTheList(featureList, feature)) {
-        result.add(block);
+        result.add(blockFull);
       }
     }
     while (blockFull.getGoNextBlock() != null) {
-      blockFull = blockFull.getGoNextBlock().getEndBlock();
+      blockFull = blockService.getBlockByID(blockFull.getGoNextBlock().getEndBlock().getBlockId());
       if (blockFull.getAssociatedTo() != null) {
         String feature = blockFull.getAssociatedTo().getEndFeature().getFeatureId();
         if (featureIsInTheList(featureList, feature)) {
-          result.add(block);
+          result.add(blockFull);
         }
       }
     }

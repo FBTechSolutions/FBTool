@@ -9,6 +9,7 @@ import ic.unicamp.bm.cli.cmd.BMExit;
 import ic.unicamp.bm.cli.cmd.BMListBlocks;
 import ic.unicamp.bm.cli.cmd.BMListFeatures;
 import ic.unicamp.bm.cli.cmd.BMProjectProduct;
+import ic.unicamp.bm.cli.cmd.BMSync;
 import ic.unicamp.bm.cli.cmd.BMTagBlocks;
 import ic.unicamp.bm.cli.cmd.BMUpsertFeatures;
 import ic.unicamp.bm.cli.cmd.BMUpsertProduct;
@@ -32,4 +33,5 @@ public interface CmdTag {
   String CMD_TAGBLOCKS = BMTagBlocks.CMD_NAME;
   String CMD_LIST_FEATURES = BMListFeatures.CMD_NAME;
   String CMD_LIST_BLOCKS = BMListBlocks.CMD_NAME;
+  String CMD_SYNC = BMSync.CMD_NAME;
 }

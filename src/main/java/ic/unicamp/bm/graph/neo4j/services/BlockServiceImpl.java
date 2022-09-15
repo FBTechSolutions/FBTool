@@ -51,7 +51,7 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
     List<Block> result = new LinkedList<>();
     queryResult.forEach(map -> {
       Block block = (Block) map.get("b");
-      Block blockWithRelations = blockService.getBlockByID(block.getBlockId());
+      Block blockWithRelations = blockService.getBlockByID(block.getBlockId()); // to optimized, relations is not saved
       result.add(blockWithRelations);
       System.out.println(blockWithRelations.getBlockId());
     });

@@ -20,6 +20,8 @@ import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToBlock;
 import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToFeature;
 import ic.unicamp.bm.graph.neo4j.schema.relations.ContainerToBlock;
 import ic.unicamp.bm.graph.neo4j.schema.relations.ContainerToContainer;
+import ic.unicamp.bm.graph.neo4j.services.BlockService;
+import ic.unicamp.bm.graph.neo4j.services.BlockServiceImpl;
 import ic.unicamp.bm.graph.neo4j.services.ContainerService;
 import ic.unicamp.bm.graph.neo4j.services.ContainerServiceImpl;
 import ic.unicamp.bm.graph.neo4j.services.FeatureService;
@@ -77,9 +79,9 @@ public class BMAnalyze implements Runnable {
       main.setContainerId(DirectoryUtil.getDirectoryAsPath().toString());
       main.setContainerType(ContainerType.MAIN);
       changeTreeToSchemaForm(treeWalk, main);
+      createContainers(main);
       //blocks
       createBlocksByFile(main);
-      createContainers(main);
       showTemporalData();
 
 
@@ -89,13 +91,7 @@ public class BMAnalyze implements Runnable {
   }
 
   private void showTemporalData() {
-    /*   List<RawData> dataList = null;*/
     System.out.println("Block List:");
-/*    for(RawData record:dataList){
-      Content block = record.getBelongsTo();
-      String blockId = block.getContentId();
-      System.out.println("blockId - " + blockId + "  state - "+ DataState.TEMPORAL+ " FROM "+block.getBelongsTo().getContainerId());
-    }*/
   }
 
   // algorithm
@@ -104,28 +100,24 @@ public class BMAnalyze implements Runnable {
     if (container.getContainerType() == ContainerType.FILE) {
 
       IBlockScanner blockScanner = new BlockScanner();
+      BlockService blockService  = new BlockServiceImpl();
+      ContainerService containerService  = new ContainerServiceImpl();
       Path path = Paths.get(container.getContainerId());
       Map<String, String> scannedBlocks = blockScanner.createInitialBlocks(path); //id and data
       IVCSAPI temporalGitBlock = GitVCSManager.createTemporalGitBlockInstance();
 
-      //previous
-      Block previousBlock = null;
+      //memory to first block and previous block
       Block firstBlock = null;
-      FeatureService featureService = new FeatureServiceImpl();
-      Feature defaultFeature = featureService.getFeatureByID(BM_FEATURE);
-      if (defaultFeature == null) {
-        defaultFeature = new Feature();
-        defaultFeature.setFeatureId(BM_FEATURE);
-        defaultFeature.setFeatureLabel(BM_FEATURE);
-      }
+      Block previousBlock = null;
+
+      Feature defaultFeature = getDefaultFeature();
+
       for (String key : scannedBlocks.keySet()) {
         System.out.println("key");
         String data = scannedBlocks.get(key);
         String shaData = DigestUtils.sha256Hex(data);
         //path
         temporalGitBlock.upsertContent(key, data);
-
-        //here to not repeat same blocks wiht same content
         //db
         Block block = new Block();
         block.setBlockId(key);
@@ -133,12 +125,13 @@ public class BMAnalyze implements Runnable {
         System.out.println(block.getBlockId());
         block.setBlockState(BlockState.TO_INSERT);
         block.setVcBlockState(DataState.TEMPORAL);
+        // tag block
+        BlockToFeature blockToFeature = new BlockToFeature();
+        blockToFeature.setStartBlock(block);
+        blockToFeature.setEndFeature(defaultFeature);
+        block.setAssociatedTo(blockToFeature);
+
         if (previousBlock == null) {
-          BlockToFeature blockToFeature = new BlockToFeature();
-          blockToFeature.setStartBlock(block);
-          blockToFeature.setEndFeature(defaultFeature);
-          block.setAssociatedTo(blockToFeature);
-          //block.setAssociatedToDefaultFeature(blockToFeature);
           firstBlock = block;
           previousBlock = block;
         } else {
@@ -146,20 +139,35 @@ public class BMAnalyze implements Runnable {
           relation.setStartBlock(previousBlock);
           relation.setEndBlock(block);
           previousBlock.setGoNextBlock(relation);
+
+          blockService.createOrUpdate(previousBlock);
           previousBlock = block;
         }
+
       }
+      // container
       ContainerToBlock relation = new ContainerToBlock();
       relation.setStartContainer(container);
       relation.setEndBlock(firstBlock);
       container.setGetFirstBlock(relation);
-
+      containerService.createOrUpdate( container);
     } else {
       for (ContainerToContainer Container : container.getGetContainers()) {
         createBlocksByFile(Container.getEndContainer());
       }
     }
 
+  }
+
+  private static Feature getDefaultFeature() {
+    FeatureService featureService = new FeatureServiceImpl();
+    Feature defaultFeature = featureService.getFeatureByID(BM_FEATURE);
+    if (defaultFeature == null) {
+      defaultFeature = new Feature();
+      defaultFeature.setFeatureId(BM_FEATURE);
+      defaultFeature.setFeatureLabel(BM_FEATURE);
+    }
+    return defaultFeature;
   }
 
   private void createContainers(Container container) {

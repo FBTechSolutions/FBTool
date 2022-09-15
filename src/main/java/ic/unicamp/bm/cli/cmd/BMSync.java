@@ -71,11 +71,12 @@ public class BMSync implements Runnable {
 
       try {
         Repository repository = repositoryBuilder.build();
-        Git git = new Git(repository);
-        Ref head = git.getRepository().findRef("HEAD");
-        RevWalk walk = new RevWalk(git.getRepository());
+
+        //Git git = new Git(repository);
+        Ref head = repository.findRef("HEAD");
+        RevWalk walk = new RevWalk(repository);
         RevCommit commit = walk.parseCommit(head.getObjectId());
-        TreeWalk treeWalk = new TreeWalk(git.getRepository());
+        TreeWalk treeWalk = new TreeWalk(repository);
         treeWalk.addTree(commit.getTree());
         treeWalk.setRecursive(false);
         BlockService blockService = new BlockServiceImpl();
@@ -84,8 +85,10 @@ public class BMSync implements Runnable {
           if (treeWalk.isSubtree()) {
             treeWalk.enterSubtree();
           } else {
+
             String pathFileString = treeWalk.getPathString();
-            Path pathFile = Paths.get(pathFileString);
+            //Path pathFile = Paths.get(pathFileString);
+            Path pathFileRepository = Paths.get(String.valueOf(path), pathFileString);
 
             Block  beginPivot = blockService.getFirstBlockByFile(pathFileString);
             String beginPivotId = beginPivot.getBlockId();
@@ -93,7 +96,7 @@ public class BMSync implements Runnable {
             Block endPivot = blockToBlock.getEndBlock();
             String endPivotId = endPivot.getBlockId();
 
-            Map<String, String> updatedBlocks = blockScanner.retrieveAllBlocks(pathFile); //by file
+            Map<String, String> updatedBlocks = blockScanner.retrieveAllBlocks(pathFileRepository); //by file
             List<String> updatedBlocksReverse = new ArrayList<>(updatedBlocks.keySet());
 
             LinkedHashMap<String, String> temporalNewBlocks = new LinkedHashMap<>(); //news
@@ -107,9 +110,11 @@ public class BMSync implements Runnable {
                   Block updatedBlock = blockService.getBlockByID(key);
                   updatedBlock.setBlockState(BlockState.TO_UPDATE);
                   updatedBlock.setVcBlockState(DataState.TEMPORAL);
-                  BlockToBlock relationUpdated = updatedBlock.getGoNextBlock();
                   beginPivotId = updatedBlock.getBlockId();
-                  endPivotId = relationUpdated.getEndBlock().getBlockId();
+                  BlockToBlock relationUpdated = updatedBlock.getGoNextBlock();
+                  if(relationUpdated != null){
+                    endPivotId = relationUpdated.getEndBlock().getBlockId();
+                  }
                   temporalVC.upsertContent(key, updatedBlocks.get(key));
                   blockService.createOrUpdate(updatedBlock);
                 }

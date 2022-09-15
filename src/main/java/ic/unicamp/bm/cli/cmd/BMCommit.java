@@ -30,9 +30,10 @@ public class BMCommit implements Runnable {
       BlockService blockService = new BlockServiceImpl();
       List<Block> stageBlocks = blockService.getBlockByVCBlockState(DataState.STAGE);
       for (Block block : stageBlocks) {
-        block.setVcBlockState(DataState.COMMITTED);
-        block.setBlockState(BlockState.SYNC);
-        blockService.createOrUpdate(block);
+        Block fullBlock = blockService.getBlockByID(block.getBlockId());
+        fullBlock.setVcBlockState(DataState.COMMITTED);
+        fullBlock.setBlockState(BlockState.SYNC);
+        blockService.createOrUpdate(fullBlock);
       }
       git.commit().setMessage("BM Adding blocks").call();
       List<Block> committedBlocks = blockService.getBlockByVCBlockState(DataState.COMMITTED);
