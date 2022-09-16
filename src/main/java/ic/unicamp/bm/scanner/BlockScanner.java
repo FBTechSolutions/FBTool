@@ -327,4 +327,11 @@ public class BlockScanner implements IBlockScanner {
     String sha256hex = DigestUtils.sha256Hex(blockData);
     blocks.put(sha256hex, blockData);
   }
+
+  @Override
+  public String cleanTagMarks(String content) {
+    int idb = getFirstBeginMark(content) + 4 + BLOCK_ID_SIZE + 1;
+    int ide = getFirstEndMark(content) - BLOCK_ID_SIZE - 1;
+    return content.substring(idb, ide);
+  }
 }

@@ -3,41 +3,29 @@ package ic.unicamp.bm.cli.cmd;
 import ic.unicamp.bm.block.GitVCSManager;
 import ic.unicamp.bm.block.IVCRepository;
 import ic.unicamp.bm.block.IVCSAPI;
-import ic.unicamp.bm.block.TempGitVCS;
-import ic.unicamp.bm.block.utils.TempBMDirectoryUtil;
 import ic.unicamp.bm.graph.neo4j.schema.Block;
-import ic.unicamp.bm.graph.neo4j.schema.Container;
 import ic.unicamp.bm.graph.neo4j.schema.enums.BlockState;
-import ic.unicamp.bm.graph.neo4j.schema.enums.ContainerType;
 import ic.unicamp.bm.graph.neo4j.schema.enums.DataState;
 import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToBlock;
-import ic.unicamp.bm.graph.neo4j.schema.relations.ContainerToContainer;
 import ic.unicamp.bm.graph.neo4j.services.BlockService;
 import ic.unicamp.bm.graph.neo4j.services.BlockServiceImpl;
 import ic.unicamp.bm.scanner.BlockScanner;
 import ic.unicamp.bm.scanner.BlockSequenceNumber;
-import ic.unicamp.bm.scanner.SequenceAbstractBlockNumber;
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.treewalk.TreeWalk;
-import org.neo4j.driver.internal.messaging.request.GoodbyeMessage;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 
@@ -115,7 +103,9 @@ public class BMSync implements Runnable {
                   if(relationUpdated != null){
                     endPivotId = relationUpdated.getEndBlock().getBlockId();
                   }
-                  temporalVC.upsertContent(key, updatedBlocks.get(key));
+                  String content = updatedBlocks.get(key);
+                  String cleanContent = blockScanner.cleanTagMarks(content);
+                  temporalVC.upsertContent(key, cleanContent);
                   blockService.createOrUpdate(updatedBlock);
                 }
               }
@@ -138,6 +128,10 @@ public class BMSync implements Runnable {
     //read blocks tags
     //compare blocks with db
     //show review of blocks
+  }
+
+  private String cleanTags(String content) {
+    return null;
   }
 
   private void processNewBlocks(BlockService blockService, String beginPivotId, String endPivotId,

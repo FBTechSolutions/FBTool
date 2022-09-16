@@ -11,5 +11,7 @@ public interface IBlockScanner {
   Map<String, String> retrieveUpdatedBlocks(Path pathFile) throws Exception;
 
   Map<String, String> createInitialBlocks(Path pathFile);
+
+  String cleanTagMarks(String content);
   // second param is the wrapper
 }
