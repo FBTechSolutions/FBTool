@@ -74,7 +74,7 @@ public class BMProjectProduct implements Runnable {
       }
     }
     try {
-      Map<String, List<String>> rawMap = retrieveContents(map);
+      Map<String, List<String>> rawMap = retrieveContents(map, clean );
       //creating repositories
       IVCRepository repository = GitVCSManager.createGitRepositoryInstance();
       Path path = repository.upsertRepository(productId);
@@ -112,16 +112,20 @@ public class BMProjectProduct implements Runnable {
     return false;
   }
 
-  private Map<String, List<String>> retrieveContents(Map<String, List<Block>> map) {
+  private Map<String, List<String>> retrieveContents(Map<String, List<Block>> map, boolean clean) {
     Map<String, List<String>> result = new LinkedHashMap<>();
     for (String path : map.keySet()) {
       List<String> rawBlock = new LinkedList<>();
 
       for (Block block : map.get(path)) {
-        rawBlock.add(createBeginTag(block.getBlockId()));
+        if(!clean){
+          rawBlock.add(createBeginTag(block.getBlockId()));
+        }
         String rawContent = gitVC.retrieveContent(block.getBlockId());
         rawBlock.add(rawContent);
-        rawBlock.add(createEndTag(block.getBlockId()));
+        if(!clean){
+          rawBlock.add(createEndTag(block.getBlockId()));
+        }
       }
 
       result.put(path, rawBlock);
