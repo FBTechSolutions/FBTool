@@ -7,9 +7,12 @@ import ic.unicamp.bm.block.GitVCSManager;
 import ic.unicamp.bm.block.utils.GitDirectoryUtil;
 import ic.unicamp.bm.block.IVCSAPI;
 import ic.unicamp.bm.cli.util.logger.SplMgrLogger;
+import ic.unicamp.bm.graph.neo4j.schema.BMConfig;
 import ic.unicamp.bm.graph.neo4j.schema.Feature;
 import ic.unicamp.bm.graph.neo4j.schema.Product;
 import ic.unicamp.bm.graph.neo4j.schema.relations.ProductToFeature;
+import ic.unicamp.bm.graph.neo4j.services.BMConfigService;
+import ic.unicamp.bm.graph.neo4j.services.BMConfigServiceImpl;
 import ic.unicamp.bm.graph.neo4j.services.FeatureService;
 import ic.unicamp.bm.graph.neo4j.services.FeatureServiceImpl;
 import ic.unicamp.bm.graph.neo4j.services.ProductService;
@@ -47,6 +50,7 @@ public class BMConfigure implements Runnable {
   }
 
   private static void setUpDB() {
+
     FeatureService featureService = new FeatureServiceImpl();
     ProductService productService = new ProductServiceImpl();
     Product product = productService.getProductByID(BM_SPL);
@@ -67,6 +71,15 @@ public class BMConfigure implements Runnable {
       featureList.add(relation);
       product.setAssociatedTo(featureList);
       productService.createOrUpdate(product);
+    }
+    // bm config
+    BMConfigService bmConfigService = new BMConfigServiceImpl();
+    BMConfig bmConfig = bmConfigService.getBMConfigByDefaultID();
+    if(bmConfig == null){
+      bmConfig = new BMConfig();
+      bmConfig.setConfigId(BMConfigServiceImpl.BM_CONFIG_ID);
+      bmConfig.setLastBlockId(0);
+      bmConfigService.createOrUpdate(bmConfig);
     }
   }
 

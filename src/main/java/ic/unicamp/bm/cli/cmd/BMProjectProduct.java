@@ -199,9 +199,13 @@ public class BMProjectProduct implements Runnable {
     for (String filePath : map.keySet()) {
       Path productRepository = Paths.get(String.valueOf(path), filePath);
       File file = new File(String.valueOf(productRepository));
-      if (!file.exists() && file.getParentFile().mkdirs()) {
+      if(!file.exists()){
+        Files.createDirectories(file.getParentFile().toPath());
         Files.createFile(file.toPath());
       }
+/*      if (!file.exists() && file.getParentFile().mkdirs()) {
+        Files.createFile(file.toPath());
+      }*/
 
       for (String block : map.get(filePath)) {
         Files.writeString(Paths.get(file.toURI()), block,  StandardOpenOption.APPEND);

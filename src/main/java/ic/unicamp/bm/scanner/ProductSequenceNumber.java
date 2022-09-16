@@ -23,4 +23,5 @@ public class ProductSequenceNumber {
     }
     return code;
   }
+
 }
