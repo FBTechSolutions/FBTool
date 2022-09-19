@@ -80,9 +80,13 @@ public class BMSync implements Runnable {
 
             Block  beginPivot = blockService.getFirstBlockByFile(pathFileString);
             String beginPivotId = beginPivot.getBlockId();
-            BlockToBlock blockToBlock = beginPivot.getGoNextBlock();
-            Block endPivot = blockToBlock.getEndBlock();
-            String endPivotId = endPivot.getBlockId();
+            Block endPivot;
+            String endPivotId = null;
+            if(beginPivot.getGoNextBlock()!=null){
+              BlockToBlock blockToBlock = beginPivot.getGoNextBlock();
+              endPivot = blockToBlock.getEndBlock();
+              endPivotId = endPivot.getBlockId();
+            }
 
             Map<String, String> updatedBlocks = blockScanner.retrieveAllBlocks(pathFileRepository); //by file
             List<String> updatedBlocksReverse = new ArrayList<>(updatedBlocks.keySet());
@@ -102,6 +106,8 @@ public class BMSync implements Runnable {
                   BlockToBlock relationUpdated = updatedBlock.getGoNextBlock();
                   if(relationUpdated != null){
                     endPivotId = relationUpdated.getEndBlock().getBlockId();
+                  }else{
+                    endPivotId = null;
                   }
                   String content = updatedBlocks.get(key);
                   String cleanContent = blockScanner.cleanTagMarks(content);
@@ -146,11 +152,13 @@ public class BMSync implements Runnable {
       newBlock.setVcBlockState(DataState.TEMPORAL);
       newBlock.setBlockId(newBlockId);
       //create relation
-      BlockToBlock relation = new BlockToBlock();
-      relation.setEndBlock(blockService.getBlockByID(endPivotId));
-      relation.setStartBlock(newBlock);
-      //update relation
-      newBlock.setGoNextBlock(relation);
+      if(endPivotId != null){
+        BlockToBlock relation = new BlockToBlock();
+        relation.setEndBlock(blockService.getBlockByID(endPivotId));
+        relation.setStartBlock(newBlock);
+        //update relation
+        newBlock.setGoNextBlock(relation);
+      }
       //update db
       blockService.createOrUpdate(newBlock);
       //update VC
