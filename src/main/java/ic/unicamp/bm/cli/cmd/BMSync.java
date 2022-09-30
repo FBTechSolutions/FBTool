@@ -111,6 +111,7 @@ public class BMSync implements Runnable {
                   }
                   String content = updatedBlocks.get(key);
                   String cleanContent = blockScanner.cleanTagMarks(content);
+                  //treat the size
                   temporalVC.upsertContent(key, cleanContent);
                   blockService.createOrUpdate(updatedBlock);
                 }
@@ -161,8 +162,10 @@ public class BMSync implements Runnable {
       }
       //update db
       blockService.createOrUpdate(newBlock);
+      String content = temporalNewBlocks.get(key);
+      // treat the size
       //update VC
-      temporalVC.upsertContent(newBlockId, temporalNewBlocks.get(key));
+      temporalVC.upsertContent(newBlockId, content);
       //update pivots
       endPivotId = newBlockId;
     }
