@@ -290,14 +290,11 @@ public class BlockScanner implements IBlockScanner {
         try {
           StringBuilder block = new StringBuilder();
 
-          String expectedEndMarkId = null;
-          boolean expectedAnEndMark = false;
-
           while (it.hasNext()) {
             String line = it.nextLine(); //read line
             boolean isLine = true;
-            boolean isCheckingLine = true;
-            while (isCheckingLine) {
+            boolean isCheckingALine = true;
+            while (isCheckingALine) {
               int firstStartPos = getFirstBeginMark(line);
               int firstCutPos = getFirstCutMark(line);
               int firstEndPos = getFirstEndMark(line);
@@ -309,124 +306,35 @@ public class BlockScanner implements IBlockScanner {
                     int[] sorted = new int[]{firstStartPos, firstCutPos, firstEndPos};
                     Arrays.sort(sorted);
                     //switch
-                    // START first
+                    // the START tag is first
                     if (firstStartPos == sorted[0]) {
-                      //start
-                      if (firstStartPos == 0) {
-                        // nothing before START
-                        String beginBlockId = getFirstBeginMarkId(line);
-                        //---wrap
-                        if (firstCutPos == sorted[1]) {
-                          //cut
-                          block.append(line, 0, firstCutPos);
-                          line = line.substring(firstCutPos + CUT_BLOCK_SIZE);
-                          blocks.put("New", block.toString());
-                          block = new StringBuilder();
-                          isCheckingLine = thereIsMoreChars(line);
-                        }
-                        if (firstEndPos == sorted[1]) {
-                          //end
-                          String endBlockId = getFirstEndMarkId(line);
-                          if (!blockStack.isEmpty() && blockStack.peek().equals(endBlockId)) {
-                            block.append(line, START_BLOCK_SIZE, firstEndPos);
-                            blocks.put(beginBlockId, block.toString());
-                            block = new StringBuilder();
-                            line = line.substring(firstEndPos + END_BLOCK_SIZE);
-                          } else {
-                            blocks.put(endBlockId, block.toString());
-                            line = line.substring(firstEndPos + END_BLOCK_SIZE);
-                            blockStack.pop();
-                          }
-                        }
-                      } else {
+                      if (firstStartPos != 0) {
                         // something before START
                         block.append(line, 0, firstStartPos); //add part
-                        blocks.put("New", block.toString());
-                        block = new StringBuilder();
-                        line = line.substring(firstStartPos);
-                        isCheckingLine = thereIsMoreChars(line);
                       }
+                      line = addStartPart(blocks, blockStack, block, line, firstStartPos);
+                      block = new StringBuilder();
+                      isCheckingALine = thereIsMoreChars(line);
                     }
-                    // CUT first
+                    // the CUT tag is first
                     if (firstCutPos == sorted[0]) {
-                      //cut
-                      if (firstCutPos == 0) {
-                        //==wrap
-                        if (firstStartPos == sorted[1]) {
-                          //start
-                          block.append(line, CUT_BLOCK_SIZE, firstStartPos);
-                          blocks.put("New", block.toString());
-                          block = new StringBuilder();
-                          line = line.substring(firstStartPos);
-                          isCheckingLine = thereIsMoreChars(line);
-                        }
-                        if (firstEndPos == sorted[1]) {
-                          //end
-                          String endBlockId = getFirstEndMarkId(line);
-                          if (!blockStack.isEmpty() && blockStack.peek().equals(endBlockId)) {
-                            blockStack.pop();
-                            block.append(line, CUT_BLOCK_SIZE, firstEndPos);
-                            blocks.put("New", block.toString());
-                            block = new StringBuilder();
-                            line = line.substring(firstEndPos);
-                            isCheckingLine = thereIsMoreChars(line);
-                          } else {
-                            block.append(line, CUT_BLOCK_SIZE, firstEndPos);
-                            blocks.put("New", block.toString());
-                            block = new StringBuilder();
-                            line = line.substring(firstEndPos);
-                            isCheckingLine = thereIsMoreChars(line);
-                          }
-                        }
-                      } else {
-                        // cut not initial
+                      if (firstCutPos != 0) {
+                        // something before CUT
                         block.append(line, 0, firstCutPos); //add part
-                        blocks.put("New", block.toString());
-                        block = new StringBuilder();
-                        line = line.substring(firstCutPos);
-                        isCheckingLine = thereIsMoreChars(line);
                       }
+                      line = addCutPart(blocks, blockStack, block, line, firstCutPos);
+                      block = new StringBuilder();
+                      isCheckingALine = thereIsMoreChars(line);
                     }
-                    // END first
+                    // the END tag is first
                     if (firstEndPos == sorted[0]) {
-                      //end
-                      if (firstEndPos == 0) {
-                        //end initial
-                        //==wrap
-                        if (firstStartPos == sorted[1]) {
-                          //start
-                          block.append(line, END_BLOCK_SIZE, firstStartPos);
-                          blocks.put("New", block.toString());
-                          block = new StringBuilder();
-                          line = line.substring(firstStartPos + START_BLOCK_SIZE);
-                          isCheckingLine = thereIsMoreChars(line);
-                        }
-                        if (firstCutPos == sorted[1]) {
-                          //cut
-                          block.append(line, END_BLOCK_SIZE, firstCutPos);
-                          blocks.put("New", block.toString());
-                          block = new StringBuilder();
-                          line = line.substring(firstCutPos + CUT_BLOCK_SIZE);
-                          isCheckingLine = thereIsMoreChars(line);
-                        }
-                      } else {
-                        // end not initial
-                        String endBlockId = getFirstEndMarkId(line);
-                        if (!blockStack.isEmpty() && blockStack.peek().equals(endBlockId)) {
-                          blockStack.pop();
-                          block.append(line, 0, firstEndPos);
-                          blocks.put(endBlockId, block.toString());
-                          block = new StringBuilder();
-                          line = line.substring(firstEndPos + END_BLOCK_SIZE);
-                          isCheckingLine = thereIsMoreChars(line);
-                        } else {
-                          block.append(line, 0, firstEndPos); //add part
-                          blocks.put("New", block.toString());
-                          block = new StringBuilder();
-                          line = line.substring(firstEndPos);
-                          isCheckingLine = thereIsMoreChars(line);
-                        }
+                      if (firstEndPos != 0) {
+                        // something before END
+                        block.append(line, 0, firstEndPos); //add part
                       }
+                      line = addEndPart(blocks, blockStack, block, line, firstEndPos);
+                      block = new StringBuilder();
+                      isCheckingALine = thereIsMoreChars(line);
                     }
 
                   } else {
@@ -434,141 +342,63 @@ public class BlockScanner implements IBlockScanner {
                     int[] sorted = new int[]{firstStartPos, firstCutPos};
                     Arrays.sort(sorted);
                     //switch
-                    // START first
+                    // the START is first
                     if (firstStartPos == sorted[0]) {
-                      if (firstStartPos == 0) {
-                        // nothing before START
-                        String beginBlockId = getFirstBeginMarkId(line);
-                        blockStack.push(beginBlockId);
-                        block = new StringBuilder();
-                        line = line.substring(firstStartPos + START_BLOCK_SIZE);
-                        isCheckingLine = thereIsMoreChars(line);
-                      } else {
+                      if (firstStartPos != 0) {
                         // something before START
                         block.append(line, 0, firstStartPos); //add part
-                        blocks.put("New", block.toString());
-                        block = new StringBuilder();
-                        line = line.substring(firstStartPos);
-                        isCheckingLine = thereIsMoreChars(line);
                       }
+                      line = addStartPart(blocks, blockStack, block, line, firstStartPos);
+                      block = new StringBuilder();
+                      isCheckingALine = thereIsMoreChars(line);
                     }
-                    // CUT first
+                    // the CUT is first
                     if (firstCutPos == sorted[0]) {
-                      if (firstCutPos == 0) {
-                        // nothing before CUT
-                        if (!blockStack.isEmpty()) {
-                          String id = blockStack.pop();
-                          blocks.put(id, block.toString());
-                          block = new StringBuilder();
-                          line = line.substring(firstCutPos + CUT_BLOCK_SIZE);
-                          isCheckingLine = thereIsMoreChars(line);
-                        } else {
-                          String id = "New";
-                          blocks.put(id, block.toString());
-                          block = new StringBuilder();
-                          line = line.substring(firstCutPos + CUT_BLOCK_SIZE);
-                          isCheckingLine = thereIsMoreChars(line);
-                        }
-                      } else {
+                      if (firstCutPos != 0) {
                         // something before CUT
-                        if (!blockStack.isEmpty()) {
-                          String id = blockStack.pop();
-                          block.append(line, 0, firstCutPos);
-                          blocks.put(id, block.toString());
-                          block = new StringBuilder();
-                          line = line.substring(firstCutPos + CUT_BLOCK_SIZE);
-                          isCheckingLine = thereIsMoreChars(line);
-                        } else {
-                          String id = "New";
-                          block.append(line, 0, firstCutPos);
-                          blocks.put(id, block.toString());
-                          block = new StringBuilder();
-                          line = line.substring(firstCutPos + CUT_BLOCK_SIZE);
-                          isCheckingLine = thereIsMoreChars(line);
-                        }
+                        block.append(line, 0, firstCutPos); //add part
                       }
+                      line = addCutPart(blocks, blockStack, block, line, firstCutPos);
+                      block = new StringBuilder();
+                      isCheckingALine = thereIsMoreChars(line);
                     }
                   }
                 } else {
-                  if (firstEndPos > 0) {
+                  if (firstEndPos >= 0) {
                     // Only START and END in the line
                     int[] sorted = new int[]{firstStartPos, firstEndPos};
                     Arrays.sort(sorted);
                     //switch
-                    // START first
+                    // the START tag is first
                     if (firstStartPos == sorted[0]) {
-                      if (firstStartPos == 0) {
-                        // nothing before START
-                        String beginBlockId = getFirstBeginMarkId(line);
-                        blockStack.push(beginBlockId);
-                        block = new StringBuilder();
-                        line = line.substring(firstStartPos + START_BLOCK_SIZE);
-                        isCheckingLine = thereIsMoreChars(line);
-                      } else {
+                      if (firstStartPos != 0) {
                         // something before START
                         block.append(line, 0, firstStartPos); //add part
-                        blocks.put("New", block.toString());
-                        block = new StringBuilder();
-                        line = line.substring(firstStartPos);
-                        isCheckingLine = thereIsMoreChars(line);
                       }
+                      line = addStartPart(blocks, blockStack, block, line, firstStartPos);
+                      block = new StringBuilder();
+                      isCheckingALine = thereIsMoreChars(line);
                     }
-                    // END first
+                    // the END tag is first
                     if (firstEndPos == sorted[0]) {
-                      if (firstEndPos == 0) {
-                        // nothing before END
-                        String endBlockId = getFirstEndMarkId(line);
-                        if (!blockStack.isEmpty() && blockStack.peek().equals(endBlockId)) {
-                          String id = blockStack.pop();
-                          blocks.put(id, block.toString());
-                          block = new StringBuilder();
-                          line = line.substring(firstEndPos + END_BLOCK_SIZE);
-                          isCheckingLine = thereIsMoreChars(line);
-                        }else{
-                          String id = "New";
-                          blocks.put(id, block.toString());
-                          block = new StringBuilder();
-                          line = line.substring(firstEndPos + END_BLOCK_SIZE);
-                          isCheckingLine = thereIsMoreChars(line);
-                        }
-                      } else {
+                      if (firstEndPos != 0) {
                         // something before END
-                        String endBlockId = getFirstEndMarkId(line);
-                        if (!blockStack.isEmpty() && blockStack.peek().equals(endBlockId)) {
-                          block.append(line, 0, firstEndPos);
-                          String id = blockStack.pop();
-                          blocks.put(id, block.toString());
-                          block = new StringBuilder();
-                          line = line.substring(firstEndPos + END_BLOCK_SIZE);
-                          isCheckingLine = thereIsMoreChars(line);
-                        } else {
-                          block.append(line, 0, firstEndPos);
-                          String id = "New";
-                          blocks.put(id, block.toString());
-                          block = new StringBuilder();
-                          line = line.substring(firstEndPos + END_BLOCK_SIZE);
-                          isCheckingLine = thereIsMoreChars(line);
-                        }
+                        block.append(line, 0, firstEndPos); //add part
                       }
+                      line = addEndPart(blocks, blockStack, block, line, firstEndPos);
+                      block = new StringBuilder();
+                      isCheckingALine = thereIsMoreChars(line);
                     }
                   } else {
                     // Only START in the line
-
-                    if (firstStartPos == 0) {
-                      // nothing before START
-                      String beginBlockId = getFirstBeginMarkId(line);
-                      blockStack.push(beginBlockId);
-                      block = new StringBuilder();
-                      line = line.substring(firstStartPos + START_BLOCK_SIZE);
-                      isCheckingLine = thereIsMoreChars(line);
-                    } else {
+                    // the START tag is first
+                    if (firstStartPos != 0) {
                       // something before START
                       block.append(line, 0, firstStartPos); //add part
-                      blocks.put("New", block.toString());
-                      block = new StringBuilder();
-                      line = line.substring(firstStartPos);
-                      isCheckingLine = thereIsMoreChars(line);
                     }
+                    line = addStartPart(blocks, blockStack, block, line, firstStartPos);
+                    block = new StringBuilder();
+                    isCheckingALine = thereIsMoreChars(line);
                   }
                 }
               } else {
@@ -580,121 +410,53 @@ public class BlockScanner implements IBlockScanner {
                     Arrays.sort(sorted);
 
                     //switch
-                    // CUT first
+                    // CUT tag is first
                     if (firstCutPos == sorted[0]) {
-                      if (firstCutPos == 0) {
-                        // nothing before CUT
-                        if (!blockStack.isEmpty()) {
-                          String id = blockStack.pop();
-                          blocks.put(id, block.toString());
-                          block = new StringBuilder();
-                          line = line.substring(firstCutPos + CUT_BLOCK_SIZE);
-                          isCheckingLine = thereIsMoreChars(line);
-                        } else {
-                          String id = "New";
-                          blocks.put(id, block.toString());
-                          block = new StringBuilder();
-                          line = line.substring(firstCutPos + CUT_BLOCK_SIZE);
-                          isCheckingLine = thereIsMoreChars(line);
-                        }
-                      } else {
+                      if (firstCutPos != 0) {
                         // something before CUT
-                        if (!blockStack.isEmpty()) {
-                          String id = blockStack.pop();
-                          block.append(line, 0, firstCutPos);
-                          blocks.put(id, block.toString());
-                          block = new StringBuilder();
-                          line = line.substring(firstCutPos + CUT_BLOCK_SIZE);
-                          isCheckingLine = thereIsMoreChars(line);
-                        } else {
-                          String id = "New";
-                          block.append(line, 0, firstCutPos);
-                          blocks.put(id, block.toString());
-                          block = new StringBuilder();
-                          line = line.substring(firstCutPos + CUT_BLOCK_SIZE);
-                          isCheckingLine = thereIsMoreChars(line);
-                        }
+                        block.append(line, 0, firstCutPos); //add part
                       }
+                      line = addCutPart(blocks, blockStack, block, line, firstCutPos);
+                      block = new StringBuilder();
+                      isCheckingALine = thereIsMoreChars(line);
                     }
-                    // END First
+                    // END tag is first
                     if (firstEndPos == sorted[0]) {
-                      if (firstEndPos == 0) {
-                        // nothing before END
-                        String endBlockId = getFirstEndMarkId(line);
-                        if (!blockStack.isEmpty() && blockStack.peek().equals(endBlockId)) {
-                          String id = blockStack.pop();
-                          blocks.put(id, block.toString());
-                          block = new StringBuilder();
-                          line = line.substring(firstEndPos + END_BLOCK_SIZE);
-                          isCheckingLine = thereIsMoreChars(line);
-                        }else{
-                          String id = "New";
-                          blocks.put(id, block.toString());
-                          block = new StringBuilder();
-                          line = line.substring(firstEndPos + END_BLOCK_SIZE);
-                          isCheckingLine = thereIsMoreChars(line);
-                        }
-                      } else {
+                      if (firstEndPos != 0) {
                         // something before END
-                        String endBlockId = getFirstEndMarkId(line);
-                        if (!blockStack.isEmpty() && blockStack.peek().equals(endBlockId)) {
-                          block.append(line, 0, firstEndPos);
-                          String id = blockStack.pop();
-                          blocks.put(id, block.toString());
-                          block = new StringBuilder();
-                          line = line.substring(firstEndPos + END_BLOCK_SIZE);
-                          isCheckingLine = thereIsMoreChars(line);
-                        } else {
-                          block.append(line, 0, firstEndPos);
-                          String id = "New";
-                          blocks.put(id, block.toString());
-                          block = new StringBuilder();
-                          line = line.substring(firstEndPos + END_BLOCK_SIZE);
-                          isCheckingLine = thereIsMoreChars(line);
-                        }
+                        block.append(line, 0, firstEndPos); //add part
                       }
+                      line = addEndPart(blocks, blockStack, block, line, firstEndPos);
+                      block = new StringBuilder();
+                      isCheckingALine = thereIsMoreChars(line);
                     }
                   } else {
-                    // only CUT in the line
-                    if (!blockStack.isEmpty()) {
-                      block.append(line, 0, firstCutPos);
-                      String id = blockStack.pop();
-                      blocks.put(id, block.toString());
-                      block = new StringBuilder();
-                      line = line.substring(firstCutPos + CUT_BLOCK_SIZE);
-                      isCheckingLine = thereIsMoreChars(line);
-                    } else {
-                      block.append(line, 0, firstCutPos);
-                      String id = "New";
-                      blocks.put(id, block.toString());
-                      block = new StringBuilder();
-                      line = line.substring(firstCutPos + CUT_BLOCK_SIZE);
-                      isCheckingLine = thereIsMoreChars(line);
+                    // ONLY CUT in the line
+                    // CUT tag is first
+                    if (firstCutPos != 0) {
+                      // something before CUT
+                      block.append(line, 0, firstCutPos); //add part
                     }
+                    line = addCutPart(blocks, blockStack, block, line, firstCutPos);
+                    block = new StringBuilder();
+                    isCheckingALine = thereIsMoreChars(line);
                   }
                 } else {
                   if (firstEndPos >= 0) {
-                    // only END in the line
-                    String endBlockId = getFirstEndMarkId(line);
-                    if (!blockStack.isEmpty() && blockStack.peek().equals(endBlockId)) {
-                      blockStack.pop();
-                      block.append(line, 0, firstEndPos);
-                      blocks.put(endBlockId, block.toString());
-                      block = new StringBuilder();
-                      line = line.substring(firstEndPos + END_BLOCK_SIZE);
-                      isCheckingLine = thereIsMoreChars(line);
-                    } else {
-                      block.append(line, 0, firstEndPos);
-                      blocks.put("New", block.toString());
-                      block = new StringBuilder();
-                      line = line.substring(firstEndPos + END_BLOCK_SIZE);
-                      isCheckingLine = thereIsMoreChars(line);
+                    // ONLY END in the line
+                    // END tag is first
+                    if (firstEndPos != 0) {
+                      // something before END
+                      block.append(line, 0, firstEndPos); //add part
                     }
+                    line = addEndPart(blocks, blockStack, block, line, firstEndPos);
+                    block = new StringBuilder();
+                    isCheckingALine = thereIsMoreChars(line);
                   } else {
                     // empty
                     block.append(line); //add
                     block.append("\r\n"); //space
-                    isCheckingLine = false;
+                    isCheckingALine = false;
                   }
                 }
               }
@@ -710,12 +472,45 @@ public class BlockScanner implements IBlockScanner {
     return blocks;
   }
 
+  private String addStartPart(Map<String, String> blocks, Stack<String> blockStack,
+      StringBuilder block, String line, int firstStartPos) {
+    blocks.put("New", block.toString());
+    String beginBlockId = getFirstBeginMarkId(line);
+    blockStack.push(beginBlockId);
+    line = line.substring(firstStartPos + START_BLOCK_SIZE);
+    return line;
+  }
+
+  private static String addCutPart(Map<String, String> blocks, Stack<String> blockStack,
+      StringBuilder block, String line, int firstCutPos) {
+    String id = "New";
+    if (!blockStack.isEmpty()) {
+      id = blockStack.pop();
+    }
+    blocks.put(id, block.toString());
+    line = line.substring(firstCutPos + CUT_BLOCK_SIZE);
+    return line;
+  }
+
+  private String addEndPart(Map<String, String> blocks, Stack<String> blockStack,
+      StringBuilder block, String line, int firstEndPos) {
+    String endBlockId = getFirstEndMarkId(line);
+    String id = "New";
+    if (!blockStack.isEmpty() && blockStack.peek().equals(endBlockId)) {
+      id = blockStack.pop();
+    }
+    blocks.put(id, block.toString());
+    line = line.substring(firstEndPos + END_BLOCK_SIZE);
+    return line;
+  }
+
+
   private boolean thereIsMoreChars(String line) {
     return line.length() > 0;
   }
 
   private int getFirstCutMark(String line) {
-    return 0;
+    return line.indexOf("b->[cut]");
   }
 
   private void addNewBlockToMap(Map<String, String> blocks, StringBuffer blockBuffer) {
