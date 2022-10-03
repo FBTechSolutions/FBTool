@@ -284,7 +284,7 @@ public class BlockScanner implements IBlockScanner {
     Stack<String> blockStack = new Stack<>();
 
     if (Files.exists(pathFile)) {
-      LineIterator it = null;
+      LineIterator it;
       try {
         it = FileUtils.lineIterator(pathFile.toFile(), "UTF-8");
         try {
