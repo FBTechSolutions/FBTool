@@ -4,11 +4,16 @@ import ic.unicamp.bm.block.GitVCSManager;
 import ic.unicamp.bm.block.IVCRepository;
 import ic.unicamp.bm.block.IVCSAPI;
 import ic.unicamp.bm.graph.neo4j.schema.Block;
+import ic.unicamp.bm.graph.neo4j.schema.Feature;
 import ic.unicamp.bm.graph.neo4j.schema.enums.BlockState;
 import ic.unicamp.bm.graph.neo4j.schema.enums.DataState;
 import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToBlock;
+import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToFeature;
+import ic.unicamp.bm.graph.neo4j.schema.relations.ProductToFeature;
 import ic.unicamp.bm.graph.neo4j.services.BlockService;
 import ic.unicamp.bm.graph.neo4j.services.BlockServiceImpl;
+import ic.unicamp.bm.graph.neo4j.services.FeatureService;
+import ic.unicamp.bm.graph.neo4j.services.FeatureServiceImpl;
 import ic.unicamp.bm.scanner.BlockScanner;
 import ic.unicamp.bm.scanner.BlockSequenceNumber;
 import java.io.File;
@@ -93,7 +98,7 @@ public class BMSync implements Runnable {
 
             LinkedHashMap<String, String> temporalNewBlocks = new LinkedHashMap<>(); //news
             for (String key : updatedBlocksReverse) {
-              if(key.equals("New")){
+              if(key.charAt(0) == 'N'){
                 temporalNewBlocks.put(key, updatedBlocks.get(key));
               }else{
                 if(!temporalNewBlocks.isEmpty()){
@@ -152,6 +157,15 @@ public class BMSync implements Runnable {
       newBlock.setBlockState(BlockState.TO_INSERT);
       newBlock.setVcBlockState(DataState.TEMPORAL);
       newBlock.setBlockId(newBlockId);
+
+      //adding default feature
+      FeatureService featureService = new FeatureServiceImpl();
+      Feature feature = featureService.getFeatureByID(BMConfigure.BM_FEATURE);
+      BlockToFeature blockToFeature = new BlockToFeature();
+      blockToFeature.setStartBlock(newBlock);
+      blockToFeature.setEndFeature(feature);
+      newBlock.setAssociatedTo(blockToFeature);
+
       //create relation
       if(endPivotId != null){
         BlockToBlock relation = new BlockToBlock();

@@ -462,6 +462,11 @@ public class BlockScanner implements IBlockScanner {
               }
             }
           }
+          //rest
+          if(!block.isEmpty()){
+            String key = "N" + SequenceAbstractBlockNumber.getNextStringCode();
+            blocks.put(key, block.toString());
+          }
         } finally {
           it.close();
         }
@@ -476,7 +481,8 @@ public class BlockScanner implements IBlockScanner {
       StringBuilder block, String line, int firstStartPos) {
     String previous = block.toString();
     if(!previous.isEmpty()){
-      blocks.put("New", block.toString());
+      String key = "N" + SequenceAbstractBlockNumber.getNextStringCode();
+      blocks.put(key, block.toString());
     }
     String beginBlockId = getFirstBeginMarkId(line);
     blockStack.push(beginBlockId);
@@ -486,7 +492,7 @@ public class BlockScanner implements IBlockScanner {
 
   private static String addCutPart(Map<String, String> blocks, Stack<String> blockStack,
       StringBuilder block, String line, int firstCutPos) {
-    String id = "New";
+    String id = "N" + SequenceAbstractBlockNumber.getNextStringCode();
     if (!blockStack.isEmpty()) {
       id = blockStack.pop();
     }
@@ -498,7 +504,7 @@ public class BlockScanner implements IBlockScanner {
   private String addEndPart(Map<String, String> blocks, Stack<String> blockStack,
       StringBuilder block, String line, int firstEndPos) {
     String endBlockId = getFirstEndMarkId(line);
-    String id = "New";
+    String id = "N" + SequenceAbstractBlockNumber.getNextStringCode();
     if (!blockStack.isEmpty() && blockStack.peek().equals(endBlockId)) {
       id = blockStack.pop();
     }
