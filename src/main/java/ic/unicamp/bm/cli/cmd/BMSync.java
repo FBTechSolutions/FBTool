@@ -93,7 +93,7 @@ public class BMSync implements Runnable {
 
             LinkedHashMap<String, String> temporalNewBlocks = new LinkedHashMap<>(); //news
             for (String key : updatedBlocksReverse) {
-              if(key.charAt(0)=='a'){
+              if(key.equals("New")){
                 temporalNewBlocks.put(key, updatedBlocks.get(key));
               }else{
                 if(!temporalNewBlocks.isEmpty()){

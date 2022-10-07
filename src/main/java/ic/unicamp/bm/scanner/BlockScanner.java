@@ -18,9 +18,9 @@ public class BlockScanner implements IBlockScanner {
 
   public static int BLOCK_CONTENT_MAX_SIZE = 40000;//10;
   public static int BLOCK_ID_SIZE = 16;
-  public static int START_BLOCK_SIZE = 16;
-  public static int END_BLOCK_SIZE = 16;
-  public static int CUT_BLOCK_SIZE = 16;
+  public static int START_BLOCK_SIZE = 21;
+  public static int END_BLOCK_SIZE = 21;
+  public static int CUT_BLOCK_SIZE = 8;
 
   @Override
   public Map<String, String> retrieveUpdatedBlocks(Path pathFile) throws Exception {
@@ -297,7 +297,7 @@ public class BlockScanner implements IBlockScanner {
             while (isCheckingALine) {
               int firstStartPos = getFirstBeginMark(line);
               int firstCutPos = getFirstCutMark(line);
-              int firstEndPos = getFirstEndMark(line);
+              int firstEndPos = getFirstEndMarkPos0(line);
 
               if (firstStartPos >= 0) {
                 if (firstCutPos >= 0) {
@@ -474,7 +474,10 @@ public class BlockScanner implements IBlockScanner {
 
   private String addStartPart(Map<String, String> blocks, Stack<String> blockStack,
       StringBuilder block, String line, int firstStartPos) {
-    blocks.put("New", block.toString());
+    String previous = block.toString();
+    if(!previous.isEmpty()){
+      blocks.put("New", block.toString());
+    }
     String beginBlockId = getFirstBeginMarkId(line);
     blockStack.push(beginBlockId);
     line = line.substring(firstStartPos + START_BLOCK_SIZE);
@@ -510,7 +513,7 @@ public class BlockScanner implements IBlockScanner {
   }
 
   private int getFirstCutMark(String line) {
-    return line.indexOf("b->[cut]");
+    return line.indexOf("b>>[cut]");
   }
 
   private void addNewBlockToMap(Map<String, String> blocks, StringBuffer blockBuffer) {
@@ -547,6 +550,13 @@ public class BlockScanner implements IBlockScanner {
   private int getFirstEndMark(String line) {
     return line.indexOf("]<-b");
   }
+  private int getFirstEndMarkPos0(String line) {
+    int pos = line.indexOf("]<-b");
+    if(pos > 0){
+      pos = pos - 17;
+    }
+    return pos;
+  }
 
   private String getFirstBeginMarkId(String line) {
     int idx = getFirstBeginMark(line) + 4;
@@ -568,9 +578,14 @@ public class BlockScanner implements IBlockScanner {
 
   @Override
   public String cleanTagMarks(String content) {
-    int idb = getFirstBeginMark(content) + 4 + BLOCK_ID_SIZE + 1;
-    int ide = getFirstEndMark(content) - BLOCK_ID_SIZE - 1;
-    return content.substring(idb, ide);
+    if(getFirstBeginMark(content)>=0 && getFirstEndMark(content)>=0){
+      int idb = getFirstBeginMark(content) + 4 + BLOCK_ID_SIZE + 1;
+      int ide = getFirstEndMark(content) - BLOCK_ID_SIZE - 1;
+      return content.substring(idb, ide);
+    }else{
+      return content;
+    }
+
   }
 }
 
