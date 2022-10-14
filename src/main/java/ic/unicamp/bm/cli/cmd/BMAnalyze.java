@@ -1,6 +1,6 @@
 package ic.unicamp.bm.cli.cmd;
 
-import static ic.unicamp.bm.cli.cmd.BMConfigure.BM_FEATURE;
+import static ic.unicamp.bm.cli.cmd.BMConfigure.BMFEATURE;
 
 import ic.unicamp.bm.block.GitVCS;
 import ic.unicamp.bm.block.GitVCSManager;
@@ -161,11 +161,11 @@ public class BMAnalyze implements Runnable {
 
   private static Feature getDefaultFeature() {
     FeatureService featureService = new FeatureServiceImpl();
-    Feature defaultFeature = featureService.getFeatureByID(BM_FEATURE);
+    Feature defaultFeature = featureService.getFeatureByID(BMFEATURE);
     if (defaultFeature == null) {
       defaultFeature = new Feature();
-      defaultFeature.setFeatureId(BM_FEATURE);
-      defaultFeature.setFeatureLabel(BM_FEATURE);
+      defaultFeature.setFeatureId(BMFEATURE);
+      defaultFeature.setFeatureLabel(BMFEATURE);
     }
     return defaultFeature;
   }

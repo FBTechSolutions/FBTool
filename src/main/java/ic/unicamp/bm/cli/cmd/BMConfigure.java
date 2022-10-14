@@ -33,8 +33,8 @@ public class BMConfigure implements Runnable {
 
   public static final String CMD_NAME = "configure";
 
-  public static final String BM_SPL = "BM_SPL";
-  public static final String BM_FEATURE = "BM_Feature";
+  public static final String BMSPL = "BMSPL";
+  public static final String BMFEATURE = "BMFeature";
 
   @Override
   public void run() {
@@ -53,17 +53,17 @@ public class BMConfigure implements Runnable {
 
     FeatureService featureService = new FeatureServiceImpl();
     ProductService productService = new ProductServiceImpl();
-    Product product = productService.getProductByID(BM_SPL);
+    Product product = productService.getProductByID(BMSPL);
     if (product == null) {
-      Feature feature = featureService.getFeatureByID(BM_FEATURE);
+      Feature feature = featureService.getFeatureByID(BMFEATURE);
       if (feature == null) {
         feature = new Feature();
-        feature.setFeatureId(BM_FEATURE);
-        feature.setFeatureLabel(BM_FEATURE);
+        feature.setFeatureId(BMFEATURE);
+        feature.setFeatureLabel(BMFEATURE);
       }
       product = new Product();
-      product.setProductId(BM_SPL);
-      product.setProductLabel(BM_SPL);
+      product.setProductId(BMSPL);
+      product.setProductLabel(BMSPL);
       List<ProductToFeature> featureList = new LinkedList<>();
       ProductToFeature relation = new ProductToFeature();
       relation.setStartProduct(product);

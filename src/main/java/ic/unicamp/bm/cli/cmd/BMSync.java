@@ -9,7 +9,6 @@ import ic.unicamp.bm.graph.neo4j.schema.enums.BlockState;
 import ic.unicamp.bm.graph.neo4j.schema.enums.DataState;
 import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToBlock;
 import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToFeature;
-import ic.unicamp.bm.graph.neo4j.schema.relations.ProductToFeature;
 import ic.unicamp.bm.graph.neo4j.services.BlockService;
 import ic.unicamp.bm.graph.neo4j.services.BlockServiceImpl;
 import ic.unicamp.bm.graph.neo4j.services.FeatureService;
@@ -160,7 +159,7 @@ public class BMSync implements Runnable {
 
       //adding default feature
       FeatureService featureService = new FeatureServiceImpl();
-      Feature feature = featureService.getFeatureByID(BMConfigure.BM_FEATURE);
+      Feature feature = featureService.getFeatureByID(BMConfigure.BMFEATURE);
       BlockToFeature blockToFeature = new BlockToFeature();
       blockToFeature.setStartBlock(newBlock);
       blockToFeature.setEndFeature(feature);

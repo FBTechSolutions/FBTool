@@ -17,4 +17,6 @@ public interface BlockService extends Service<Block> {
   List<Block> getBlocksByFile(String pathFile);
 
   Block getFirstBlockByFile(String pathFile);
+
+  List<Block> getBlocksByFeature(String oldFeatureId);
 }
