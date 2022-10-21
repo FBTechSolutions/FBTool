@@ -12,7 +12,7 @@ public class Neo4jSessionFactory {
       .build();*/
   private final static Configuration configuration = new Configuration.Builder()
       .uri("neo4j://localhost:7687")
-      .credentials("neo4j", "test")
+      .credentials("neo4j", "test") // neo4j, test
       .build();
   private final static SessionFactory sessionFactory = new SessionFactory(configuration,
       "ic.unicamp.bm.graph.neo4j.schema");
