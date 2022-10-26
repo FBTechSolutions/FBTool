@@ -13,7 +13,7 @@ import ic.unicamp.bm.cli.cmd.BMProjectProduct;
 import ic.unicamp.bm.cli.cmd.BMMoveBlocks;
 import ic.unicamp.bm.cli.cmd.BMSync;
 import ic.unicamp.bm.cli.cmd.BMTagBlocks;
-import ic.unicamp.bm.cli.cmd.BMUpsertFeatures;
+import ic.unicamp.bm.cli.cmd.BMUpsertFeature;
 import ic.unicamp.bm.cli.cmd.BMUpsertProduct;
 import ic.unicamp.bm.cli.cmd.BMVersion;
 import ic.unicamp.bm.cli.util.logger.SplMgrLogger;
@@ -43,7 +43,7 @@ import static ic.unicamp.bm.cli.util.msg.InfoMessages.*;
         BMAnalyze.class,
         BMProjectProduct.class,
         BMUpsertProduct.class,
-        BMUpsertFeatures.class,
+        BMUpsertFeature.class,
         BMListFeatures.class,
         BMListBlocks.class,
         BMSync.class,
@@ -119,7 +119,7 @@ public class Cmd implements Runnable {
             __executeCmd(inputs, commandLine);
           }
           case CMD_UPSERT_FEATURES -> {
-            CommandLine commandLine = new CommandLine(new BMUpsertFeatures());
+            CommandLine commandLine = new CommandLine(new BMUpsertFeature());
             __executeCmd(inputs, commandLine);
           }
           case CMD_PROJECT_PRODUCT -> {

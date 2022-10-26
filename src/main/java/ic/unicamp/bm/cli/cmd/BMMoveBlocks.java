@@ -46,9 +46,12 @@ public class BMMoveBlocks implements Runnable {
 
     BlockService blockService = new BlockServiceImpl();
     List<Block> blocks = blockService.getBlocksByFeature(oldFeatureId);
-    Feature newF = new Feature();
-    newF.setFeatureId(newFeatureId);
-    newF.setFeatureLabel(newFeatureId);
+    Feature newF = featureService.getFeatureByID(newFeatureId);
+    if(newF == null){
+      newF = new Feature();
+      newF.setFeatureId(newFeatureId);
+      newF.setFeatureLabel(newFeatureId);
+    }
     for (Block block : blocks) {
       Block blockUpdated = blockService.getBlockByID(block.getBlockId());
       BlockToFeature blockToFeature = new BlockToFeature();

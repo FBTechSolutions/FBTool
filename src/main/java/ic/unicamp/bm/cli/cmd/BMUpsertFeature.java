@@ -8,9 +8,9 @@ import picocli.CommandLine.Parameters;
 
 //ok
 @Command(
-    name = BMUpsertFeatures.CMD_NAME,
+    name = BMUpsertFeature.CMD_NAME,
     description = "This command will update or create a Feature")
-public class BMUpsertFeatures implements Runnable {
+public class BMUpsertFeature implements Runnable {
 
   public static final String CMD_NAME = "upsert-feature";
 
