@@ -33,13 +33,13 @@ public class BMMoveBlocks implements Runnable {
 
   @Override
   public void run() {
-    if(oldFeatureId.equals("") || newFeatureId.equals("") ){
+    if (oldFeatureId.equals("") || newFeatureId.equals("")) {
       System.out.println("You need two parameters");
       return;
     }
     FeatureService featureService = new FeatureServiceImpl();
     Feature oldF = featureService.getFeatureByID(oldFeatureId);
-    if(oldF == null){
+    if (oldF == null) {
       System.out.println("FeatureId target not valid");
       return;
     }
@@ -47,7 +47,7 @@ public class BMMoveBlocks implements Runnable {
     BlockService blockService = new BlockServiceImpl();
     List<Block> blocks = blockService.getBlocksByFeature(oldFeatureId);
     Feature newF = featureService.getFeatureByID(newFeatureId);
-    if(newF == null){
+    if (newF == null) {
       newF = new Feature();
       newF.setFeatureId(newFeatureId);
       newF.setFeatureLabel(newFeatureId);

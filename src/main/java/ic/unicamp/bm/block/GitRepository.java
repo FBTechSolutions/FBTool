@@ -12,15 +12,16 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
-public class GitRepository implements  IVCRepository {
+public class GitRepository implements IVCRepository {
 
   private final Path path = DirectoryUtil.getOutDirectoryAsPath();
+
   @Override
   public Path upsertRepository(String repositoryName) {
 
     Path productRepository = Paths.get(String.valueOf(path), repositoryName);
-    File  file = new File(String.valueOf(productRepository));
-    if(file.exists()){
+    File file = new File(String.valueOf(productRepository));
+    if (file.exists()) {
       try {
         FileUtils.deleteDirectory(file);
       } catch (IOException e) {
@@ -29,10 +30,10 @@ public class GitRepository implements  IVCRepository {
       }
     }
     try {
-        return Files.createDirectories(Paths.get(String.valueOf(productRepository)));
+      return Files.createDirectories(Paths.get(String.valueOf(productRepository)));
     } catch (IOException e) {
-        System.out.println("We could not create the product folder");
-        throw new RuntimeException(e);
+      System.out.println("We could not create the product folder");
+      throw new RuntimeException(e);
     }
   }
 
@@ -45,17 +46,17 @@ public class GitRepository implements  IVCRepository {
   public Path getOutDirectory(String name) {
     return Paths.get(String.valueOf(path), name);
   }
+
   @Override
   public Git createGitDir(Path repositoryPath) {
     try {
-
 
       File currentDirectoryFile = new File(String.valueOf(repositoryPath));
       System.out.println(currentDirectoryFile.getAbsolutePath());
       Git.init().setDirectory(currentDirectoryFile).call();
       Path repositoryGit = Paths.get(String.valueOf(repositoryPath), ".git");
       File currentDirectoryFile2 = new File(String.valueOf(repositoryGit));
-      if(currentDirectoryFile2.exists()){
+      if (currentDirectoryFile2.exists()) {
 
         FileRepositoryBuilder repositoryBuilder = new FileRepositoryBuilder();
         repositoryBuilder.setMustExist(true);

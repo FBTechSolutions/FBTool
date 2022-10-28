@@ -9,6 +9,7 @@ import ic.unicamp.bm.graph.neo4j.services.FeatureService;
 import ic.unicamp.bm.graph.neo4j.services.FeatureServiceImpl;
 import picocli.CommandLine;
 import picocli.CommandLine.Parameters;
+
 //ok
 @CommandLine.Command(name = BMTagBlocks.CMD_NAME)
 public class BMTagBlocks implements Runnable {

@@ -20,6 +20,7 @@ import org.neo4j.ogm.cypher.Filters;
 public class BMConfigServiceImpl extends GenericService<BMConfig> implements BMConfigService {
 
   public static String BM_CONFIG_ID = "BM_CONFIG_ID";
+
   @Override
   public Iterable<BMConfig> findAll() {
     return session.loadAll(BMConfig.class, 1);

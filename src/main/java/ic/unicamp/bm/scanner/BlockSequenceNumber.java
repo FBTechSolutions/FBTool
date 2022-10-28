@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class BlockSequenceNumber {
 
   private static final BMConfigService bmConfigService = new BMConfigServiceImpl();
- // private static AtomicLong sequenceNumber = new AtomicLong(0);
+  // private static AtomicLong sequenceNumber = new AtomicLong(0);
 
   public static String getNextStringCode() {
     return transformToString(generateNextCode());

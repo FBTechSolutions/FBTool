@@ -463,7 +463,7 @@ public class BlockScanner implements IBlockScanner {
             }
           }
           //rest
-          if(!block.isEmpty()){
+          if (!block.isEmpty()) {
             String key = "N" + SequenceAbstractBlockNumber.getNextStringCode();
             blocks.put(key, block.toString());
           }
@@ -480,7 +480,7 @@ public class BlockScanner implements IBlockScanner {
   private String addStartPart(Map<String, String> blocks, Stack<String> blockStack,
       StringBuilder block, String line, int firstStartPos) {
     String previous = block.toString();
-    if(!previous.isEmpty()){
+    if (!previous.isEmpty()) {
       String key = "N" + SequenceAbstractBlockNumber.getNextStringCode();
       blocks.put(key, block.toString());
     }
@@ -556,9 +556,10 @@ public class BlockScanner implements IBlockScanner {
   private int getFirstEndMark(String line) {
     return line.indexOf("]<-b");
   }
+
   private int getFirstEndMarkPos0(String line) {
     int pos = line.indexOf("]<-b");
-    if(pos > 0){
+    if (pos > 0) {
       pos = pos - 17;
     }
     return pos;
@@ -584,11 +585,11 @@ public class BlockScanner implements IBlockScanner {
 
   @Override
   public String cleanTagMarks(String content) {
-    if(getFirstBeginMark(content)>=0 && getFirstEndMark(content)>=0){
+    if (getFirstBeginMark(content) >= 0 && getFirstEndMark(content) >= 0) {
       int idb = getFirstBeginMark(content) + 4 + BLOCK_ID_SIZE + 1;
       int ide = getFirstEndMark(content) - BLOCK_ID_SIZE - 1;
       return content.substring(idb, ide);
-    }else{
+    } else {
       return content;
     }
 

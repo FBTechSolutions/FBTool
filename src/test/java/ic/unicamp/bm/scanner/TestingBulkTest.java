@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
 public class TestingBulkTest {
+
   private static final ObjectMapper objectMapper = new ObjectMapper();
+
   @Test
   void createBulkOperation() {
 

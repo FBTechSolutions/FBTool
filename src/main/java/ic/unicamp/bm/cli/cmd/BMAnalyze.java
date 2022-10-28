@@ -100,8 +100,8 @@ public class BMAnalyze implements Runnable {
     if (container.getContainerType() == ContainerType.FILE) {
 
       IBlockScanner blockScanner = new BlockScanner();
-      BlockService blockService  = new BlockServiceImpl();
-      ContainerService containerService  = new ContainerServiceImpl();
+      BlockService blockService = new BlockServiceImpl();
+      ContainerService containerService = new ContainerServiceImpl();
       Path path = Paths.get(container.getContainerId());
       Map<String, String> scannedBlocks = blockScanner.createInitialBlocks(path); //id and data
       IVCSAPI temporalGitBlock = GitVCSManager.createTemporalGitBlockInstance();
@@ -150,7 +150,7 @@ public class BMAnalyze implements Runnable {
       relation.setStartContainer(container);
       relation.setEndBlock(firstBlock);
       container.setGetFirstBlock(relation);
-      containerService.createOrUpdate( container);
+      containerService.createOrUpdate(container);
     } else {
       for (ContainerToContainer Container : container.getGetContainers()) {
         createBlocksByFile(Container.getEndContainer());

@@ -52,7 +52,8 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
     List<Block> result = new LinkedList<>();
     queryResult.forEach(map -> {
       Block block = (Block) map.get("b");
-      Block blockWithRelations = blockService.getBlockByID(block.getBlockId()); // to optimized, relations is not saved
+      Block blockWithRelations = blockService.getBlockByID(
+          block.getBlockId()); // to optimized, relations is not saved
       result.add(blockWithRelations);
       System.out.println(blockWithRelations.getBlockId());
     });
@@ -80,25 +81,25 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
 
   @Override
   public List<Block> getBlocksByFile(String pathFile) {
-      LinkedList<Block> blocks = Lists.newLinkedList();
-      ContainerService containerService = new ContainerServiceImpl();
-      Container container = containerService.getContainerByID(pathFile);
-      ContainerToBlock blockRelation = container.getGetFirstBlock();
-      Block block = blockRelation.getEndBlock();
-      BlockService blockService = new BlockServiceImpl();
-      Block initial = blockService.getBlockByID(block.getBlockId());
-      blocks.add(initial);
-      while(initial.getGoNextBlock()!=null && initial.getGoNextBlock().getEndBlock()!=null){
-        Block newBlock = initial.getGoNextBlock().getEndBlock();
-        initial = newBlock;
-        blocks.add(newBlock);
-      }
-      return blocks;
+    LinkedList<Block> blocks = Lists.newLinkedList();
+    ContainerService containerService = new ContainerServiceImpl();
+    Container container = containerService.getContainerByID(pathFile);
+    ContainerToBlock blockRelation = container.getGetFirstBlock();
+    Block block = blockRelation.getEndBlock();
+    BlockService blockService = new BlockServiceImpl();
+    Block initial = blockService.getBlockByID(block.getBlockId());
+    blocks.add(initial);
+    while (initial.getGoNextBlock() != null && initial.getGoNextBlock().getEndBlock() != null) {
+      Block newBlock = initial.getGoNextBlock().getEndBlock();
+      initial = newBlock;
+      blocks.add(newBlock);
+    }
+    return blocks;
   }
 
   @Override
   public Block getFirstBlockByFile(String pathFile) {
-    LinkedList<Block> blocks = Lists.newLinkedList();
+    //LinkedList<Block> blocks = Lists.newLinkedList();
     ContainerService containerService = new ContainerServiceImpl();
     Container container = containerService.getContainerByID(pathFile);
     ContainerToBlock blockRelation = container.getGetFirstBlock();
@@ -123,7 +124,7 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
     queryResult.forEach(map -> {
       Feature feature = (Feature) map.get("f");
       Block block = (Block) map.get("b");
-      if(feature.getFeatureId().equals(oldFeatureId)){
+      if (feature.getFeatureId().equals(oldFeatureId)) {
         result.add(block);
       }
     });

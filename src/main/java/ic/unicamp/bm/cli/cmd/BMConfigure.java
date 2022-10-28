@@ -75,7 +75,7 @@ public class BMConfigure implements Runnable {
     // bm config
     BMConfigService bmConfigService = new BMConfigServiceImpl();
     BMConfig bmConfig = bmConfigService.getBMConfigByDefaultID();
-    if(bmConfig == null){
+    if (bmConfig == null) {
       bmConfig = new BMConfig();
       bmConfig.setConfigId(BMConfigServiceImpl.BM_CONFIG_ID);
       bmConfig.setLastBlockId(0);

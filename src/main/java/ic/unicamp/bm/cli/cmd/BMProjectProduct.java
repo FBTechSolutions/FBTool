@@ -39,7 +39,7 @@ public class BMProjectProduct implements Runnable {
   private final Git git = (Git) gitVC.retrieveDirector();
   public static final String CMD_NAME = "project";
 
-  @Option(names = "-clean",  defaultValue = "false")
+  @Option(names = "-clean", defaultValue = "false")
   boolean clean;
 
   @Parameters(index = "0..*")
@@ -47,7 +47,7 @@ public class BMProjectProduct implements Runnable {
 
   @Override
   public void run() {
-    if(productList == null){
+    if (productList == null) {
       System.out.println("You need to specify at least one Product Id");
       return;
     }
@@ -74,7 +74,7 @@ public class BMProjectProduct implements Runnable {
       }
     }
     try {
-      Map<String, List<String>> rawMap = retrieveContents(map, clean );
+      Map<String, List<String>> rawMap = retrieveContents(map, clean);
       //creating repositories
       IVCRepository repository = GitVCSManager.createGitRepositoryInstance();
       Path path = repository.upsertRepository(productId);
@@ -118,12 +118,12 @@ public class BMProjectProduct implements Runnable {
       List<String> rawBlock = new LinkedList<>();
 
       for (Block block : map.get(path)) {
-        if(!clean){
+        if (!clean) {
           rawBlock.add(createBeginTag(block.getBlockId()));
         }
         String rawContent = gitVC.retrieveContent(block.getBlockId());
         rawBlock.add(rawContent);
-        if(!clean){
+        if (!clean) {
           rawBlock.add(createEndTag(block.getBlockId()));
         }
       }
@@ -198,21 +198,25 @@ public class BMProjectProduct implements Runnable {
         }
       }
     }*/
-  private void projectRawFiles(Map<String, List<String>> map, boolean clean, Path path) throws IOException {
+  private void projectRawFiles(Map<String, List<String>> map, boolean clean, Path path)
+      throws IOException {
     System.out.println("Enter Project Files");
     for (String filePath : map.keySet()) {
       Path productRepository = Paths.get(String.valueOf(path), filePath);
       File file = new File(String.valueOf(productRepository));
-      if(!file.exists()){
-        Files.createDirectories(file.getParentFile().toPath());
+      if (!file.exists()) {
+        Files.createDirectories(file.getParentFile().toPath()); // method is not atomic
+        // alternative  newDir.mkdirs();
         Files.createFile(file.toPath());
+        if (!file.exists()) {
+          // file.getParentFile().mkdirs()
+          //Files.createFile(file.toPath());
+          System.out.println("CreateDirectories is not working for" + file.toPath());
+        }
       }
-/*      if (!file.exists() && file.getParentFile().mkdirs()) {
-        Files.createFile(file.toPath());
-      }*/
 
       for (String block : map.get(filePath)) {
-        Files.writeString(Paths.get(file.toURI()), block,  StandardOpenOption.APPEND);
+        Files.writeString(Paths.get(file.toURI()), block, StandardOpenOption.APPEND);
       }
 
     }
