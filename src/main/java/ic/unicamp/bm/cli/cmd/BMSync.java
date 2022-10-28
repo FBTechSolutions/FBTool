@@ -105,6 +105,7 @@ public class BMSync implements Runnable {
                 relations = new LinkedList<>();
               }
               relations.add(aRelation);
+              parentContainer.setGetContainers(relations);
               containerService.createOrUpdate(parentContainer);
             }
             treeWalk.enterSubtree();
@@ -260,7 +261,7 @@ public class BMSync implements Runnable {
     boolean back = true;
     Path pathFolderRepository = Paths.get(String.valueOf(path), pathFileString);
     Path parent = pathFolderRepository.getParent();
-    Path parentCleaned = parent.relativize(path);
+    Path parentCleaned = path.relativize(parent);
     while (back) {
       String parentCleanedString = String.valueOf(parentCleaned);
       Container container = containerService.getContainerByID(parentCleanedString);
@@ -268,7 +269,7 @@ public class BMSync implements Runnable {
         return container;
       }
       parent = parent.getParent();
-      parentCleaned = parent.relativize(path);
+      parentCleaned = path.relativize(parent);
       if (parentCleanedString.equals("")) {
         back = false;
       }
