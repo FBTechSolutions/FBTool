@@ -20,23 +20,23 @@
       <artifactId>org.eclipse.jgit</artifactId>
       <version>6.5.0.202303070854-r</version>
     </dependency>
-    <!-- Git End dependencies -->
+    <!-- -->
     <!-- CLI dependencies -->
     <dependency>
       <groupId>info.picocli</groupId>
       <artifactId>picocli</artifactId>
       <version>4.7.1</version>
     </dependency>
-    <!-- CLI End dependencies -->
+    <!-- -->
     <!-- CLI Art -->
     <dependency>
       <groupId>com.github.lalyos</groupId>
       <artifactId>jfiglet</artifactId>
       <version>0.0.9</version>
     </dependency>
-    <!-- CLI End Art -->
+    <!-- -->
 
-    <!-- The logging frameworks API and its implementation using log4j -->
+    <!-- A logging frameworks API and its implementation -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
@@ -47,13 +47,16 @@
       <artifactId>slf4j-api</artifactId>
       <version>2.0.6</version>
     </dependency>
-    <!-- Test -->
+    <!-- -->
+    <!-- Test Library -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
       <version>5.9.2</version>
       <scope>test</scope>
     </dependency>
+    <!-- -->
+    <!-- Common -->
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
@@ -80,8 +83,8 @@
       <version>1.18.26</version>
       <scope>provided</scope>
     </dependency>
-
-    <!-- neo4j -->
+    <!-- -->
+    <!-- neo4j database -->
     <dependency>
       <groupId>org.neo4j.driver</groupId>
       <artifactId>neo4j-java-driver</artifactId>
@@ -108,12 +111,13 @@
       <version>4.0.4</version>
       <scope>runtime</scope>
     </dependency>
-
-    <!-- GUAVA GOOGLE-->
+    <!-- -->
+    <!-- Guava Google-->
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
       <version>31.1-jre</version>
     </dependency>
+    <!-- -->
   </dependencies>
 </project>
