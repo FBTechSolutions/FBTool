@@ -5,5 +5,5 @@ import org.neo4j.ogm.annotation.Id;
 
 public abstract class AbstractNode {
 
-  public abstract Long getId();
+    public abstract Long getId();
 }

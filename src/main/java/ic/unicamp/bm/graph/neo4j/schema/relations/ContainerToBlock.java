@@ -21,13 +21,13 @@ import org.neo4j.ogm.annotation.StartNode;
 @RelationshipEntity(type = "GET_FIRST_BLOCK")
 public class ContainerToBlock {
 
-  @Id
-  @GeneratedValue
-  private Long relationshipId;
-  @Property
-  private String name;
-  @StartNode
-  private Container startContainer;
-  @EndNode
-  private Block endBlock;
+    @Id
+    @GeneratedValue
+    private Long relationshipId;
+    @Property
+    private String name;
+    @StartNode
+    private Container startContainer;
+    @EndNode
+    private Block endBlock;
 }

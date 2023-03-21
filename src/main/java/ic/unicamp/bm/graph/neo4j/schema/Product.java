@@ -1,7 +1,9 @@
 package ic.unicamp.bm.graph.neo4j.schema;
 
 import ic.unicamp.bm.graph.neo4j.schema.relations.ProductToFeature;
+
 import java.util.List;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,29 +14,31 @@ import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
 
+import static org.neo4j.ogm.annotation.Relationship.Direction.OUTGOING;
+
 @FieldDefaults(makeFinal = false, level = AccessLevel.PRIVATE)
 @Setter
 @Getter
 @NodeEntity(label = "Product")
 public class Product extends AbstractNode {
 
-  @GeneratedValue
-  @Id
-  private Long id;
+    @GeneratedValue
+    @Id
+    private Long id;
 
-  @Property(name = "productId")
-  private String productId;
+    @Property(name = "productId")
+    private String productId;
 
-  @Property(name = "productLabel")
-  private String productLabel;
+    @Property(name = "productLabel")
+    private String productLabel;
 
-  @Relationship(type = "ASSOCIATED_TO", direction = Relationship.OUTGOING)
-  private List<ProductToFeature> associatedTo;
+    @Relationship(type = "ASSOCIATED_TO", direction = OUTGOING)
+    private List<ProductToFeature> associatedTo;
 
-  @Override
-  public Long getId() {
-    return id;
-  }
+    @Override
+    public Long getId() {
+        return id;
+    }
 }
 
 

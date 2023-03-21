@@ -20,13 +20,13 @@ import org.neo4j.ogm.annotation.StartNode;
 @RelationshipEntity(type = "GO_NEXT_BLOCK")
 public class BlockToBlock {
 
-  @Id
-  @GeneratedValue
-  private Long relationshipId;
-  @Property
-  private String name;
-  @StartNode
-  private Block startBlock;
-  @EndNode
-  private Block endBlock;
+    @Id
+    @GeneratedValue
+    private Long relationshipId;
+    @Property
+    private String name;
+    @StartNode
+    private Block startBlock;
+    @EndNode
+    private Block endBlock;
 }

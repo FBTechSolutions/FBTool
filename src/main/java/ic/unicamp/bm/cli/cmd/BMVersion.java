@@ -9,10 +9,10 @@ import picocli.CommandLine;
 @CommandLine.Command(name = BMVersion.CMD_NAME)
 public class BMVersion implements Runnable {
 
-  public static final String CMD_NAME = "version";
+    public static final String CMD_NAME = "version";
 
-  @Override
-  public void run() {
-    SplMgrLogger.message_ln(INF_0__SPLM_VERSION, false);
-  }
+    @Override
+    public void run() {
+        SplMgrLogger.message_ln(INF_0__SPLM_VERSION, false);
+    }
 }

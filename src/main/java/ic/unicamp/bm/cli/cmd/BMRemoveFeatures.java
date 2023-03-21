@@ -7,25 +7,25 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 
 @Command(
-    name = BMRemoveFeatures.CMD_NAME,
-    description = "This command will remove a list of feature")
+        name = BMRemoveFeatures.CMD_NAME,
+        description = "This command will remove a list of feature")
 public class BMRemoveFeatures implements Runnable {
 
-  public static final String CMD_NAME = "rm-features";
+    public static final String CMD_NAME = "rm-features";
 
-  @Parameters(index = "0..*")
-  String[] featureIds;
+    @Parameters(index = "0..*")
+    String[] featureIds;
 
-  @Override
-  public void run() {
-    if (featureIds == null) {
-      System.out.println("You need to specify at least one Feature Id");
-      return;
+    @Override
+    public void run() {
+        if (featureIds == null) {
+            System.out.println("You need to specify at least one Feature Id");
+            return;
+        }
+        FeatureService featureService = new FeatureServiceImpl();
+        for (String featureId : featureIds) {
+            Feature feature = featureService.getFeatureByID(featureId);
+            featureService.delete(feature.getId());
+        }
     }
-    FeatureService featureService = new FeatureServiceImpl();
-    for (String featureId : featureIds) {
-      Feature feature = featureService.getFeatureByID(featureId);
-      featureService.delete(feature.getId());
-    }
-  }
 }

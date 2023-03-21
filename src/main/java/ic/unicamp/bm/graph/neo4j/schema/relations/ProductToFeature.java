@@ -19,13 +19,13 @@ import org.neo4j.ogm.annotation.StartNode;
 @RelationshipEntity(type = "ASSOCIATED_TO")
 public class ProductToFeature {
 
-  @Id
-  @GeneratedValue
-  private Long relationshipId;
-  @Property
-  private String name;
-  @StartNode
-  private Product startProduct;
-  @EndNode
-  private Feature endFeature;
+    @Id
+    @GeneratedValue
+    private Long relationshipId;
+    @Property
+    private String name;
+    @StartNode
+    private Product startProduct;
+    @EndNode
+    private Feature endFeature;
 }

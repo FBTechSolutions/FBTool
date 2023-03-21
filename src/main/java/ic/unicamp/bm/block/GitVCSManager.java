@@ -2,29 +2,29 @@ package ic.unicamp.bm.block;
 
 public class GitVCSManager {
 
-  private static IVCSAPI instance = null;
-  private static IVCSAPI temporal = null;
-  private static IVCRepository repository = null;
+    private static IVCSAPI instance = null;
+    private static IVCSAPI temporal = null;
+    private static IVCRepository repository = null;
 
-  public static IVCSAPI createInstance() {
-    if (instance == null) {
-      instance = new GitVCS();
+    public static IVCSAPI createInstance() {
+        if (instance == null) {
+            instance = new GitVCS();
+        }
+        return instance;
     }
-    return instance;
-  }
 
-  public static IVCSAPI createTemporalGitBlockInstance() {
-    if (temporal == null) {
-      temporal = new TempGitVCS();
+    public static IVCSAPI createTemporalGitBlockInstance() {
+        if (temporal == null) {
+            temporal = new TempGitVCS();
+        }
+        return temporal;
     }
-    return temporal;
-  }
 
-  public static IVCRepository createGitRepositoryInstance() {
-    if (repository == null) {
-      repository = new GitRepository();
+    public static IVCRepository createGitRepositoryInstance() {
+        if (repository == null) {
+            repository = new GitRepository();
+        }
+        return repository;
     }
-    return repository;
-  }
 
 }

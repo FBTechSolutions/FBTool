@@ -15,18 +15,18 @@ import org.neo4j.ogm.annotation.Property;
 @NodeEntity(label = "Feature")
 public class Feature extends AbstractNode {
 
-  @GeneratedValue
-  @Id
-  private Long id;
+    @GeneratedValue
+    @Id
+    private Long id;
 
-  @Property(name = "featureId")
-  private String featureId;
+    @Property(name = "featureId")
+    private String featureId;
 
-  @Property(name = "featureLabel")
-  private String featureLabel;
+    @Property(name = "featureLabel")
+    private String featureLabel;
 
-  @Override
-  public Long getId() {
-    return id;
-  }
+    @Override
+    public Long getId() {
+        return id;
+    }
 }

@@ -5,26 +5,26 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
 @Command(
-    name = BMRestore.CMD_NAME,
-    description = "This command will restore a list of blocks")
+        name = BMRestore.CMD_NAME,
+        description = "This command will restore a list of blocks")
 public class BMRestore implements Runnable {
 
-  public static final String CMD_NAME = "restore";
+    public static final String CMD_NAME = "restore";
 
-  @Option(names = "-clean")
-  boolean clean;
+    @Option(names = "-clean")
+    boolean clean;
 
-  @Parameters(index = "0..*")
-  String[] products;
+    @Parameters(index = "0..*")
+    String[] products;
 
-  @Override
-  public void run() {
-    System.out.println("Option clean " + clean);
-    System.out.println("List of products:");
-    for (String feature : products) {
-      System.out.println(feature);
+    @Override
+    public void run() {
+        System.out.println("Option clean " + clean);
+        System.out.println("List of products:");
+        for (String feature : products) {
+            System.out.println(feature);
+        }
     }
-  }
 }
 /*  private final GraphAPI graph = GraphBuilder.createGraphInstance();
   private final IBlockAPI gitBlock = GitBlockManager.createGitBlockInstance();

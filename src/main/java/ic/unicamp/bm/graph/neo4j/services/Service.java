@@ -2,13 +2,13 @@ package ic.unicamp.bm.graph.neo4j.services;
 
 public interface Service<T> {
 
-  Iterable<T> findAll();
+    Iterable<T> findAll();
 
-  T find(Long id);
+    T find(Long id);
 
-  void delete(Long id);
+    void delete(Long id);
 
-  T createOrUpdate(T object);
+    T createOrUpdate(T object);
 
-  Class<T> getEntityType();
+    Class<T> getEntityType();
 }

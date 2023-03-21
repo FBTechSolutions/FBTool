@@ -3,20 +3,21 @@ package ic.unicamp.bm.graph.neo4j.services;
 import ic.unicamp.bm.graph.neo4j.schema.Block;
 import ic.unicamp.bm.graph.neo4j.schema.enums.DataState;
 import ic.unicamp.bm.graph.neo4j.schema.relations.ContainerToBlock;
+
 import java.util.List;
 
 public interface BlockService extends Service<Block> {
 
-  Block getBlockByID(String productId);
-  //Block getBlockByID(String productId, int depth);
+    Block getBlockByID(String productId);
+    //Block getBlockByID(String productId, int depth);
 
-  List<Block> getBlockByVCBlockState(DataState dataState);
+    List<Block> getBlockByVCBlockState(DataState dataState);
 
-  List<ContainerToBlock> getContainerToBlockRelations();
+    List<ContainerToBlock> getContainerToBlockRelations();
 
-  List<Block> getBlocksByFile(String pathFile);
+    List<Block> getBlocksByFile(String pathFile);
 
-  Block getFirstBlockByFile(String pathFile);
+    Block getFirstBlockByFile(String pathFile);
 
-  List<Block> getBlocksByFeature(String oldFeatureId);
+    List<Block> getBlocksByFeature(String oldFeatureId);
 }

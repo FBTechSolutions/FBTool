@@ -28,6 +28,7 @@ import ic.unicamp.bm.graph.neo4j.services.FeatureService;
 import ic.unicamp.bm.graph.neo4j.services.FeatureServiceImpl;
 import ic.unicamp.bm.scanner.BlockScanner;
 import ic.unicamp.bm.scanner.IBlockScanner;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -39,6 +40,7 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -49,207 +51,207 @@ import org.eclipse.jgit.treewalk.TreeWalk;
 import picocli.CommandLine.Command;
 
 @Command(
-    name = BMAnalyze.CMD_NAME,
-    description = "This command will Analyze all files")
+        name = BMAnalyze.CMD_NAME,
+        description = "This command will Analyze all files")
 public class BMAnalyze implements Runnable {
 
-  public static final String CMD_NAME = "analyze";
+    public static final String CMD_NAME = "analyze";
 
-  @Override
-  public void run() {
-    try {
-      IVCSAPI temporalVC = GitVCSManager.createTemporalGitBlockInstance();
-      Git git = (Git) temporalVC.retrieveDirector();
-      git.checkout().setName(GitVCS.BMBranchLabel).call();
-      if (!TempBMDirectoryUtil.existsBmTemporalDirectory()) {
-        TempBMDirectoryUtil.createBMTemporalDirectory();
-        SplMgrLogger.message_ln("- Temporal Directory for blocks was created", false);
-      }
+    @Override
+    public void run() {
+        try {
+            IVCSAPI temporalVC = GitVCSManager.createTemporalGitBlockInstance();
+            Git git = (Git) temporalVC.retrieveDirector();
+            git.checkout().setName(GitVCS.BMBranchLabel).call();
+            if (!TempBMDirectoryUtil.existsBmTemporalDirectory()) {
+                TempBMDirectoryUtil.createBMTemporalDirectory();
+                SplMgrLogger.message_ln("- Temporal Directory for blocks was created", false);
+            }
 
-      Ref head = git.getRepository().findRef("HEAD");
-      RevWalk walk = new RevWalk(git.getRepository());
-      RevCommit commit = walk.parseCommit(head.getObjectId());
+            Ref head = git.getRepository().findRef("HEAD");
+            RevWalk walk = new RevWalk(git.getRepository());
+            RevCommit commit = walk.parseCommit(head.getObjectId());
 
-      TreeWalk treeWalk = new TreeWalk(git.getRepository());
-      treeWalk.addTree(commit.getTree());
-      treeWalk.setRecursive(false);
+            TreeWalk treeWalk = new TreeWalk(git.getRepository());
+            treeWalk.addTree(commit.getTree());
+            treeWalk.setRecursive(false);
 
-      //spl main container
-      Container main = new Container();
-      main.setContainerId(DirectoryUtil.getDirectoryAsPath().toString());
-      main.setContainerType(ContainerType.MAIN);
-      changeTreeToSchemaForm(treeWalk, main);
-      createContainers(main);
-      //blocks
-      createBlocksByFile(main);
-      showTemporalData();
+            //spl main container
+            Container main = new Container();
+            main.setContainerId(DirectoryUtil.getDirectoryAsPath().toString());
+            main.setContainerType(ContainerType.MAIN);
+            changeTreeToSchemaForm(treeWalk, main);
+            createContainers(main);
+            //blocks
+            createBlocksByFile(main);
+            showTemporalData();
 
 
-    } catch (IOException | GitAPIException e) {
-      throw new RuntimeException(e);
+        } catch (IOException | GitAPIException e) {
+            throw new RuntimeException(e);
+        }
     }
-  }
 
-  private void showTemporalData() {
-    System.out.println("Block List:");
-  }
+    private void showTemporalData() {
+        System.out.println("Block List:");
+    }
 
-  // algorithm
-  private void createBlocksByFile(Container container) {
+    // algorithm
+    private void createBlocksByFile(Container container) {
 
-    if (container.getContainerType() == ContainerType.FILE) {
+        if (container.getContainerType() == ContainerType.FILE) {
 
-      IBlockScanner blockScanner = new BlockScanner();
-      BlockService blockService = new BlockServiceImpl();
-      ContainerService containerService = new ContainerServiceImpl();
-      Path path = Paths.get(container.getContainerId());
-      Map<String, String> scannedBlocks = blockScanner.createInitialBlocks(path); //id and data
-      IVCSAPI temporalGitBlock = GitVCSManager.createTemporalGitBlockInstance();
+            IBlockScanner blockScanner = new BlockScanner();
+            BlockService blockService = new BlockServiceImpl();
+            ContainerService containerService = new ContainerServiceImpl();
+            Path path = Paths.get(container.getContainerId());
+            Map<String, String> scannedBlocks = blockScanner.createInitialBlocks(path); //id and data
+            IVCSAPI temporalGitBlock = GitVCSManager.createTemporalGitBlockInstance();
 
-      //memory to first block and previous block
-      Block firstBlock = null;
-      Block previousBlock = null;
+            //memory to first block and previous block
+            Block firstBlock = null;
+            Block previousBlock = null;
 
-      Feature defaultFeature = getDefaultFeature();
+            Feature defaultFeature = getDefaultFeature();
 
-      for (String key : scannedBlocks.keySet()) {
-        System.out.println("key");
-        String data = scannedBlocks.get(key);
-        String shaData = DigestUtils.sha256Hex(data);
-        //path
-        temporalGitBlock.upsertContent(key, data);
-        //db
-        Block block = new Block();
-        block.setBlockId(key);
-        block.setBlockSha(shaData);
-        System.out.println(block.getBlockId());
-        block.setBlockState(BlockState.TO_INSERT);
-        block.setVcBlockState(DataState.TEMPORAL);
-        // tag block
-        BlockToFeature blockToFeature = new BlockToFeature();
-        blockToFeature.setStartBlock(block);
-        blockToFeature.setEndFeature(defaultFeature);
-        block.setAssociatedTo(blockToFeature);
+            for (String key : scannedBlocks.keySet()) {
+                System.out.println("key");
+                String data = scannedBlocks.get(key);
+                String shaData = DigestUtils.sha256Hex(data);
+                //path
+                temporalGitBlock.upsertContent(key, data);
+                //db
+                Block block = new Block();
+                block.setBlockId(key);
+                block.setBlockSha(shaData);
+                System.out.println(block.getBlockId());
+                block.setBlockState(BlockState.TO_INSERT);
+                block.setVcBlockState(DataState.TEMPORAL);
+                // tag block
+                BlockToFeature blockToFeature = new BlockToFeature();
+                blockToFeature.setStartBlock(block);
+                blockToFeature.setEndFeature(defaultFeature);
+                block.setAssociatedTo(blockToFeature);
 
-        if (previousBlock == null) {
-          firstBlock = block;
-          previousBlock = block;
+                if (previousBlock == null) {
+                    firstBlock = block;
+                    previousBlock = block;
+                } else {
+                    BlockToBlock relation = new BlockToBlock();
+                    relation.setStartBlock(previousBlock);
+                    relation.setEndBlock(block);
+                    previousBlock.setGoNextBlock(relation);
+
+                    blockService.createOrUpdate(previousBlock);
+                    previousBlock = block;
+                }
+
+            }
+            // container
+            ContainerToBlock relation = new ContainerToBlock();
+            relation.setStartContainer(container);
+            relation.setEndBlock(firstBlock);
+            container.setGetFirstBlock(relation);
+            containerService.createOrUpdate(container);
         } else {
-          BlockToBlock relation = new BlockToBlock();
-          relation.setStartBlock(previousBlock);
-          relation.setEndBlock(block);
-          previousBlock.setGoNextBlock(relation);
-
-          blockService.createOrUpdate(previousBlock);
-          previousBlock = block;
+            for (ContainerToContainer Container : container.getGetContainers()) {
+                createBlocksByFile(Container.getEndContainer());
+            }
         }
 
-      }
-      // container
-      ContainerToBlock relation = new ContainerToBlock();
-      relation.setStartContainer(container);
-      relation.setEndBlock(firstBlock);
-      container.setGetFirstBlock(relation);
-      containerService.createOrUpdate(container);
-    } else {
-      for (ContainerToContainer Container : container.getGetContainers()) {
-        createBlocksByFile(Container.getEndContainer());
-      }
     }
 
-  }
-
-  private static Feature getDefaultFeature() {
-    FeatureService featureService = new FeatureServiceImpl();
-    Feature defaultFeature = featureService.getFeatureByID(BMFEATURE);
-    if (defaultFeature == null) {
-      defaultFeature = new Feature();
-      defaultFeature.setFeatureId(BMFEATURE);
-      defaultFeature.setFeatureLabel(BMFEATURE);
-    }
-    return defaultFeature;
-  }
-
-  private void createContainers(Container container) {
-    ContainerService containerService = new ContainerServiceImpl();
-    containerService.createOrUpdate(container);
-  }
-
-  private void changeTreeToSchemaForm(TreeWalk treeWalk, Container main) throws IOException {
-    Stack<Container> stack = new Stack<>();
-    stack.push(main);
-    Container parentPivot = main;
-    while (treeWalk.next()) {
-      if (treeWalk.isSubtree()) {
-        //backing
-        parentPivot = backStack(treeWalk, stack, parentPivot);
-        //folder
-        Container container = new Container();
-        container.setContainerId(treeWalk.getPathString());
-        container.setContainerType(ContainerType.FOLDER);
-
-        ContainerToContainer relation = new ContainerToContainer();
-        relation.setStartContainer(parentPivot);
-        relation.setEndContainer(container);
-        List<ContainerToContainer> relations = parentPivot.getGetContainers();
-        if (relations == null) {
-          relations = new LinkedList<>();
+    private static Feature getDefaultFeature() {
+        FeatureService featureService = new FeatureServiceImpl();
+        Feature defaultFeature = featureService.getFeatureByID(BMFEATURE);
+        if (defaultFeature == null) {
+            defaultFeature = new Feature();
+            defaultFeature.setFeatureId(BMFEATURE);
+            defaultFeature.setFeatureLabel(BMFEATURE);
         }
-        relations.add(relation);
-        parentPivot.setGetContainers(relations);
-        parentPivot = container;
-        stack.push(container);
-        treeWalk.enterSubtree();
+        return defaultFeature;
+    }
 
-      } else {
-        //backing
-        parentPivot = backStack(treeWalk, stack, parentPivot);
-        //file
-        Container container = new Container();
-        container.setContainerId(treeWalk.getPathString());
-        container.setContainerType(ContainerType.FILE);
+    private void createContainers(Container container) {
+        ContainerService containerService = new ContainerServiceImpl();
+        containerService.createOrUpdate(container);
+    }
 
-        ContainerToContainer relation = new ContainerToContainer();
-        relation.setStartContainer(parentPivot);
-        relation.setEndContainer(container);
-        List<ContainerToContainer> relations = parentPivot.getGetContainers();
-        if (relations == null) {
-          relations = new LinkedList<>();
+    private void changeTreeToSchemaForm(TreeWalk treeWalk, Container main) throws IOException {
+        Stack<Container> stack = new Stack<>();
+        stack.push(main);
+        Container parentPivot = main;
+        while (treeWalk.next()) {
+            if (treeWalk.isSubtree()) {
+                //backing
+                parentPivot = backStack(treeWalk, stack, parentPivot);
+                //folder
+                Container container = new Container();
+                container.setContainerId(treeWalk.getPathString());
+                container.setContainerType(ContainerType.FOLDER);
+
+                ContainerToContainer relation = new ContainerToContainer();
+                relation.setStartContainer(parentPivot);
+                relation.setEndContainer(container);
+                List<ContainerToContainer> relations = parentPivot.getGetContainers();
+                if (relations == null) {
+                    relations = new LinkedList<>();
+                }
+                relations.add(relation);
+                parentPivot.setGetContainers(relations);
+                parentPivot = container;
+                stack.push(container);
+                treeWalk.enterSubtree();
+
+            } else {
+                //backing
+                parentPivot = backStack(treeWalk, stack, parentPivot);
+                //file
+                Container container = new Container();
+                container.setContainerId(treeWalk.getPathString());
+                container.setContainerType(ContainerType.FILE);
+
+                ContainerToContainer relation = new ContainerToContainer();
+                relation.setStartContainer(parentPivot);
+                relation.setEndContainer(container);
+                List<ContainerToContainer> relations = parentPivot.getGetContainers();
+                if (relations == null) {
+                    relations = new LinkedList<>();
+                }
+                relations.add(relation);
+                parentPivot.setGetContainers(relations);
+            }
         }
-        relations.add(relation);
-        parentPivot.setGetContainers(relations);
-      }
     }
-  }
 
-  private static Container backStack(TreeWalk treeWalk, Stack<Container> stack,
-      Container parentPivot) {
-    boolean back = true;
-    while (back) {
-      File exists =
-          new File(parentPivot.getContainerId(), treeWalk.getNameString());
-      if (exists.exists()) {
-        back = false;
-      } else {
-        stack.pop();
-        parentPivot = stack.peek();
-        if (parentPivot.getContainerType() == ContainerType.MAIN) {
-          back = false;
+    private static Container backStack(TreeWalk treeWalk, Stack<Container> stack,
+                                       Container parentPivot) {
+        boolean back = true;
+        while (back) {
+            File exists =
+                    new File(parentPivot.getContainerId(), treeWalk.getNameString());
+            if (exists.exists()) {
+                back = false;
+            } else {
+                stack.pop();
+                parentPivot = stack.peek();
+                if (parentPivot.getContainerType() == ContainerType.MAIN) {
+                    back = false;
+                }
+            }
         }
-      }
+        return parentPivot;
     }
-    return parentPivot;
-  }
 
-  public static List<Path> listFiles(Path path) throws IOException {
-    List<Path> result;
-    try (Stream<Path> walk = Files.walk(path)) {
-      result = walk.filter(Files::isRegularFile)
-          .filter(aPath -> !GitDirectoryUtil.existNameInPath(aPath))
-          .filter(aPath -> !BMDirectoryUtil.existNameInPath(aPath))
-          .collect(Collectors.toList());
+    public static List<Path> listFiles(Path path) throws IOException {
+        List<Path> result;
+        try (Stream<Path> walk = Files.walk(path)) {
+            result = walk.filter(Files::isRegularFile)
+                    .filter(aPath -> !GitDirectoryUtil.existNameInPath(aPath))
+                    .filter(aPath -> !BMDirectoryUtil.existNameInPath(aPath))
+                    .collect(Collectors.toList());
+        }
+        return result;
+
     }
-    return result;
-
-  }
 }

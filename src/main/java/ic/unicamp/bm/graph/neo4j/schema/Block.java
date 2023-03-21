@@ -14,42 +14,44 @@ import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
 
+import static org.neo4j.ogm.annotation.Relationship.Direction.OUTGOING;
+
 @FieldDefaults(makeFinal = false, level = AccessLevel.PRIVATE)
 @Setter
 @Getter
 @NodeEntity(label = "Block")
 public class Block extends AbstractNode {
 
-  @GeneratedValue
-  @Id
-  private Long id;
+    @GeneratedValue
+    @Id
+    private Long id;
 
-  @Property(name = "blockId")
-  private String blockId;
+    @Property(name = "blockId")
+    private String blockId;
 
-  @Property(name = "blockState")
-  private BlockState blockState;
+    @Property(name = "blockState")
+    private BlockState blockState;
 
-  @Property(name = "blockSha")
-  private String blockSha;
+    @Property(name = "blockSha")
+    private String blockSha;
 
-  // version control
-  @Property(name = "vcBlockState")
-  private DataState vcBlockState;
+    // version control
+    @Property(name = "vcBlockState")
+    private DataState vcBlockState;
 
-  @Relationship(type = "GO_NEXT_BLOCK", direction = Relationship.OUTGOING)
-  private BlockToBlock goNextBlock;
+    @Relationship(type = "GO_NEXT_BLOCK", direction = OUTGOING)
+    private BlockToBlock goNextBlock;
 
-  @Relationship(type = "ASSOCIATED_TO", direction = Relationship.OUTGOING)
-  private BlockToFeature associatedTo;
+    @Relationship(type = "ASSOCIATED_TO", direction = OUTGOING)
+    private BlockToFeature associatedTo;
 
 /*
   for now it is not necesary
   @Relationship(type = "ASSOCIATED_TO_DEFAULT_FEATURE", direction = Relationship.OUTGOING)
   private BlockToDefaultFeature associatedToDefaultFeature;*/
 
-  @Override
-  public Long getId() {
-    return id;
-  }
+    @Override
+    public Long getId() {
+        return id;
+    }
 }

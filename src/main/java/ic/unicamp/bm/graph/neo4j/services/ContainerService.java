@@ -6,7 +6,7 @@ import ic.unicamp.bm.graph.neo4j.schema.enums.ContainerType;
 
 public interface ContainerService extends Service<Container> {
 
-  Container getContainerByID(String productId);
+    Container getContainerByID(String productId);
 
-  Container getContainerByType(ContainerType type);
+    Container getContainerByType(ContainerType type);
 }

@@ -19,13 +19,13 @@ import org.neo4j.ogm.annotation.StartNode;
 @RelationshipEntity(type = "ASSOCIATED_TO_DEFAULT_FEATURE")
 public class BlockToDefaultFeature {
 
-  @Id
-  @GeneratedValue
-  private Long relationshipId;
-  @Property
-  private String name;
-  @StartNode
-  private Block startBlock;
-  @EndNode
-  private Feature endFeature;
+    @Id
+    @GeneratedValue
+    private Long relationshipId;
+    @Property
+    private String name;
+    @StartNode
+    private Block startBlock;
+    @EndNode
+    private Feature endFeature;
 }
