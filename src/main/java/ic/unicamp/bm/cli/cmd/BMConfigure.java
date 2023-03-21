@@ -15,6 +15,8 @@ import ic.unicamp.bm.graph.neo4j.services.BMConfigService;
 import ic.unicamp.bm.graph.neo4j.services.BMConfigServiceImpl;
 import ic.unicamp.bm.graph.neo4j.services.FeatureService;
 import ic.unicamp.bm.graph.neo4j.services.FeatureServiceImpl;
+import ic.unicamp.bm.graph.neo4j.services.FragmentService;
+import ic.unicamp.bm.graph.neo4j.services.FragmentServiceImpl;
 import ic.unicamp.bm.graph.neo4j.services.ProductService;
 import ic.unicamp.bm.graph.neo4j.services.ProductServiceImpl;
 
@@ -34,9 +36,8 @@ import picocli.CommandLine.Command;
 public class BMConfigure implements Runnable {
 
     public static final String CMD_NAME = "configure";
-
-    public static final String BMSPL = "BMSPL";
-    public static final String BMFEATURE = "BMFeature";
+    public static final String FB_GENERIC_SPL = "FB Generic SPL";
+    public static final String FB_GENERIC_FEATURE = "FB Generic Feature";
 
     @Override
     public void run() {
@@ -52,20 +53,21 @@ public class BMConfigure implements Runnable {
     }
 
     private static void setUpDB() {
-
-        FeatureService featureService = new FeatureServiceImpl();
         ProductService productService = new ProductServiceImpl();
-        Product product = productService.getProductByID(BMSPL);
+        FeatureService featureService = new FeatureServiceImpl();
+        FragmentService fragmentService = new FragmentServiceImpl();
+
+        Product product = productService.getProductByID(FB_GENERIC_SPL);
         if (product == null) {
-            Feature feature = featureService.getFeatureByID(BMFEATURE);
+            Feature feature = featureService.getFeatureByID(FB_GENERIC_FEATURE);
             if (feature == null) {
                 feature = new Feature();
-                feature.setFeatureId(BMFEATURE);
-                feature.setFeatureLabel(BMFEATURE);
+                feature.setFeatureId(FB_GENERIC_FEATURE);
+                feature.setFeatureLabel(FB_GENERIC_FEATURE);
             }
             product = new Product();
-            product.setProductId(BMSPL);
-            product.setProductLabel(BMSPL);
+            product.setProductId(FB_GENERIC_SPL);
+            product.setProductLabel(FB_GENERIC_SPL);
             List<ProductToFeature> featureList = new LinkedList<>();
             ProductToFeature relation = new ProductToFeature();
             relation.setStartProduct(product);

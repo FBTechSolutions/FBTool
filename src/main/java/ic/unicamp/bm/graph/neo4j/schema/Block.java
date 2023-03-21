@@ -3,7 +3,7 @@ package ic.unicamp.bm.graph.neo4j.schema;
 import ic.unicamp.bm.graph.neo4j.schema.enums.BlockState;
 import ic.unicamp.bm.graph.neo4j.schema.enums.DataState;
 import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToBlock;
-import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToFeature;
+import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToFragment;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,7 +43,7 @@ public class Block extends AbstractNode {
     private BlockToBlock goNextBlock;
 
     @Relationship(type = "ASSOCIATED_TO", direction = OUTGOING)
-    private BlockToFeature associatedTo;
+    private BlockToFragment associatedTo;
 
 /*
   for now it is not necesary

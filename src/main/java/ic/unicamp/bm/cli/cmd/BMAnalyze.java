@@ -1,6 +1,6 @@
 package ic.unicamp.bm.cli.cmd;
 
-import static ic.unicamp.bm.cli.cmd.BMConfigure.BMFEATURE;
+import static ic.unicamp.bm.cli.cmd.BMConfigure.FB_GENERIC_FEATURE;
 
 import ic.unicamp.bm.block.GitVCS;
 import ic.unicamp.bm.block.GitVCSManager;
@@ -17,7 +17,7 @@ import ic.unicamp.bm.graph.neo4j.schema.enums.BlockState;
 import ic.unicamp.bm.graph.neo4j.schema.enums.ContainerType;
 import ic.unicamp.bm.graph.neo4j.schema.enums.DataState;
 import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToBlock;
-import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToFeature;
+import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToFragment;
 import ic.unicamp.bm.graph.neo4j.schema.relations.ContainerToBlock;
 import ic.unicamp.bm.graph.neo4j.schema.relations.ContainerToContainer;
 import ic.unicamp.bm.graph.neo4j.services.BlockService;
@@ -128,9 +128,9 @@ public class BMAnalyze implements Runnable {
                 block.setBlockState(BlockState.TO_INSERT);
                 block.setVcBlockState(DataState.TEMPORAL);
                 // tag block
-                BlockToFeature blockToFeature = new BlockToFeature();
+                BlockToFragment blockToFeature = new BlockToFragment();
                 blockToFeature.setStartBlock(block);
-                blockToFeature.setEndFeature(defaultFeature);
+                blockToFeature.setEndFragment(defaultFeature);
                 block.setAssociatedTo(blockToFeature);
 
                 if (previousBlock == null) {
@@ -163,11 +163,11 @@ public class BMAnalyze implements Runnable {
 
     private static Feature getDefaultFeature() {
         FeatureService featureService = new FeatureServiceImpl();
-        Feature defaultFeature = featureService.getFeatureByID(BMFEATURE);
+        Feature defaultFeature = featureService.getFeatureByID(FB_GENERIC_FEATURE);
         if (defaultFeature == null) {
             defaultFeature = new Feature();
-            defaultFeature.setFeatureId(BMFEATURE);
-            defaultFeature.setFeatureLabel(BMFEATURE);
+            defaultFeature.setFeatureId(FB_GENERIC_FEATURE);
+            defaultFeature.setFeatureLabel(FB_GENERIC_FEATURE);
         }
         return defaultFeature;
     }

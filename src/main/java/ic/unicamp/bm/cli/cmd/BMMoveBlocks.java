@@ -4,13 +4,12 @@ import ic.unicamp.bm.block.GitVCSManager;
 import ic.unicamp.bm.block.IVCSAPI;
 import ic.unicamp.bm.graph.neo4j.schema.Block;
 import ic.unicamp.bm.graph.neo4j.schema.Feature;
-import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToFeature;
+import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToFragment;
 import ic.unicamp.bm.graph.neo4j.services.BlockService;
 import ic.unicamp.bm.graph.neo4j.services.BlockServiceImpl;
 import ic.unicamp.bm.graph.neo4j.services.FeatureService;
 import ic.unicamp.bm.graph.neo4j.services.FeatureServiceImpl;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jgit.api.Git;
@@ -56,9 +55,9 @@ public class BMMoveBlocks implements Runnable {
         }
         for (Block block : blocks) {
             Block blockUpdated = blockService.getBlockByID(block.getBlockId());
-            BlockToFeature blockToFeature = new BlockToFeature();
+            BlockToFragment blockToFeature = new BlockToFragment();
             blockToFeature.setStartBlock(block);
-            blockToFeature.setEndFeature(newF);
+            blockToFeature.setEndFragment(newF);
             blockUpdated.setAssociatedTo(blockToFeature);
             blockService.createOrUpdate(blockUpdated);
         }

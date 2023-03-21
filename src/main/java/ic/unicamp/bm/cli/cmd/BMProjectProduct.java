@@ -162,7 +162,7 @@ public class BMProjectProduct implements Runnable {
         BlockService blockService = new BlockServiceImpl();
         Block blockFull = blockService.getBlockByID(block.getBlockId());
         if (blockFull.getAssociatedTo() != null) {
-            String feature = blockFull.getAssociatedTo().getEndFeature().getFeatureId();
+            String feature = blockFull.getAssociatedTo().getEndFragment().getFeatureId();
             if (featureIsInTheList(featureList, feature)) {
                 result.add(blockFull);
             }
@@ -170,7 +170,7 @@ public class BMProjectProduct implements Runnable {
         while (blockFull.getGoNextBlock() != null) {
             blockFull = blockService.getBlockByID(blockFull.getGoNextBlock().getEndBlock().getBlockId());
             if (blockFull.getAssociatedTo() != null) {
-                String feature = blockFull.getAssociatedTo().getEndFeature().getFeatureId();
+                String feature = blockFull.getAssociatedTo().getEndFragment().getFeatureId();
                 if (featureIsInTheList(featureList, feature)) {
                     result.add(blockFull);
                 }

@@ -2,7 +2,7 @@ package ic.unicamp.bm.cli.cmd;
 
 import ic.unicamp.bm.graph.neo4j.schema.Block;
 import ic.unicamp.bm.graph.neo4j.schema.Feature;
-import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToFeature;
+import ic.unicamp.bm.graph.neo4j.schema.relations.BlockToFragment;
 import ic.unicamp.bm.graph.neo4j.services.BlockService;
 import ic.unicamp.bm.graph.neo4j.services.BlockServiceImpl;
 import ic.unicamp.bm.graph.neo4j.services.FeatureService;
@@ -42,9 +42,9 @@ public class BMTagBlocks implements Runnable {
                 String message = String.format("No Block with the given ID (%s) could be found", blockId);
                 System.out.println(message);
             } else {
-                BlockToFeature relation = new BlockToFeature();
+                BlockToFragment relation = new BlockToFragment();
                 relation.setStartBlock(block);
-                relation.setEndFeature(feature);
+                relation.setEndFragment(feature);
                 block.setAssociatedTo(relation);
                 blockService.createOrUpdate(block);
                 String message = String.format("Block %s tagged", blockId);

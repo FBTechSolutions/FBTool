@@ -1,7 +1,7 @@
 package ic.unicamp.bm.graph.neo4j.schema.relations;
 
 import ic.unicamp.bm.graph.neo4j.schema.Block;
-import ic.unicamp.bm.graph.neo4j.schema.Feature;
+import ic.unicamp.bm.graph.neo4j.schema.Fragment;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,8 +16,8 @@ import org.neo4j.ogm.annotation.StartNode;
 @FieldDefaults(makeFinal = false, level = AccessLevel.PRIVATE)
 @Setter
 @Getter
-@RelationshipEntity(type = "ASSOCIATED_TO_DEFAULT_FEATURE")
-public class BlockToDefaultFeature {
+@RelationshipEntity(type = "ASSOCIATED_TO")
+public class BlockToFragment {
 
     @Id
     @GeneratedValue
@@ -27,5 +27,5 @@ public class BlockToDefaultFeature {
     @StartNode
     private Block startBlock;
     @EndNode
-    private Feature endFeature;
+    private Fragment endFragment;
 }

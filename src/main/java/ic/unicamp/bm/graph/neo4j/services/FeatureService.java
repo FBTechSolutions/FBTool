@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface FeatureService extends Service<Feature> {
 
-    Feature getFeatureByID(String productId);
+    Feature getFeatureByID(String featureId);
 
     List<Feature> getFeaturesByProductId(String productId);
 
