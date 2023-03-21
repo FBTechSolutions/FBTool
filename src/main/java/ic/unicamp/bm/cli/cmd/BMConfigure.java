@@ -9,7 +9,9 @@ import ic.unicamp.bm.block.IVCSAPI;
 import ic.unicamp.bm.cli.util.logger.SplMgrLogger;
 import ic.unicamp.bm.graph.neo4j.schema.BMConfig;
 import ic.unicamp.bm.graph.neo4j.schema.Feature;
+import ic.unicamp.bm.graph.neo4j.schema.Fragment;
 import ic.unicamp.bm.graph.neo4j.schema.Product;
+import ic.unicamp.bm.graph.neo4j.schema.relations.FeatureToFragment;
 import ic.unicamp.bm.graph.neo4j.schema.relations.ProductToFeature;
 import ic.unicamp.bm.graph.neo4j.services.BMConfigService;
 import ic.unicamp.bm.graph.neo4j.services.BMConfigServiceImpl;
@@ -38,6 +40,7 @@ public class BMConfigure implements Runnable {
     public static final String CMD_NAME = "configure";
     public static final String FB_GENERIC_SPL = "FB Generic SPL";
     public static final String FB_GENERIC_FEATURE = "FB Generic Feature";
+    public static final String FB_GENERIC_FRAGMENT = "FB Generic Fragment";
 
     @Override
     public void run() {
@@ -61,18 +64,37 @@ public class BMConfigure implements Runnable {
         if (product == null) {
             Feature feature = featureService.getFeatureByID(FB_GENERIC_FEATURE);
             if (feature == null) {
+                Fragment fragment = fragmentService.getFragmentByID(FB_GENERIC_FRAGMENT);
+                if(fragment == null){
+                    fragment = new Fragment();
+                    fragment.setFragmentId(FB_GENERIC_FRAGMENT);
+                    fragment.setFragmentLabel(FB_GENERIC_FRAGMENT);
+                }
+                //data
                 feature = new Feature();
                 feature.setFeatureId(FB_GENERIC_FEATURE);
                 feature.setFeatureLabel(FB_GENERIC_FEATURE);
+                //relations
+                List<FeatureToFragment> fragmentList = new LinkedList<>();
+                FeatureToFragment relation = new FeatureToFragment();
+                relation.setStartFeature(feature);
+                relation.setEndFragment(fragment);
+                fragmentList.add(relation);
+                // update
+                feature.setAssociatedTo(fragmentList);
+                featureService.createOrUpdate(feature);
             }
+            //data
             product = new Product();
             product.setProductId(FB_GENERIC_SPL);
             product.setProductLabel(FB_GENERIC_SPL);
+            //relations
             List<ProductToFeature> featureList = new LinkedList<>();
             ProductToFeature relation = new ProductToFeature();
             relation.setStartProduct(product);
             relation.setEndFeature(feature);
             featureList.add(relation);
+            //update
             product.setAssociatedTo(featureList);
             productService.createOrUpdate(product);
         }
