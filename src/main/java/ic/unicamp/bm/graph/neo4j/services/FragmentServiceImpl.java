@@ -51,8 +51,8 @@ public class FragmentServiceImpl extends GenericService<Fragment> implements Fra
     }
 
     @Override
-    public Class<Feature> getEntityType() {
-        return Feature.class;
+    public Class<Fragment> getEntityType() {
+        return Fragment.class;
     }
 
 }

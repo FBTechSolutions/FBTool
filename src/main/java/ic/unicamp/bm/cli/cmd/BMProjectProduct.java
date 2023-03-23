@@ -6,6 +6,7 @@ import ic.unicamp.bm.block.IVCSAPI;
 import ic.unicamp.bm.graph.neo4j.schema.Block;
 import ic.unicamp.bm.graph.neo4j.schema.Container;
 import ic.unicamp.bm.graph.neo4j.schema.Feature;
+import ic.unicamp.bm.graph.neo4j.schema.Fragment;
 import ic.unicamp.bm.graph.neo4j.schema.enums.DataState;
 import ic.unicamp.bm.graph.neo4j.schema.relations.ContainerToBlock;
 import ic.unicamp.bm.graph.neo4j.services.BlockService;
@@ -19,11 +20,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import ic.unicamp.bm.graph.neo4j.services.FragmentService;
+import ic.unicamp.bm.graph.neo4j.services.FragmentServiceImpl;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ListBranchCommand.ListMode;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -68,7 +73,8 @@ public class BMProjectProduct implements Runnable {
         for (ContainerToBlock containerToBlock : containerToBlockList) {
             Container container = containerToBlock.getStartContainer();
             Block block = containerToBlock.getEndBlock();
-            List<Block> blockRetrieved = retrieveBlockInBatches(block, featureList);
+            List<Fragment> fragmentList = retrieveBlockList(featureList);
+            List<Block> blockRetrieved = retrieveBlockInBatches(block, fragmentList);
             List<Block> blockRetrievedCommitted = retrieveBlockCommitted(blockRetrieved);
             //blockService.getBlockByID(block.getBlockId());
             if (!blockRetrievedCommitted.isEmpty()) {
@@ -157,21 +163,31 @@ public class BMProjectProduct implements Runnable {
         return result;
     }
 
-    private List<Block> retrieveBlockInBatches(Block block, List<Feature> featureList) {
+    private List<Fragment> retrieveBlockList(List<Feature> featureList) {
+        Set<Fragment> fragmentSet = new HashSet<>();
+        FragmentService fragmentService = new FragmentServiceImpl();
+        for (Feature feature : featureList) {
+            List<Fragment> fragments = fragmentService.getFragmentsByFeatureId(feature.getFeatureId());
+            fragmentSet.addAll(fragments);
+        }
+        return fragmentSet.stream().toList();
+    }
+
+    private List<Block> retrieveBlockInBatches(Block block, List<Fragment> fragmentList) {
         List<Block> result = new LinkedList<>();
         BlockService blockService = new BlockServiceImpl();
         Block blockFull = blockService.getBlockByID(block.getBlockId());
         if (blockFull.getAssociatedTo() != null) {
-            String feature = blockFull.getAssociatedTo().getEndFragment().getFeatureId();
-            if (featureIsInTheList(featureList, feature)) {
+            String fragmentId = blockFull.getAssociatedTo().getEndFragment().getFragmentId();
+            if (fragmentIsInTheList(fragmentList, fragmentId)) {
                 result.add(blockFull);
             }
         }
         while (blockFull.getGoNextBlock() != null) {
             blockFull = blockService.getBlockByID(blockFull.getGoNextBlock().getEndBlock().getBlockId());
             if (blockFull.getAssociatedTo() != null) {
-                String feature = blockFull.getAssociatedTo().getEndFragment().getFeatureId();
-                if (featureIsInTheList(featureList, feature)) {
+                String fragmentId = blockFull.getAssociatedTo().getEndFragment().getFragmentId();
+                if (fragmentIsInTheList(fragmentList, fragmentId)) {
                     result.add(blockFull);
                 }
             }
@@ -179,9 +195,9 @@ public class BMProjectProduct implements Runnable {
         return result;
     }
 
-    private static boolean featureIsInTheList(List<Feature> featureList, String feature) {
-        for (Feature featureNode : featureList) {
-            if (featureNode.getFeatureId().equals(feature)) {
+    private static boolean fragmentIsInTheList(List<Fragment> fragmentList, String fragment) {
+        for (Fragment fragmentNode : fragmentList) {
+            if (fragmentNode.getFragmentId().equals(fragment)) {
                 return true;
             }
         }

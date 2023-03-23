@@ -1,6 +1,7 @@
 package ic.unicamp.bm.cli.cmd;
 
 import static ic.unicamp.bm.block.GitVCS.BMBranchLabel;
+import static ic.unicamp.bm.graph.neo4j.utils.FragmentUtil.retrieveOrCreateGenericFragment;
 
 import ic.unicamp.bm.block.utils.BMDirectoryUtil;
 import ic.unicamp.bm.block.GitVCSManager;
@@ -64,12 +65,7 @@ public class BMConfigure implements Runnable {
         if (product == null) {
             Feature feature = featureService.getFeatureByID(FB_GENERIC_FEATURE);
             if (feature == null) {
-                Fragment fragment = fragmentService.getFragmentByID(FB_GENERIC_FRAGMENT);
-                if(fragment == null){
-                    fragment = new Fragment();
-                    fragment.setFragmentId(FB_GENERIC_FRAGMENT);
-                    fragment.setFragmentLabel(FB_GENERIC_FRAGMENT);
-                }
+                Fragment fragment = retrieveOrCreateGenericFragment(fragmentService);
                 //data
                 feature = new Feature();
                 feature.setFeatureId(FB_GENERIC_FEATURE);

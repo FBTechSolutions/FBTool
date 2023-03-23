@@ -1,6 +1,6 @@
 package ic.unicamp.bm.cli.cmd;
 
-import static ic.unicamp.bm.cli.cmd.BMConfigure.FB_GENERIC_FEATURE;
+import static ic.unicamp.bm.graph.neo4j.utils.FragmentUtil.retrieveOrCreateGenericFragment;
 
 import ic.unicamp.bm.block.GitVCS;
 import ic.unicamp.bm.block.GitVCSManager;
@@ -12,7 +12,7 @@ import ic.unicamp.bm.block.utils.TempBMDirectoryUtil;
 import ic.unicamp.bm.cli.util.logger.SplMgrLogger;
 import ic.unicamp.bm.graph.neo4j.schema.Block;
 import ic.unicamp.bm.graph.neo4j.schema.Container;
-import ic.unicamp.bm.graph.neo4j.schema.Feature;
+import ic.unicamp.bm.graph.neo4j.schema.Fragment;
 import ic.unicamp.bm.graph.neo4j.schema.enums.BlockState;
 import ic.unicamp.bm.graph.neo4j.schema.enums.ContainerType;
 import ic.unicamp.bm.graph.neo4j.schema.enums.DataState;
@@ -24,8 +24,8 @@ import ic.unicamp.bm.graph.neo4j.services.BlockService;
 import ic.unicamp.bm.graph.neo4j.services.BlockServiceImpl;
 import ic.unicamp.bm.graph.neo4j.services.ContainerService;
 import ic.unicamp.bm.graph.neo4j.services.ContainerServiceImpl;
-import ic.unicamp.bm.graph.neo4j.services.FeatureService;
-import ic.unicamp.bm.graph.neo4j.services.FeatureServiceImpl;
+import ic.unicamp.bm.graph.neo4j.services.FragmentService;
+import ic.unicamp.bm.graph.neo4j.services.FragmentServiceImpl;
 import ic.unicamp.bm.scanner.BlockScanner;
 import ic.unicamp.bm.scanner.IBlockScanner;
 
@@ -112,7 +112,8 @@ public class BMAnalyze implements Runnable {
             Block firstBlock = null;
             Block previousBlock = null;
 
-            Feature defaultFeature = getDefaultFeature();
+            FragmentService fragmentService = new FragmentServiceImpl();
+            Fragment defaultFragment = retrieveOrCreateGenericFragment(fragmentService);
 
             for (String key : scannedBlocks.keySet()) {
                 System.out.println("key");
@@ -130,7 +131,7 @@ public class BMAnalyze implements Runnable {
                 // tag block
                 BlockToFragment blockToFeature = new BlockToFragment();
                 blockToFeature.setStartBlock(block);
-                blockToFeature.setEndFragment(defaultFeature);
+                blockToFeature.setEndFragment(defaultFragment);
                 block.setAssociatedTo(blockToFeature);
 
                 if (previousBlock == null) {
@@ -161,16 +162,7 @@ public class BMAnalyze implements Runnable {
 
     }
 
-    private static Feature getDefaultFeature() {
-        FeatureService featureService = new FeatureServiceImpl();
-        Feature defaultFeature = featureService.getFeatureByID(FB_GENERIC_FEATURE);
-        if (defaultFeature == null) {
-            defaultFeature = new Feature();
-            defaultFeature.setFeatureId(FB_GENERIC_FEATURE);
-            defaultFeature.setFeatureLabel(FB_GENERIC_FEATURE);
-        }
-        return defaultFeature;
-    }
+
 
     private void createContainers(Container container) {
         ContainerService containerService = new ContainerServiceImpl();
