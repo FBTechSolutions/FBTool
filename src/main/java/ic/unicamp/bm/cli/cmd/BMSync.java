@@ -1,6 +1,7 @@
 package ic.unicamp.bm.cli.cmd;
 
 import static ic.unicamp.bm.cli.cmd.BMConfigure.FB_GENERIC_FEATURE;
+import static ic.unicamp.bm.graph.neo4j.utils.FragmentUtil.retrieveOrCreateGenericFragment;
 
 import ic.unicamp.bm.block.GitVCSManager;
 import ic.unicamp.bm.block.IVCRepository;
@@ -8,6 +9,7 @@ import ic.unicamp.bm.block.IVCSAPI;
 import ic.unicamp.bm.graph.neo4j.schema.Block;
 import ic.unicamp.bm.graph.neo4j.schema.Container;
 import ic.unicamp.bm.graph.neo4j.schema.Feature;
+import ic.unicamp.bm.graph.neo4j.schema.Fragment;
 import ic.unicamp.bm.graph.neo4j.schema.enums.BlockState;
 import ic.unicamp.bm.graph.neo4j.schema.enums.ContainerType;
 import ic.unicamp.bm.graph.neo4j.schema.enums.DataState;
@@ -21,6 +23,8 @@ import ic.unicamp.bm.graph.neo4j.services.ContainerService;
 import ic.unicamp.bm.graph.neo4j.services.ContainerServiceImpl;
 import ic.unicamp.bm.graph.neo4j.services.FeatureService;
 import ic.unicamp.bm.graph.neo4j.services.FeatureServiceImpl;
+import ic.unicamp.bm.graph.neo4j.services.FragmentService;
+import ic.unicamp.bm.graph.neo4j.services.FragmentServiceImpl;
 import ic.unicamp.bm.scanner.BlockScanner;
 import ic.unicamp.bm.scanner.BlockNumberSequencer;
 
@@ -147,7 +151,8 @@ public class BMSync implements Runnable {
                             Block firstBlock = null;
                             Block previousBlock = null;
 
-                            Feature defaultFeature = getDefaultFeature();
+                            FragmentService fragmentService = new FragmentServiceImpl();
+                            Fragment defaultFragment = retrieveOrCreateGenericFragment(fragmentService);
 
                             for (String key : scannedBlocks.keySet()) {
                                 String data = scannedBlocks.get(key);
@@ -164,7 +169,7 @@ public class BMSync implements Runnable {
                                 // tag block
                                 BlockToFragment blockToFeature = new BlockToFragment();
                                 blockToFeature.setStartBlock(block);
-                                blockToFeature.setEndFragment(defaultFeature);
+                                blockToFeature.setEndFragment(defaultFragment);
                                 block.setAssociatedTo(blockToFeature);
 
                                 if (previousBlock == null) {
@@ -314,12 +319,12 @@ public class BMSync implements Runnable {
             newBlock.setVcBlockState(DataState.TEMPORAL);
             newBlock.setBlockId(newBlockId);
 
-            //adding default feature
-            FeatureService featureService = new FeatureServiceImpl();
-            Feature feature = featureService.getFeatureByID(BMConfigure.FB_GENERIC_FEATURE);
+            //adding default fragment
+            FragmentService fragmentService = new FragmentServiceImpl();
+            Fragment fragment = fragmentService.getFragmentByID(BMConfigure.FB_GENERIC_FRAGMENT);
             BlockToFragment blockToFeature = new BlockToFragment();
             blockToFeature.setStartBlock(newBlock);
-            blockToFeature.setEndFragment(feature);
+            blockToFeature.setEndFragment(fragment);
             newBlock.setAssociatedTo(blockToFeature);
 
             //create relation
