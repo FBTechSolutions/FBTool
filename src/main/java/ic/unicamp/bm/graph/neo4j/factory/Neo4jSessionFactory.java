@@ -37,12 +37,18 @@ public class Neo4jSessionFactory {
     }
 
     private void loadCredentialsFromFile() throws IOException {
-        String configFilePath = "conf/config.properties";
+/*        System.out.println("Working Directory = " + System.getProperty("user.dir"));
+        String configFilePath = "main/resources/config.properties";
         Properties prop = new Properties();
-        prop.load(new FileInputStream(configFilePath));
+        FileInputStream fileInputStream = new FileInputStream(configFilePath);
+        prop.load(fileInputStream);
         this.uri = prop.getProperty("neo4j_uri");
         this.user = prop.getProperty("neo4j_user");
-        this.password = prop.getProperty("neo4j_password");
+        this.password = prop.getProperty("neo4j_password");*/
+        // FIXME : Fix loading properties.
+        this.uri = "neo4j://localhost:7687";
+        this.user = "neo4j";
+        this.password = "12345678";
     }
 
     public Session getNeo4jSession() {
