@@ -39,9 +39,9 @@ import picocli.CommandLine.Command;
 public class BMConfigure implements Runnable {
 
     public static final String CMD_NAME = "configure";
-    public static final String FB_GENERIC_SPL = "FB Generic SPL";
-    public static final String FB_GENERIC_FEATURE = "FB Generic Feature";
-    public static final String FB_GENERIC_FRAGMENT = "FB Generic Fragment";
+    public static final String FB_GENERIC_SPL = "FB_Generic_SPL";
+    public static final String FB_GENERIC_FEATURE = "FB_Generic_Feature";
+    public static final String FB_GENERIC_FRAGMENT = "FB_Generic_Fragment";
 
     @Override
     public void run() {
