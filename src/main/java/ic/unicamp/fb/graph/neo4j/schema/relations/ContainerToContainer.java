@@ -15,7 +15,7 @@ import org.neo4j.ogm.annotation.StartNode;
 @FieldDefaults(makeFinal = false, level = AccessLevel.PRIVATE)
 @Setter
 @Getter
-@RelationshipEntity(type = "GET_CONTAINERS")
+@RelationshipEntity(type = "PARENT_FROM")
 public class ContainerToContainer {
 
     @Id

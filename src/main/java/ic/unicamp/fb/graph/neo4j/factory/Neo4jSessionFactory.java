@@ -30,7 +30,7 @@ public class Neo4jSessionFactory {
                 .credentials(user, password) // neo4j, test
                 .build();
         sessionFactory = new SessionFactory(configuration,
-                "ic.unicamp.bm.graph.neo4j.schema");
+                "ic.unicamp.fb.graph.neo4j.schema");
 
     }
 

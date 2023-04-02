@@ -16,7 +16,7 @@ import org.neo4j.ogm.annotation.StartNode;
 @FieldDefaults(makeFinal = false, level = AccessLevel.PRIVATE)
 @Setter
 @Getter
-@RelationshipEntity(type = "GET_FIRST_BLOCK")
+@RelationshipEntity(type = "POINT_TO")
 public class ContainerToBlock {
 
     @Id

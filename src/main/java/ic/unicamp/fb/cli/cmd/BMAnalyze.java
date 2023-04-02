@@ -174,6 +174,7 @@ public class BMAnalyze implements Runnable {
         stack.push(main);
         Container parentPivot = main;
         while (treeWalk.next()) {
+            String pathString = treeWalk.getPathString();
             if (treeWalk.isSubtree()) {
                 //backing
                 parentPivot = backStack(treeWalk, stack, parentPivot);

@@ -1,0 +1,2 @@
+BUG 1
+treeWalk.isSubtree() do not recognized names in folders like "FB-Elevator-Antenna-v1.4". It is treat like a file.
