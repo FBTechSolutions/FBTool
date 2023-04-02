@@ -28,7 +28,7 @@ public class FBToolConfiguration extends AbstractNode {
     private String configId;
 
     @Property(name = "lastBlockId")
-    private Long lastBlockId;
+    private long lastBlockId;
 
     @Override
     public Long getId() {
