@@ -6,6 +6,8 @@ import java.util.List;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.neo4j.ogm.annotation.GeneratedValue;
@@ -16,12 +18,14 @@ import org.neo4j.ogm.annotation.Relationship;
 
 import static org.neo4j.ogm.annotation.Relationship.Direction.OUTGOING;
 
-@FieldDefaults(makeFinal = false, level = AccessLevel.PRIVATE)
 @Setter
 @Getter
+@NoArgsConstructor(force = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @NodeEntity(label = "Product")
 public class Product extends AbstractNode {
 
+    @NonNull
     @GeneratedValue
     @Id
     private Long id;

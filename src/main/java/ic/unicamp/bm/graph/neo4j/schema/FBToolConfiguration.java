@@ -1,9 +1,9 @@
 package ic.unicamp.bm.graph.neo4j.schema;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.neo4j.ogm.annotation.GeneratedValue;
@@ -11,12 +11,15 @@ import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 
-@FieldDefaults(makeFinal = false, level = AccessLevel.PRIVATE)
+
 @Setter
 @Getter
-@NodeEntity(label = "BM")
-public class BMConfig extends AbstractNode {
+@NoArgsConstructor(force = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@NodeEntity(label = "FBTool")
+public class FBToolConfiguration extends AbstractNode {
 
+    @NonNull
     @GeneratedValue
     @Id
     private Long id;
@@ -25,8 +28,7 @@ public class BMConfig extends AbstractNode {
     private String configId;
 
     @Property(name = "lastBlockId")
-    private long lastBlockId;
-
+    private Long lastBlockId;
 
     @Override
     public Long getId() {

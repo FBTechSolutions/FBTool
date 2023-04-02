@@ -86,7 +86,7 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
         LinkedList<Block> blocks = Lists.newLinkedList();
         ContainerService containerService = new ContainerServiceImpl();
         Container container = containerService.getContainerByID(pathFile);
-        ContainerToBlock blockRelation = container.getGetFirstBlock();
+        ContainerToBlock blockRelation = container.getBlock();
         Block block = blockRelation.getEndBlock();
         BlockService blockService = new BlockServiceImpl();
         Block initial = blockService.getBlockByID(block.getBlockId());
@@ -104,7 +104,7 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
         //LinkedList<Block> blocks = Lists.newLinkedList();
         ContainerService containerService = new ContainerServiceImpl();
         Container container = containerService.getContainerByID(pathFile);
-        ContainerToBlock blockRelation = container.getGetFirstBlock();
+        ContainerToBlock blockRelation = container.getBlock();
         Block block = blockRelation.getEndBlock();
         BlockService blockService = new BlockServiceImpl();
         Block initial = blockService.getBlockByID(block.getBlockId());

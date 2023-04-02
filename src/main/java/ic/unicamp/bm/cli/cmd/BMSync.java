@@ -106,12 +106,12 @@ public class BMSync implements Runnable {
                             ContainerToContainer aRelation = new ContainerToContainer();
                             aRelation.setStartContainer(parentContainer);
                             aRelation.setEndContainer(newContainer);
-                            List<ContainerToContainer> relations = parentContainer.getGetContainers();
+                            List<ContainerToContainer> relations = parentContainer.getParentFrom();
                             if (relations == null) {
                                 relations = new LinkedList<>();
                             }
                             relations.add(aRelation);
-                            parentContainer.setGetContainers(relations);
+                            parentContainer.setParentFrom(relations);
                             containerService.createOrUpdate(parentContainer);
                         }
                         treeWalk.enterSubtree();
@@ -132,12 +132,12 @@ public class BMSync implements Runnable {
                             ContainerToContainer relation = new ContainerToContainer();
                             relation.setStartContainer(parentContainer);
                             relation.setEndContainer(newContainerFile);
-                            List<ContainerToContainer> relations = parentContainer.getGetContainers();
+                            List<ContainerToContainer> relations = parentContainer.getParentFrom();
                             if (relations == null) {
                                 relations = new LinkedList<>();
                             }
                             relations.add(relation);
-                            parentContainer.setGetContainers(relations);
+                            parentContainer.setParentFrom(relations);
                             //update container
                             containerService.createOrUpdate(parentContainer);
 
@@ -190,7 +190,7 @@ public class BMSync implements Runnable {
                             ContainerToBlock relation3 = new ContainerToBlock();
                             relation3.setStartContainer(newContainerFile);
                             relation3.setEndBlock(firstBlock);
-                            newContainerFile.setGetFirstBlock(relation3);
+                            newContainerFile.setBlock(relation3);
                             containerService.createOrUpdate(newContainerFile);
                         } else {
                             // case updated file.

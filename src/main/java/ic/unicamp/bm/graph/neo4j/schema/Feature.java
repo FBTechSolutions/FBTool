@@ -4,6 +4,8 @@ import ic.unicamp.bm.graph.neo4j.schema.relations.FeatureToFragment;
 import ic.unicamp.bm.graph.neo4j.schema.relations.ProductToFeature;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.neo4j.ogm.annotation.GeneratedValue;
@@ -16,12 +18,14 @@ import java.util.List;
 
 import static org.neo4j.ogm.annotation.Relationship.Direction.OUTGOING;
 
-@FieldDefaults(makeFinal = false, level = AccessLevel.PRIVATE)
 @Setter
 @Getter
+@NoArgsConstructor(force = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @NodeEntity(label = "Feature")
 public class Feature extends AbstractNode {
 
+    @NonNull
     @GeneratedValue
     @Id
     private Long id;

@@ -1,6 +1,6 @@
 package ic.unicamp.bm.scanner;
 
-import ic.unicamp.bm.graph.neo4j.schema.BMConfig;
+import ic.unicamp.bm.graph.neo4j.schema.FBToolConfiguration;
 import ic.unicamp.bm.graph.neo4j.services.BMConfigService;
 import ic.unicamp.bm.graph.neo4j.services.BMConfigServiceImpl;
 import org.apache.commons.lang3.StringUtils;
@@ -18,7 +18,7 @@ public class BlockNumberSequencer {
     }
 
     private static long generateNextCode() {
-        BMConfig bmConfig = bmConfigService.getBMConfigByDefaultID();
+        FBToolConfiguration bmConfig = bmConfigService.getBMConfigByDefaultID();
         long code = bmConfig.getLastBlockId() + 1;
         if (code == 10000000000000000L) {
             code = 0;

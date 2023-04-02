@@ -1,9 +1,24 @@
 package ic.unicamp.bm.graph.neo4j.schema;
 
-import org.neo4j.ogm.annotation.GeneratedValue;
-import org.neo4j.ogm.annotation.Id;
-
+/**
+ * Represents an abstract node in the Neo4j database.
+ */
 public abstract class AbstractNode {
 
+    /**
+     * Returns the ID of the node.
+     *
+     * @return the ID of the node.
+     */
     public abstract Long getId();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "AbstractNode{" +
+                "id=" + getId() +
+                '}';
+    }
 }

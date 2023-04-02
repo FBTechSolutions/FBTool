@@ -152,10 +152,10 @@ public class BMAnalyze implements Runnable {
             ContainerToBlock relation = new ContainerToBlock();
             relation.setStartContainer(container);
             relation.setEndBlock(firstBlock);
-            container.setGetFirstBlock(relation);
+            container.setBlock(relation);
             containerService.createOrUpdate(container);
         } else {
-            for (ContainerToContainer Container : container.getGetContainers()) {
+            for (ContainerToContainer Container : container.getParentFrom()) {
                 createBlocksByFile(Container.getEndContainer());
             }
         }
@@ -185,12 +185,12 @@ public class BMAnalyze implements Runnable {
                 ContainerToContainer relation = new ContainerToContainer();
                 relation.setStartContainer(parentPivot);
                 relation.setEndContainer(container);
-                List<ContainerToContainer> relations = parentPivot.getGetContainers();
+                List<ContainerToContainer> relations = parentPivot.getParentFrom();
                 if (relations == null) {
                     relations = new LinkedList<>();
                 }
                 relations.add(relation);
-                parentPivot.setGetContainers(relations);
+                parentPivot.setParentFrom(relations);
                 parentPivot = container;
                 stack.push(container);
                 treeWalk.enterSubtree();
@@ -206,12 +206,12 @@ public class BMAnalyze implements Runnable {
                 ContainerToContainer relation = new ContainerToContainer();
                 relation.setStartContainer(parentPivot);
                 relation.setEndContainer(container);
-                List<ContainerToContainer> relations = parentPivot.getGetContainers();
+                List<ContainerToContainer> relations = parentPivot.getParentFrom();
                 if (relations == null) {
                     relations = new LinkedList<>();
                 }
                 relations.add(relation);
-                parentPivot.setGetContainers(relations);
+                parentPivot.setParentFrom(relations);
             }
         }
     }

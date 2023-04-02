@@ -1,9 +1,9 @@
 package ic.unicamp.bm.graph.neo4j.services;
 
-import ic.unicamp.bm.graph.neo4j.schema.BMConfig;
+import ic.unicamp.bm.graph.neo4j.schema.FBToolConfiguration;
 
-public interface BMConfigService extends Service<BMConfig> {
+public interface BMConfigService extends Service<FBToolConfiguration> {
 
-    BMConfig getBMConfigByDefaultID();
+    FBToolConfiguration getBMConfigByDefaultID();
 
 }
