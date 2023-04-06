@@ -14,9 +14,10 @@ public class BMListBlocks implements Runnable {
 
     @Override
     public void run() {
+        System.out.println("Listing all blocks...");
         BlockService blockService = new BlockServiceImpl();
         for (Block block : blockService.findAll()) {
-            String message = String.format("BlockId:%s BlockState:%s BlockVState:%s", block.getBlockId(),
+            String message = String.format("id:%s state:%s vcState:%s", block.getBlockId(),
                     block.getBlockState(), block.getVcBlockState());
             System.out.println(message);
         }

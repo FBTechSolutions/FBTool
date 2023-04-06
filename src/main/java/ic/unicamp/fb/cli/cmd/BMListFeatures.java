@@ -14,9 +14,10 @@ public class BMListFeatures implements Runnable {
 
     @Override
     public void run() {
+        System.out.println("Listing all features...");
         FeatureService featureService = new FeatureServiceImpl();
         for (Feature feature : featureService.findAll()) {
-            String message = String.format("FeatureId: %s FeatureLabel: %s", feature.getFeatureId(),
+            String message = String.format("id: %s label: %s", feature.getFeatureId(),
                     feature.getFeatureLabel());
             System.out.println(message);
         }

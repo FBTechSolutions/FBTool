@@ -8,6 +8,8 @@ import ic.unicamp.fb.cli.cmd.BMConfigure;
 import ic.unicamp.fb.cli.cmd.BMExit;
 import ic.unicamp.fb.cli.cmd.BMListBlocks;
 import ic.unicamp.fb.cli.cmd.BMListFeatures;
+import ic.unicamp.fb.cli.cmd.BMListFragments;
+import ic.unicamp.fb.cli.cmd.BMListProducts;
 import ic.unicamp.fb.cli.cmd.BMProjectProduct;
 import ic.unicamp.fb.cli.cmd.BMMoveBlocks;
 import ic.unicamp.fb.cli.cmd.BMSync;
@@ -44,7 +46,9 @@ import static ic.unicamp.fb.cli.util.msg.InfoMessages.*;
                 BMProjectProduct.class,
                 BMUpsertProduct.class,
                 BMUpsertFeature.class,
+                BMListProducts.class,
                 BMListFeatures.class,
+                BMListFragments.class,
                 BMListBlocks.class,
                 BMSync.class,
                 BMMoveBlocks.class},
@@ -125,12 +129,20 @@ public class Cmd implements Runnable {
                         CommandLine commandLine = new CommandLine(new BMProjectProduct());
                         __executeCmd(inputs, commandLine);
                     }
-                    case CMD_TAGBLOCKS -> {
+                    case CMD_TAG_BLOCKS -> {
                         CommandLine commandLine = new CommandLine(new BMTagBlocks());
+                        __executeCmd(inputs, commandLine);
+                    }
+                    case CMD_LIST_PRODUCTS -> {
+                        CommandLine commandLine = new CommandLine(new BMListProducts());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_LIST_FEATURES -> {
                         CommandLine commandLine = new CommandLine(new BMListFeatures());
+                        __executeCmd(inputs, commandLine);
+                    }
+                    case CMD_LIST_FRAGMENTS -> {
+                        CommandLine commandLine = new CommandLine(new BMListFragments());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_LIST_BLOCKS -> {

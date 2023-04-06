@@ -14,9 +14,10 @@ public class BMListFragments implements Runnable {
 
     @Override
     public void run() {
+        System.out.println("Listing all fragments...");
         FragmentService fragmentService = new FragmentServiceImpl();
         for (Fragment fragment : fragmentService.findAll()) {
-            String message = String.format("FragmentId:%s FragmentLabel:%s", fragment.getFragmentId(),
+            String message = String.format("id:%s label:%s", fragment.getFragmentId(),
                     fragment.getFragmentLabel());
             System.out.println(message);
         }
