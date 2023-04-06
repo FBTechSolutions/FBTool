@@ -5,6 +5,7 @@ import ic.unicamp.fb.graph.neo4j.factory.Neo4jSessionFactory;
 import ic.unicamp.fb.graph.neo4j.schema.Block;
 import ic.unicamp.fb.graph.neo4j.schema.Container;
 import ic.unicamp.fb.graph.neo4j.schema.Feature;
+import ic.unicamp.fb.graph.neo4j.schema.Fragment;
 import ic.unicamp.fb.graph.neo4j.schema.enums.DataState;
 import ic.unicamp.fb.graph.neo4j.schema.relations.ContainerToBlock;
 import org.neo4j.ogm.cypher.ComparisonOperator;
@@ -116,16 +117,16 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
     }
 
     @Override
-    public List<Block> getBlocksByFeature(String oldFeatureId) {
-        String queryTemplate = "MATCH (b:Block)-[r:ASSOCIATED_TO]->(f:Feature) return b,f";
+    public List<Block> getBlocksByFragment(String oldFragmentId) {
+        String queryTemplate = "MATCH (b:Block)-[r:ASSOCIATED_TO]->(f:Fragment) return b,f";
         //String query = String.format(queryTemplate, productId);
         Iterable<Map<String, Object>> queryResult = Neo4jSessionFactory.getInstance().getNeo4jSession()
                 .query(queryTemplate, Collections.EMPTY_MAP);
         List<Block> result = new LinkedList<>();
         queryResult.forEach(map -> {
-            Feature feature = (Feature) map.get("f");
+            Fragment fragment = (Fragment) map.get("f");
             Block block = (Block) map.get("b");
-            if (feature.getFeatureId().equals(oldFeatureId)) {
+            if (fragment.getFragmentId().equals(oldFragmentId)) {
                 result.add(block);
             }
         });

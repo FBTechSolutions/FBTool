@@ -22,7 +22,7 @@ public class BMListFeatures implements Runnable {
         System.out.println("Fetching feature list...");
         FeatureService featureService = new FeatureServiceImpl();
         for (Feature feature : featureService.findAll()) {
-            String message = String.format("- %s label: %s", feature.getFeatureId(),
+            String message = String.format("- id:%s label:%s", feature.getFeatureId(),
                     feature.getFeatureLabel());
             System.out.println(message);
             if (isFragmentEnabled) {

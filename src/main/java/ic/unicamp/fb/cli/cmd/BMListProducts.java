@@ -21,7 +21,7 @@ public class BMListProducts implements Runnable {
         System.out.println("Listing all products...");
         ProductService productService = new ProductServiceImpl();
         for (Product product : productService.findAll()) {
-            System.out.printf("- %s  label:%s%n", product.getProductId(), product.getProductLabel());
+            System.out.printf("- id:%s  label:%s%n", product.getProductId(), product.getProductLabel());
             if (isFeatureEnabled) {
                 for (ProductToFeature relation : product.getAssociatedTo()) {
                     System.out.println("  - " + relation.getEndFeature().getFeatureId());

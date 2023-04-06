@@ -41,7 +41,7 @@ public class BMMoveBlocks implements Runnable {
         Fragment newF = retrieveOrCreateAStandardFragment(fragmentService, newFragmentId, newFragmentId);
 
         BlockService blockService = new BlockServiceImpl();
-        List<Block> blocks = blockService.getBlocksByFeature(oldFragmentId);
+        List<Block> blocks = blockService.getBlocksByFragment(oldFragmentId);
         for (Block block : blocks) {
             Block blockUpdated = blockService.getBlockByID(block.getBlockId());
             BlockToFragment blockToFeature = new BlockToFragment();
