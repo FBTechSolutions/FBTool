@@ -2,7 +2,6 @@ package ic.unicamp.fb.cli.cmd;
 
 import ic.unicamp.fb.graph.neo4j.schema.Block;
 import ic.unicamp.fb.graph.neo4j.schema.Fragment;
-import ic.unicamp.fb.graph.neo4j.schema.relations.FeatureToFragment;
 import ic.unicamp.fb.graph.neo4j.services.BlockService;
 import ic.unicamp.fb.graph.neo4j.services.BlockServiceImpl;
 import ic.unicamp.fb.graph.neo4j.services.FragmentService;
