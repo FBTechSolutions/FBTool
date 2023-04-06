@@ -1,11 +1,11 @@
 package ic.unicamp.fb.cli.cmd;
 
+import ic.unicamp.fb.graph.neo4j.schema.Product;
+import ic.unicamp.fb.graph.neo4j.schema.relations.ProductToFeature;
 import ic.unicamp.fb.graph.neo4j.services.ProductService;
 import ic.unicamp.fb.graph.neo4j.services.ProductServiceImpl;
+import picocli.CommandLine;
 import picocli.CommandLine.Command;
-
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Command(
         name = BMListProducts.CMD_NAME,
@@ -13,15 +13,20 @@ import java.util.stream.StreamSupport;
 public class BMListProducts implements Runnable {
 
     public static final String CMD_NAME = "list-products";
+    @CommandLine.Option(names = {"-f", "--features"}, description = "Add features to the list")
+    private boolean isFeatureEnabled;
 
     @Override
     public void run() {
         System.out.println("Listing all products...");
         ProductService productService = new ProductServiceImpl();
-        String productList = StreamSupport
-                .stream(productService.findAll().spliterator(), false)
-                .map(product -> String.format("id:%s  label:%s", product.getProductId(), product.getProductLabel()))
-                .collect(Collectors.joining("\n"));
-        System.out.println(productList);
+        for (Product product : productService.findAll()) {
+            System.out.printf("- %s  label:%s%n", product.getProductId(), product.getProductLabel());
+            if (isFeatureEnabled) {
+                for (ProductToFeature relation : product.getAssociatedTo()) {
+                    System.out.println("  - " + relation.getEndFeature().getFeatureId());
+                }
+            }
+        }
     }
 }

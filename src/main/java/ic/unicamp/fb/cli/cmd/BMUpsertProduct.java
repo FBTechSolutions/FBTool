@@ -7,13 +7,12 @@ import ic.unicamp.fb.graph.neo4j.services.FeatureService;
 import ic.unicamp.fb.graph.neo4j.services.FeatureServiceImpl;
 import ic.unicamp.fb.graph.neo4j.services.ProductService;
 import ic.unicamp.fb.graph.neo4j.services.ProductServiceImpl;
-
-import java.util.LinkedList;
-import java.util.List;
-
 import org.eclipse.jgit.util.StringUtils;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
+
+import java.util.LinkedList;
+import java.util.List;
 
 //ok
 @Command(

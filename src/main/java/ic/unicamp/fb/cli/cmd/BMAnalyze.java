@@ -1,7 +1,5 @@
 package ic.unicamp.fb.cli.cmd;
 
-import static ic.unicamp.fb.graph.neo4j.utils.FragmentUtil.retrieveOrCreateGenericFragment;
-
 import ic.unicamp.fb.block.GitVCS;
 import ic.unicamp.fb.block.GitVCSManager;
 import ic.unicamp.fb.block.IVCSAPI;
@@ -28,6 +26,14 @@ import ic.unicamp.fb.graph.neo4j.services.FragmentService;
 import ic.unicamp.fb.graph.neo4j.services.FragmentServiceImpl;
 import ic.unicamp.fb.scanner.BlockScanner;
 import ic.unicamp.fb.scanner.IBlockScanner;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevWalk;
+import org.eclipse.jgit.treewalk.TreeWalk;
+import picocli.CommandLine.Command;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,14 +47,7 @@ import java.util.Stack;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.codec.digest.DigestUtils;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.lib.Ref;
-import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.RevWalk;
-import org.eclipse.jgit.treewalk.TreeWalk;
-import picocli.CommandLine.Command;
+import static ic.unicamp.fb.graph.neo4j.utils.FragmentUtil.retrieveOrCreateGenericFragment;
 
 @Command(
         name = BMAnalyze.CMD_NAME,
@@ -161,7 +160,6 @@ public class BMAnalyze implements Runnable {
         }
 
     }
-
 
 
     private void createContainers(Container container) {

@@ -1,12 +1,9 @@
 package ic.unicamp.fb.cli.cmd;
 
-import static ic.unicamp.fb.block.GitVCS.BMBranchLabel;
-import static ic.unicamp.fb.graph.neo4j.utils.FragmentUtil.retrieveOrCreateGenericFragment;
-
-import ic.unicamp.fb.block.utils.BMDirectoryUtil;
 import ic.unicamp.fb.block.GitVCSManager;
-import ic.unicamp.fb.block.utils.GitDirectoryUtil;
 import ic.unicamp.fb.block.IVCSAPI;
+import ic.unicamp.fb.block.utils.BMDirectoryUtil;
+import ic.unicamp.fb.block.utils.GitDirectoryUtil;
 import ic.unicamp.fb.cli.util.logger.SplMgrLogger;
 import ic.unicamp.fb.graph.neo4j.schema.FBToolConfiguration;
 import ic.unicamp.fb.graph.neo4j.schema.Feature;
@@ -22,16 +19,18 @@ import ic.unicamp.fb.graph.neo4j.services.FragmentService;
 import ic.unicamp.fb.graph.neo4j.services.FragmentServiceImpl;
 import ic.unicamp.fb.graph.neo4j.services.ProductService;
 import ic.unicamp.fb.graph.neo4j.services.ProductServiceImpl;
+import org.apache.commons.io.FileUtils;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import picocli.CommandLine.Command;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import picocli.CommandLine.Command;
+import static ic.unicamp.fb.block.GitVCS.BMBranchLabel;
+import static ic.unicamp.fb.graph.neo4j.utils.FragmentUtil.retrieveOrCreateGenericFragment;
 
 @Command(
         name = BMConfigure.CMD_NAME,

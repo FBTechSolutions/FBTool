@@ -15,20 +15,19 @@ public class BMListFeatures implements Runnable {
     public static final String CMD_NAME = "list-features";
 
     @CommandLine.Option(names = {"-f", "--fragments"}, description = "Add fragments to the list")
-    private boolean fragmentEnabled;
+    private boolean isFragmentEnabled;
 
     @Override
     public void run() {
         System.out.println("Fetching feature list...");
         FeatureService featureService = new FeatureServiceImpl();
         for (Feature feature : featureService.findAll()) {
-            String message = String.format("id: %s label: %s", feature.getFeatureId(),
+            String message = String.format("- %s label: %s", feature.getFeatureId(),
                     feature.getFeatureLabel());
             System.out.println(message);
-            if (fragmentEnabled) {
-                System.out.println("    fragments:");
+            if (isFragmentEnabled) {
                 for (FeatureToFragment relation : feature.getAssociatedTo()) {
-                    System.out.println("        " + relation.getEndFragment().getFragmentId());
+                    System.out.println("  - " + relation.getEndFragment().getFragmentId());
                 }
             }
         }

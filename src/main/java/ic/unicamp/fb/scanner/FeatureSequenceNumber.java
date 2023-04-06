@@ -1,8 +1,8 @@
 package ic.unicamp.fb.scanner;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.concurrent.atomic.AtomicLong;
 
 public class FeatureSequenceNumber {
 

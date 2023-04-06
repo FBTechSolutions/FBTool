@@ -2,13 +2,12 @@ package ic.unicamp.fb.graph.neo4j.services;
 
 import ic.unicamp.fb.graph.neo4j.schema.Container;
 import ic.unicamp.fb.graph.neo4j.schema.enums.ContainerType;
-
-import java.util.Collection;
-import java.util.Iterator;
-
 import org.neo4j.ogm.cypher.ComparisonOperator;
 import org.neo4j.ogm.cypher.Filter;
 import org.neo4j.ogm.cypher.Filters;
+
+import java.util.Collection;
+import java.util.Iterator;
 
 public class ContainerServiceImpl extends GenericService<Container> implements ContainerService {
 

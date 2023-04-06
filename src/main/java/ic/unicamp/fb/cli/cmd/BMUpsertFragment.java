@@ -25,7 +25,7 @@ public class BMUpsertFragment implements Runnable {
     public void run() {
         String featureLabel = retrieveLabel();
         FragmentService fragmentService = new FragmentServiceImpl();
-        Fragment fragment = FragmentUtil.retrieveOrCreateAStandardFragment(fragmentService,fragmentId, featureLabel);
+        Fragment fragment = FragmentUtil.retrieveOrCreateAStandardFragment(fragmentService, fragmentId, featureLabel);
         fragmentService.createOrUpdate(fragment);
     }
 

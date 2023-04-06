@@ -2,7 +2,10 @@ package ic.unicamp.fb.cli.util.logger;
 
 import org.slf4j.LoggerFactory;
 
-import static ic.unicamp.fb.cli.util.logger.LoggerTag.*;
+import static ic.unicamp.fb.cli.util.logger.LoggerTag.TAG_LINE_BREAK;
+import static ic.unicamp.fb.cli.util.logger.LoggerTag.TAG_XGIT_ERROR;
+import static ic.unicamp.fb.cli.util.logger.LoggerTag.TAG_XGIT_INFO;
+import static ic.unicamp.fb.cli.util.logger.LoggerTag.TAG_XGIT_WARN;
 
 
 public class SplMgrLogger {

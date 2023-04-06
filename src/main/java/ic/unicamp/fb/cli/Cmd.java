@@ -10,8 +10,8 @@ import ic.unicamp.fb.cli.cmd.BMListBlocks;
 import ic.unicamp.fb.cli.cmd.BMListFeatures;
 import ic.unicamp.fb.cli.cmd.BMListFragments;
 import ic.unicamp.fb.cli.cmd.BMListProducts;
-import ic.unicamp.fb.cli.cmd.BMProjectProduct;
 import ic.unicamp.fb.cli.cmd.BMMoveBlocks;
+import ic.unicamp.fb.cli.cmd.BMProjectProduct;
 import ic.unicamp.fb.cli.cmd.BMSync;
 import ic.unicamp.fb.cli.cmd.BMTagBlocks;
 import ic.unicamp.fb.cli.cmd.BMUpsertFeature;
@@ -27,14 +27,36 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
-import static ic.unicamp.fb.cli.util.CmdTag.*;
-import static ic.unicamp.fb.cli.util.msg.InfoMessages.*;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_ADD;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_ANALYSE;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_COMMIT;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_CONFIGURE;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_EXIT;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_BLOCKS;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_FEATURES;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_FRAGMENTS;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_PRODUCTS;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_MOVE_BLOCKS;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_PROJECT_PRODUCT;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_SYNC;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_TAG_BLOCKS;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_UPSERT_FEATURES;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_UPSERT_PRODUCT;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_VERSION;
+import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__BM_ASCII;
+import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__CMD_ACCEPTED;
+import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__CMD_END;
+import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__CMD_NOT_VALID;
+import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__PROMPT;
+import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__SPLM_AUTHOR;
+import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__SPLM_VERSION;
+import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__WELCOME_SPLM;
 
 
 @Command(
         name = "(fb)",
-        header = {"Thanks for choosing the FB Tool.",""},
-        description = {"Description: This tool internally use git to stored the block data and a graph db to manage logic and relationships",""},
+        header = {"Thanks for choosing the FB Tool.", ""},
+        description = {"Description: This tool internally use git to stored the block data and a graph db to manage logic and relationships", ""},
         subcommands = {
                 // basic
 //                BMInit.class,

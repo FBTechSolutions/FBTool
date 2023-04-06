@@ -15,6 +15,7 @@ public class FragmentUtil {
         }
         return defaultFragment;
     }
+
     public static Fragment retrieveOrCreateAStandardFragment(FragmentService fragmentService, String fragmentId, String fragmentLabel) {
         Fragment standardFragment = fragmentService.getFragmentByID(fragmentId);
         if (standardFragment == null) {

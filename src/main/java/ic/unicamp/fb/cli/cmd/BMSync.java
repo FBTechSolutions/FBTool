@@ -1,8 +1,5 @@
 package ic.unicamp.fb.cli.cmd;
 
-import static ic.unicamp.fb.cli.cmd.BMConfigure.FB_GENERIC_FEATURE;
-import static ic.unicamp.fb.graph.neo4j.utils.FragmentUtil.retrieveOrCreateGenericFragment;
-
 import ic.unicamp.fb.block.GitVCSManager;
 import ic.unicamp.fb.block.IVCRepository;
 import ic.unicamp.fb.block.IVCSAPI;
@@ -25,8 +22,18 @@ import ic.unicamp.fb.graph.neo4j.services.FeatureService;
 import ic.unicamp.fb.graph.neo4j.services.FeatureServiceImpl;
 import ic.unicamp.fb.graph.neo4j.services.FragmentService;
 import ic.unicamp.fb.graph.neo4j.services.FragmentServiceImpl;
-import ic.unicamp.fb.scanner.BlockScanner;
 import ic.unicamp.fb.scanner.BlockNumberSequencer;
+import ic.unicamp.fb.scanner.BlockScanner;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevWalk;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.treewalk.TreeWalk;
+import picocli.CommandLine.Command;
+import picocli.CommandLine.Parameters;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -39,16 +46,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.eclipse.jgit.lib.Ref;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.RevWalk;
-import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
-import org.eclipse.jgit.treewalk.TreeWalk;
-import picocli.CommandLine.Command;
-import picocli.CommandLine.Parameters;
+import static ic.unicamp.fb.cli.cmd.BMConfigure.FB_GENERIC_FEATURE;
+import static ic.unicamp.fb.graph.neo4j.utils.FragmentUtil.retrieveOrCreateGenericFragment;
 
 @Command(
         name = BMSync.CMD_NAME,

@@ -1,8 +1,8 @@
 package ic.unicamp.fb.block;
 
-import java.nio.file.Path;
-
 import org.eclipse.jgit.api.Git;
+
+import java.nio.file.Path;
 
 public interface IVCRepository {
 

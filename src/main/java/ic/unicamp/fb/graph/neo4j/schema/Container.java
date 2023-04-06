@@ -3,9 +3,6 @@ package ic.unicamp.fb.graph.neo4j.schema;
 import ic.unicamp.fb.graph.neo4j.schema.enums.ContainerType;
 import ic.unicamp.fb.graph.neo4j.schema.relations.ContainerToBlock;
 import ic.unicamp.fb.graph.neo4j.schema.relations.ContainerToContainer;
-
-import java.util.List;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +14,8 @@ import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
+
+import java.util.List;
 
 import static org.neo4j.ogm.annotation.Relationship.Direction.OUTGOING;
 

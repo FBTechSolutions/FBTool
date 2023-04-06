@@ -13,6 +13,15 @@ import ic.unicamp.fb.graph.neo4j.services.BlockService;
 import ic.unicamp.fb.graph.neo4j.services.BlockServiceImpl;
 import ic.unicamp.fb.graph.neo4j.services.FeatureService;
 import ic.unicamp.fb.graph.neo4j.services.FeatureServiceImpl;
+import ic.unicamp.fb.graph.neo4j.services.FragmentService;
+import ic.unicamp.fb.graph.neo4j.services.FragmentServiceImpl;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.ListBranchCommand.ListMode;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.Ref;
+import picocli.CommandLine.Command;
+import picocli.CommandLine.Option;
+import picocli.CommandLine.Parameters;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,16 +35,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import ic.unicamp.fb.graph.neo4j.services.FragmentService;
-import ic.unicamp.fb.graph.neo4j.services.FragmentServiceImpl;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.ListBranchCommand.ListMode;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.lib.Ref;
-import picocli.CommandLine.Command;
-import picocli.CommandLine.Option;
-import picocli.CommandLine.Parameters;
 
 @Command(
         name = BMProjectProduct.CMD_NAME,

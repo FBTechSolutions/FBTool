@@ -8,12 +8,11 @@ import ic.unicamp.fb.graph.neo4j.schema.enums.BlockState;
 import ic.unicamp.fb.graph.neo4j.schema.enums.DataState;
 import ic.unicamp.fb.graph.neo4j.services.BlockService;
 import ic.unicamp.fb.graph.neo4j.services.BlockServiceImpl;
-
-import java.util.List;
-
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import picocli.CommandLine.Command;
+
+import java.util.List;
 
 @Command(
         name = BMCommit.CMD_NAME,
