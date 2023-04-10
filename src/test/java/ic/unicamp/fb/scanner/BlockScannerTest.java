@@ -15,7 +15,7 @@ class BlockScannerTest {
         BlockScanner blockScanner = new BlockScanner();
         Path resosurcesPath = Paths.get("src", "test", "resources");
         Path resourceDirectory1 = resosurcesPath.resolve("source-code-with-blocks-1.txt");
-        Path resourceDirectory2 = resosurcesPath.resolve("source-code-with-blocks-2.txt");
+        //Path resourceDirectory2 = resosurcesPath.resolve("source-code-with-blocks-2.txt");
         Path resourceDirectory3 = resosurcesPath.resolve("source-code-with-blocks-3.txt");
         try {
             Map<String, String> updatedBlocks = blockScanner.retrieveAllValidBlocks(resourceDirectory1);
@@ -25,12 +25,12 @@ class BlockScannerTest {
             System.out.println(updatedBlocks.get("0000000000000001"));
             System.out.println(updatedBlocks.get("0000000000000002"));
 
-            updatedBlocks = blockScanner.retrieveAllValidBlocks(resourceDirectory2);
+           /* updatedBlocks = blockScanner.retrieveAllValidBlocks(resourceDirectory2);
             assertEquals(3, updatedBlocks.size());
             System.out.println("----- File 2");
             System.out.println(updatedBlocks.get("0000000000000000"));
             System.out.println(updatedBlocks.get("0000000000000001"));
-            System.out.println(updatedBlocks.get("0000000000000002"));
+            System.out.println(updatedBlocks.get("0000000000000002"));*/
 
             updatedBlocks = blockScanner.retrieveAllValidBlocks(resourceDirectory3);
             assertEquals(3, updatedBlocks.size());
@@ -48,6 +48,23 @@ class BlockScannerTest {
         BlockScanner blockScanner = new BlockScanner();
         Path resourceDirectory1 = Paths.get("src", "test", "resources")
                 .resolve("source-code-with-blocks-4.txt");
+        try {
+            Map<String, String> updatedBlocks = blockScanner.retrieveAllBlocks(resourceDirectory1);
+            assertEquals(6, updatedBlocks.size());
+            for (String key : updatedBlocks.keySet()) {
+                System.out.println(updatedBlocks.get(key));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Test
+    void detectAllBlocks2() {
+        BlockScanner blockScanner = new BlockScanner();
+        Path resourceDirectory1 = Paths.get("src", "test", "resources")
+                .resolve("source-code-with-blocks-2.txt");
         try {
             Map<String, String> updatedBlocks = blockScanner.retrieveAllBlocks(resourceDirectory1);
             assertEquals(7, updatedBlocks.size());

@@ -64,7 +64,7 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
 
     @Override
     public List<ContainerToBlock> getContainerToBlockRelations() {
-        String queryTemplate = "MATCH (c:Container)-[r:GET_FIRST_BLOCK]->(b:Block) return c,b";
+        String queryTemplate = "MATCH (c:Container)-[r:POINT_TO]->(b:Block) return c,b";
         //String query = String.format(queryTemplate, productId);
         Iterable<Map<String, Object>> queryResult = Neo4jSessionFactory.getInstance().getNeo4jSession()
                 .query(queryTemplate, Collections.EMPTY_MAP);

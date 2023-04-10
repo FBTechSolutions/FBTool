@@ -134,6 +134,8 @@ public class BlockScanner implements IBlockScanner {
                                         //line = "";
                                         thereIsLine = false;
                                     }
+                                }else{
+                                    throw new Exception("Not valid block");
                                 }
                             } else {
                                 int endPos = getFirstEndMark(line);
