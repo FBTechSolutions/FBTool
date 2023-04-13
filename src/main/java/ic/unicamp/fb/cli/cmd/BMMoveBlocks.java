@@ -38,7 +38,7 @@ public class BMMoveBlocks implements Runnable {
             System.out.println("Fragment source not valid");
             return;
         }
-        Fragment newF = retrieveOrCreateAStandardFragment(fragmentService, newFragmentId, newFragmentId);
+        Fragment newF = retrieveOrCreateAStandardFragment(fragmentService, newFragmentId, newFragmentId, newFragmentId);
 
         BlockService blockService = new BlockServiceImpl();
         List<Block> blocks = blockService.getBlocksByFragment(oldFragmentId);

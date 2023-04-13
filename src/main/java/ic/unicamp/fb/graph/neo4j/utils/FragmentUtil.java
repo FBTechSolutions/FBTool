@@ -16,11 +16,12 @@ public class FragmentUtil {
         return defaultFragment;
     }
 
-    public static Fragment retrieveOrCreateAStandardFragment(FragmentService fragmentService, String fragmentId, String fragmentLabel) {
+    public static Fragment retrieveOrCreateAStandardFragment(FragmentService fragmentService, String fragmentId, String fragmentCode, String fragmentLabel) {
         Fragment standardFragment = fragmentService.getFragmentByID(fragmentId);
         if (standardFragment == null) {
             standardFragment = new Fragment();
             standardFragment.setFragmentId(fragmentId);
+            standardFragment.setFragmentCode(fragmentCode);
             standardFragment.setFragmentLabel(fragmentLabel);
         }
         return standardFragment;

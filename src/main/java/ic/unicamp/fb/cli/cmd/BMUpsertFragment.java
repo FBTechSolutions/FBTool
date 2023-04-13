@@ -15,17 +15,20 @@ public class BMUpsertFragment implements Runnable {
 
     public static final String CMD_NAME = "upsert-fragment";
 
-    @Parameters(index = "0", description = "fragmentId (required)", defaultValue = "")
+    @Parameters(index = "0", description = "fragmentId (e.g., sF019F018)", defaultValue = "")
     String fragmentId;
 
-    @Parameters(index = "1..*")
+    @Parameters(index = "1", description = "fragmentCode (e.g., 000000101)", defaultValue = "")
+    String fragmentCode;
+
+    @Parameters(index = "2..*", description = "fragmentLabel (e.g.,  CallButtons and DirectedCall)", defaultValue = "")
     String[] labelInParts;
 
     @Override
     public void run() {
         String featureLabel = retrieveLabel();
         FragmentService fragmentService = new FragmentServiceImpl();
-        Fragment fragment = FragmentUtil.retrieveOrCreateAStandardFragment(fragmentService, fragmentId, featureLabel);
+        Fragment fragment = FragmentUtil.retrieveOrCreateAStandardFragment(fragmentService, fragmentId, fragmentCode, featureLabel);
         fragmentService.createOrUpdate(fragment);
     }
 
