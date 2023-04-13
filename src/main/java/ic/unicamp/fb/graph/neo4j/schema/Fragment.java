@@ -24,10 +24,13 @@ public class Fragment extends AbstractNode {
     private Long id;
 
     @Property(name = "fragmentId")
-    private String fragmentId;
+    private String fragmentId; // e.g., sF019F018
+
+    @Property(name = "fragmentCode")
+    private String fragmentCode; // e.g., 000000001
 
     @Property(name = "fragmentLabel")
-    private String fragmentLabel;
+    private String fragmentLabel;// e.g., CallButtons and DirectedCall
 
     @Override
     public Long getId() {
