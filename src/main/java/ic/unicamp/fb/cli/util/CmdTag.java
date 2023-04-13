@@ -6,6 +6,7 @@ import ic.unicamp.fb.cli.cmd.BMAnalyze;
 import ic.unicamp.fb.cli.cmd.BMCommit;
 import ic.unicamp.fb.cli.cmd.BMConfigure;
 import ic.unicamp.fb.cli.cmd.BMExit;
+import ic.unicamp.fb.cli.cmd.BMLinkFragments;
 import ic.unicamp.fb.cli.cmd.BMListBlocks;
 import ic.unicamp.fb.cli.cmd.BMListFeatures;
 import ic.unicamp.fb.cli.cmd.BMListFragments;
@@ -33,11 +34,15 @@ public interface CmdTag {
     String CMD_UPSERT_PRODUCT = BMUpsertProduct.CMD_NAME;
     String CMD_UPSERT_FEATURES = BMUpsertFeature.CMD_NAME;
     String CMD_PROJECT_PRODUCT = BMProjectProduct.CMD_NAME;
-    String CMD_TAG_BLOCKS = BMTagBlocks.CMD_NAME;
+
     String CMD_LIST_PRODUCTS = BMListProducts.CMD_NAME;
     String CMD_LIST_FEATURES = BMListFeatures.CMD_NAME;
     String CMD_LIST_FRAGMENTS = BMListFragments.CMD_NAME;
     String CMD_LIST_BLOCKS = BMListBlocks.CMD_NAME;
     String CMD_SYNC = BMSync.CMD_NAME;
     String CMD_MOVE_BLOCKS = BMMoveBlocks.CMD_NAME;
+
+    String CMD_TAG_BLOCKS = BMTagBlocks.CMD_NAME;
+
+    String CMD_LINK_FRAGMENTS = BMLinkFragments.CMD_NAME;
 }
