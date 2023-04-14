@@ -70,7 +70,7 @@ public class BMInspectFiles implements Runnable {
                             fragId = fragment.getFragmentId();
                         }
                     }else{
-                        System.out.println("not fragment to "+ fullBlock.getBlockId() );
+                        System.out.println(" - not fragment associated to "+ fullBlock.getBlockId() );
                     }
                 }
                 String message = String.format("  - block:%s fragment:%s", blockId,

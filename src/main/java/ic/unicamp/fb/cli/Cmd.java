@@ -89,7 +89,6 @@ import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__WELCOME_SPLM;
                 BMTagBlocks.class,
                 BMMapFragments.class,
                 BMInspectFiles.class,
-                BMMapFragments.class,
                 BMUpsertBlockOut.class},
         footer = {"", "launching prompt ...", ""})
 public class Cmd implements Runnable {
