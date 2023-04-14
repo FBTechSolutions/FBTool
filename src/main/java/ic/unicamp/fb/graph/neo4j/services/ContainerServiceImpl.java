@@ -16,44 +16,33 @@ public class ContainerServiceImpl extends GenericService<Container> implements C
         return session.loadAll(Container.class, 1);
     }
 
-    /*  @Override
-      public Container getContainerByID(String productId) {
-        Filter filter = new Filter("containerId", ComparisonOperator.EQUALS, productId);
-        Collection<Container> features = session.loadAll(Container.class, new Filters().add(filter));
-        if (features.size() > 1) {
-          System.out.println("Two IDs for Product is not good");
-        }
-        Iterator<Container> iter = features.iterator();
-        if (iter.hasNext()) {
-          return iter.next();
-        }
-        return null;
-      }*/
     @Override
     public Container getContainerByID(String containerId) {
         Filter filter = new Filter("containerId", ComparisonOperator.EQUALS, containerId);
         Collection<Container> containers = session.loadAll(Container.class, new Filters().add(filter));
         if (containers.size() > 1) {
-            System.out.println("Two IDs for Product is not good");
+            System.out.println("Database corrupted. Two or more IDs for a Container are not allowed.");
         }
         Iterator<Container> iter = containers.iterator();
         if (iter.hasNext()) {
             return iter.next();
         }
+        //print warning
         return null;
     }
 
     @Override
-    public Container getContainerByType(ContainerType type) {
-        Filter filter = new Filter("containerType", ComparisonOperator.EQUALS, type);
+    public Container getContainerByType(ContainerType containerType) {
+        Filter filter = new Filter("containerType", ComparisonOperator.EQUALS, containerType);
         Collection<Container> containers = session.loadAll(Container.class, new Filters().add(filter));
         if (containers.size() > 1) {
-            System.out.println("Two MAIN is not good");
+            System.out.println("Database corrupted. Two or more MAIN Containers are not allowed.");
         }
         Iterator<Container> iter = containers.iterator();
         if (iter.hasNext()) {
             return iter.next();
         }
+        //print warning
         return null;
     }
 

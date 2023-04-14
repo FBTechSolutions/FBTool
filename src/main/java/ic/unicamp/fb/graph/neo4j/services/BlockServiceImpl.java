@@ -28,37 +28,37 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
     }
 
     @Override
-    public Block getBlockByID(String productId) {
-        Filter filter = new Filter("blockId", ComparisonOperator.EQUALS, productId);
+    public Block getBlockByID(String blockId) {
+        Filter filter = new Filter("blockId", ComparisonOperator.EQUALS, blockId);
         Collection<Block> features = session.loadAll(Block.class, new Filters().add(filter));
         if (features.size() > 1) {
-            System.out.println("Two IDs for Product is not good");
+            System.out.println("Database corrupted. Two or more IDs for a Block are not allowed.");
         }
         Iterator<Block> iter = features.iterator();
         if (iter.hasNext()) {
             return iter.next();
         }
+        //print warning
         return null;
     }
 
 
     @Override
-    public List<Block> getBlockByVCBlockState(DataState dataState) {
+    public List<Block> getBlockByVCBlockState(DataState vcBlockState) {
         BlockService blockService = new BlockServiceImpl();
-        System.out.println("Enter Query");
         String queryTemplate = "MATCH (b:Block{vcBlockState: '%s'}) return b";
-        String query = String.format(queryTemplate, dataState);
+        String query = String.format(queryTemplate, vcBlockState);
         System.out.println(query);
         Iterable<Map<String, Object>> queryResult = Neo4jSessionFactory.getInstance().getNeo4jSession()
                 .query(query, Collections.EMPTY_MAP);
-        System.out.println(queryResult);
         List<Block> result = new LinkedList<>();
         queryResult.forEach(map -> {
             Block block = (Block) map.get("b");
-            Block blockWithRelations = blockService.getBlockByID(
-                    block.getBlockId()); // to optimized, relations is not saved
-            result.add(blockWithRelations);
-            System.out.println(blockWithRelations.getBlockId());
+            if (block != null) {
+                Block fullBlock = blockService.getBlockByID(
+                        block.getBlockId());
+                result.add(fullBlock);
+            }
         });
         return result;
     }
@@ -66,12 +66,10 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
     @Override
     public List<ContainerToBlock> getContainerToBlockRelations() {
         String queryTemplate = "MATCH (c:Container)-[r:POINT_TO]->(b:Block) return c,b";
-        //String query = String.format(queryTemplate, productId);
         Iterable<Map<String, Object>> queryResult = Neo4jSessionFactory.getInstance().getNeo4jSession()
                 .query(queryTemplate, Collections.EMPTY_MAP);
         List<ContainerToBlock> result = new LinkedList<>();
         queryResult.forEach(map -> {
-            //ContainerToBlock relation = (ContainerToBlock)map.get("r");
             Container container = (Container) map.get("c");
             Block block = (Block) map.get("b");
             ContainerToBlock rel = new ContainerToBlock();
@@ -83,37 +81,38 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
     }
 
     @Override
-    public List<Block> getBlocksByFile(String pathFile) {
+    public List<Block> getBlocksByFile(String pathToFile) {
         ContainerService containerService = new ContainerServiceImpl();
         BlockService blockService = new BlockServiceImpl();
 
-        LinkedList<Block> blocks = Lists.newLinkedList();
+        LinkedList<Block> linkedBlocks = Lists.newLinkedList();
 
-        Container fullContainer = containerService.getContainerByID(pathFile);
-        ContainerToBlock containerToBlockRelation = fullContainer.getBlock();
-        Block simpleBlock = containerToBlockRelation.getEndBlock();
+        Container fullContainer = containerService.getContainerByID(pathToFile);
+        ContainerToBlock containerToBlock = fullContainer.getBlock();
+        Block simpleBlock = containerToBlock.getEndBlock();
         Block initialFullBlock = blockService.getBlockByID(simpleBlock.getBlockId());
-        blocks.add(initialFullBlock);
-        BlockToBlock blockToBlockRelation = initialFullBlock.getGoNextBlock();
-        while (blockToBlockRelation != null && blockToBlockRelation.getEndBlock() != null) {
-            Block simpleNextBlock = blockToBlockRelation.getEndBlock();
+
+        linkedBlocks.add(initialFullBlock);
+        BlockToBlock blocktoBlock = initialFullBlock.getGoNextBlock();
+        while (blocktoBlock != null && blocktoBlock.getEndBlock() != null) {
+            Block simpleNextBlock = blocktoBlock.getEndBlock();
             Block fullNewBlock = blockService.getBlockByID(simpleNextBlock.getBlockId());
-            blocks.add(fullNewBlock);
-            blockToBlockRelation = fullNewBlock.getGoNextBlock();
+            linkedBlocks.add(fullNewBlock);
+            blocktoBlock = fullNewBlock.getGoNextBlock();
         }
-        return blocks;
+        return linkedBlocks;
     }
 
     @Override
-    public Block getFirstBlockByFile(String pathFile) {
-        //LinkedList<Block> blocks = Lists.newLinkedList();
+    public Block getFirstBlockByFile(String pathToFile) {
         ContainerService containerService = new ContainerServiceImpl();
-        Container container = containerService.getContainerByID(pathFile);
-        ContainerToBlock blockRelation = container.getBlock();
-        Block block = blockRelation.getEndBlock();
         BlockService blockService = new BlockServiceImpl();
-        Block initial = blockService.getBlockByID(block.getBlockId());
-        return initial;
+
+        Container fullContainer = containerService.getContainerByID(pathToFile);
+        ContainerToBlock containerToBlock = fullContainer.getBlock();
+        Block simpleBlock = containerToBlock.getEndBlock();
+        Block initialFullBlock = blockService.getBlockByID(simpleBlock.getBlockId());
+        return initialFullBlock;
     }
 
     @Override
@@ -124,15 +123,16 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
     @Override
     public List<Block> getBlocksByFragment(String oldFragmentId) {
         String queryTemplate = "MATCH (b:Block)-[r:ASSOCIATED_TO]->(f:Fragment) return b,f";
-        //String query = String.format(queryTemplate, productId);
         Iterable<Map<String, Object>> queryResult = Neo4jSessionFactory.getInstance().getNeo4jSession()
                 .query(queryTemplate, Collections.EMPTY_MAP);
         List<Block> result = new LinkedList<>();
         queryResult.forEach(map -> {
             Fragment fragment = (Fragment) map.get("f");
             Block block = (Block) map.get("b");
-            if (fragment.getFragmentId().equals(oldFragmentId)) {
-                result.add(block);
+            if (fragment != null && block != null) {
+                if (fragment.getFragmentId().equals(oldFragmentId)) {
+                    result.add(block);
+                }
             }
         });
         return result;

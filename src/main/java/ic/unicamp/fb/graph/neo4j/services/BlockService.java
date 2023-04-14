@@ -8,16 +8,16 @@ import java.util.List;
 
 public interface BlockService extends Service<Block> {
 
-    Block getBlockByID(String productId);
+    Block getBlockByID(String blockId);
     //Block getBlockByID(String productId, int depth);
 
-    List<Block> getBlockByVCBlockState(DataState dataState);
+    List<Block> getBlockByVCBlockState(DataState vcBlockState);
 
     List<ContainerToBlock> getContainerToBlockRelations();
 
-    List<Block> getBlocksByFile(String pathFile);
+    List<Block> getBlocksByFile(String pathToFile);
 
-    Block getFirstBlockByFile(String pathFile);
+    Block getFirstBlockByFile(String pathToFile);
 
     List<Block> getBlocksByFragment(String oldFeatureId);
 }

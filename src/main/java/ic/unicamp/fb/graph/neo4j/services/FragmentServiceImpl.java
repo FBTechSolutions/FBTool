@@ -21,16 +21,17 @@ public class FragmentServiceImpl extends GenericService<Fragment> implements Fra
     }
 
     @Override
-    public Fragment getFragmentByID(String featureId) {
-        Filter filter = new Filter("fragmentId", ComparisonOperator.EQUALS, featureId);
+    public Fragment getFragmentByID(String fragmentId) {
+        Filter filter = new Filter("fragmentId", ComparisonOperator.EQUALS, fragmentId);
         Collection<Fragment> fragments = session.loadAll(Fragment.class, new Filters().add(filter));
         if (fragments.size() > 1) {
-            System.out.println("Two IDs for Product is not good");
+            System.out.println("Database corrupted. Two or more IDs for a Fragment are not allowed.");
         }
         Iterator<Fragment> iter = fragments.iterator();
         if (iter.hasNext()) {
             return iter.next();
         }
+        //print warning
         return null;
     }
 

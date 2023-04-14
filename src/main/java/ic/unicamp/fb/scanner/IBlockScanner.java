@@ -8,7 +8,9 @@ public interface IBlockScanner {
     //Vector
     Map<String, String> retrieveAllValidBlocks(Path pathFile) throws Exception;
 
-    Map<String, String> retrieveUpdatedBlocks(Path pathFile) throws Exception;
+    Map<String, String> retrieveAllBlocks(Path pathFile) throws Exception;
+
+/*    Map<String, String> retrieveUpdatedBlocks(Path pathFile) throws Exception;*/
 
     Map<String, String> createInitialBlocks(Path pathFile);
 

@@ -19,26 +19,17 @@ public class ProductServiceImpl extends GenericService<Product> implements Produ
     }
 
     @Override
-    public Iterable<Map<String, Object>> getStudyBuddiesByPopularity() {
-        //String query = "MATCH (s:Feature)<-[:ASSOCIATED_TO]-(p:Product) return p, count(s) as buddies ORDER BY buddies DESC";
-        String query = "MATCH (s:Feature)<-[:ASSOCIATED_TO]-(p:Product) return p";
-        return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query, Collections.EMPTY_MAP);
-    }
-
-    @Override
     public Product getProductByID(String productId) {
-   /* String queryTemplate = "MATCH (p:Product {productId: '%s'}) return p";
-    String query = String.format(queryTemplate, productId);
-    return Neo4jSessionFactory.getInstance().getNeo4jSession().query(query, Collections.EMPTY_MAP);*/
         Filter filter = new Filter("productId", ComparisonOperator.EQUALS, productId);
         Collection<Product> products = session.loadAll(Product.class, new Filters().add(filter));
         if (products.size() > 1) {
-            System.out.println("Two IDs for Product is not good");
+            System.out.println("Database corrupted. Two or more IDs for a Product are not allowed.");
         }
         Iterator<Product> iter = products.iterator();
         if (iter.hasNext()) {
             return iter.next();
         }
+        //print warning
         return null;
     }
 

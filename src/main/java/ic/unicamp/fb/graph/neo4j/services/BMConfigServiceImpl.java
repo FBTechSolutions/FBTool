@@ -22,12 +22,13 @@ public class BMConfigServiceImpl extends GenericService<FBToolConfiguration> imp
         Filter filter = new Filter("configId", ComparisonOperator.EQUALS, BM_CONFIG_ID);
         Collection<FBToolConfiguration> features = session.loadAll(FBToolConfiguration.class, new Filters().add(filter));
         if (features.size() > 1) {
-            System.out.println("Two IDs for Product is not good");
+            System.out.println("Database corrupted. Two or more IDs for a Configuration are not allowed.");
         }
         Iterator<FBToolConfiguration> iter = features.iterator();
         if (iter.hasNext()) {
             return iter.next();
         }
+        //print warning
         return null;
     }
 

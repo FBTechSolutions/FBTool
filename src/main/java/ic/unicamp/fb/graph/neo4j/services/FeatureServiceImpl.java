@@ -25,12 +25,13 @@ public class FeatureServiceImpl extends GenericService<Feature> implements Featu
         Filter filter = new Filter("featureId", ComparisonOperator.EQUALS, featureId);
         Collection<Feature> features = session.loadAll(Feature.class, new Filters().add(filter));
         if (features.size() > 1) {
-            System.out.println("Two IDs for Product is not good");
+            System.out.println("Database corrupted. Two or more IDs for a Feature are not allowed.");
         }
         Iterator<Feature> iter = features.iterator();
         if (iter.hasNext()) {
             return iter.next();
         }
+        //print warning
         return null;
     }
 
