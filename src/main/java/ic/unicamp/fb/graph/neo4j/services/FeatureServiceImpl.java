@@ -45,7 +45,8 @@ public class FeatureServiceImpl extends GenericService<Feature> implements Featu
         List<Feature> result = new LinkedList<>();
         queryResult.forEach(map -> {
             Feature feature = (Feature) map.get("f");
-            result.add(feature);
+            Feature fullFeature = getFeatureByID(feature.getFeatureId());
+            result.add(fullFeature);
         });
         return result;
     }

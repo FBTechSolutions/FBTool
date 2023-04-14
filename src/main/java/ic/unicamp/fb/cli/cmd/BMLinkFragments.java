@@ -28,8 +28,8 @@ public class BMLinkFragments implements Runnable {
     @Override
     public void run() {
         FeatureService featureService = new FeatureServiceImpl();
-        Feature feature = featureService.getFeatureByID(featureId);
-        if (feature == null) {
+        Feature fullFeature = featureService.getFeatureByID(featureId);
+        if (fullFeature == null) {
             System.out.println("No Feature with the given ID could be found");
             return;
         }
@@ -41,18 +41,18 @@ public class BMLinkFragments implements Runnable {
         FragmentService fragmentService = new FragmentServiceImpl();
         List<FeatureToFragment> relations = new ArrayList<>();
         for (String fragmentId : fragmentList) {
-            Fragment fragment = fragmentService.getFragmentByID(fragmentId);
-            if (fragment == null) {
+            Fragment fullFragment = fragmentService.getFragmentByID(fragmentId);
+            if (fullFragment == null) {
                 String message = String.format("No Fragment with the given ID (%s) could be found", fragmentId);
                 System.out.println(message);
             } else {
                 FeatureToFragment relation = new FeatureToFragment();
-                relation.setStartFeature(feature);
-                relation.setEndFragment(fragment);
+                relation.setStartFeature(fullFeature);
+                relation.setEndFragment(fullFragment);
                 relations.add(relation);
             }
         }
-        feature.setAssociatedTo(relations);
-        featureService.createOrUpdate(feature);
+        fullFeature.setAssociatedTo(relations);
+        featureService.createOrUpdate(fullFeature);
     }
 }

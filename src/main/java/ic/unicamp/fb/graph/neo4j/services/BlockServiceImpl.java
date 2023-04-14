@@ -44,7 +44,7 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
 
     @Override
     public List<Block> getBlockByVCBlockState(DataState vcBlockState) {
-        BlockService blockService = new BlockServiceImpl();
+
         String queryTemplate = "MATCH (b:Block{vcBlockState: '%s'}) return b";
         String query = String.format(queryTemplate, vcBlockState);
         System.out.println(query);
@@ -54,7 +54,7 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
         queryResult.forEach(map -> {
             Block block = (Block) map.get("b");
             if (block != null) {
-                Block fullBlock = blockService.getBlockByID(
+                Block fullBlock = getBlockByID(
                         block.getBlockId());
                 result.add(fullBlock);
             }
@@ -64,6 +64,7 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
 
     @Override
     public List<ContainerToBlock> getContainerToBlockRelations() {
+        ContainerService containerService = new ContainerServiceImpl();
         String queryTemplate = "MATCH (c:Container)-[r:POINT_TO]->(b:Block) return c,b";
         Iterable<Map<String, Object>> queryResult = Neo4jSessionFactory.getInstance().getNeo4jSession()
                 .query(queryTemplate, Collections.EMPTY_MAP);
@@ -71,9 +72,12 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
         queryResult.forEach(map -> {
             Container container = (Container) map.get("c");
             Block block = (Block) map.get("b");
+            Container fullContainer = containerService.getContainerByID(container.getContainerId());
+            Block fullBlock = getBlockByID(block.getBlockId());
+
             ContainerToBlock rel = new ContainerToBlock();
-            rel.setStartContainer(container);
-            rel.setEndBlock(block);
+            rel.setStartContainer(fullContainer);
+            rel.setEndBlock(fullBlock);
             result.add(rel);
         });
         return result;
@@ -121,7 +125,7 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
 
     @Override
     public List<Block> getBlocksByFragment(String oldFragmentId) {
-        BlockService blockService = new BlockServiceImpl();
+
         String queryTemplate = "MATCH (b:Block)-[r:ASSOCIATED_TO]->(f:Fragment) return b,f";
         Iterable<Map<String, Object>> queryResult = Neo4jSessionFactory.getInstance().getNeo4jSession()
                 .query(queryTemplate, Collections.EMPTY_MAP);
@@ -131,7 +135,7 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
             Fragment fragment = (Fragment) map.get("f");
             if (fragment != null && block != null) {
                 if (fragment.getFragmentId().equals(oldFragmentId)) {
-                    Block fullBlock = blockService.getBlockByID(
+                    Block fullBlock = getBlockByID(
                             block.getBlockId());
                     result.add(fullBlock);
                 }

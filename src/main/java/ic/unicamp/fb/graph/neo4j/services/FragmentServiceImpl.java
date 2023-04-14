@@ -45,7 +45,8 @@ public class FragmentServiceImpl extends GenericService<Fragment> implements Fra
         List<Fragment> result = new LinkedList<>();
         queryResult.forEach(map -> {
             Fragment fragment = (Fragment) map.get("f");
-            result.add(fragment);
+            Fragment fullFragment = getFragmentByID(fragment.getFragmentId());
+            result.add(fullFragment);
         });
         return result;
     }
