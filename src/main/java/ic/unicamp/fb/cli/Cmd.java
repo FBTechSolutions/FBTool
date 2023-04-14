@@ -17,6 +17,7 @@ import ic.unicamp.fb.cli.cmd.BMMoveBlocks;
 import ic.unicamp.fb.cli.cmd.BMProjectProduct;
 import ic.unicamp.fb.cli.cmd.BMSync;
 import ic.unicamp.fb.cli.cmd.BMTagBlocks;
+import ic.unicamp.fb.cli.cmd.BMUpsertBlockOut;
 import ic.unicamp.fb.cli.cmd.BMUpsertFeature;
 import ic.unicamp.fb.cli.cmd.BMUpsertFragment;
 import ic.unicamp.fb.cli.cmd.BMUpsertProduct;
@@ -47,6 +48,7 @@ import static ic.unicamp.fb.cli.util.CmdTag.CMD_MOVE_BLOCKS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_PROJECT_PRODUCT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_SYNC;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_TAG_BLOCKS;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_UPSERT_BLOCK_OUT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_UPSERT_FEATURES;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_UPSERT_FRAGMENT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_UPSERT_PRODUCT;
@@ -87,7 +89,8 @@ import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__WELCOME_SPLM;
                 BMTagBlocks.class,
                 BMMapFragments.class,
                 BMInspectFiles.class,
-                BMMapFragments.class},
+                BMMapFragments.class,
+                BMUpsertBlockOut.class},
         footer = {"", "launching prompt ...", ""})
 public class Cmd implements Runnable {
 
@@ -207,6 +210,10 @@ public class Cmd implements Runnable {
                     }
                     case CMD_INSPECT_FILES -> {
                         CommandLine commandLine = new CommandLine(new BMInspectFiles());
+                        __executeCmd(inputs, commandLine);
+                    }
+                    case CMD_UPSERT_BLOCK_OUT -> {
+                        CommandLine commandLine = new CommandLine(new BMUpsertBlockOut());
                         __executeCmd(inputs, commandLine);
                     }
                     default -> __printCmdNotValid();

@@ -17,6 +17,7 @@ import ic.unicamp.fb.cli.cmd.BMMoveBlocks;
 import ic.unicamp.fb.cli.cmd.BMProjectProduct;
 import ic.unicamp.fb.cli.cmd.BMSync;
 import ic.unicamp.fb.cli.cmd.BMTagBlocks;
+import ic.unicamp.fb.cli.cmd.BMUpsertBlockOut;
 import ic.unicamp.fb.cli.cmd.BMUpsertFeature;
 import ic.unicamp.fb.cli.cmd.BMUpsertFragment;
 import ic.unicamp.fb.cli.cmd.BMUpsertProduct;
@@ -52,4 +53,5 @@ public interface CmdTag {
 
     String CMD_MAP_FRAGMENTS = BMMapFragments.CMD_NAME;
     String CMD_INSPECT_FILES = BMInspectFiles.CMD_NAME;
+    String CMD_UPSERT_BLOCK_OUT = BMUpsertBlockOut.CMD_NAME;
 }
