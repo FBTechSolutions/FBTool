@@ -6,9 +6,11 @@ import ic.unicamp.fb.cli.cmd.BMAnalyze;
 import ic.unicamp.fb.cli.cmd.BMCommit;
 import ic.unicamp.fb.cli.cmd.BMConfigure;
 import ic.unicamp.fb.cli.cmd.BMExit;
+import ic.unicamp.fb.cli.cmd.BMInspectFiles;
 import ic.unicamp.fb.cli.cmd.BMLinkFragments;
 import ic.unicamp.fb.cli.cmd.BMListBlocks;
 import ic.unicamp.fb.cli.cmd.BMListFeatures;
+import ic.unicamp.fb.cli.cmd.BMListFiles;
 import ic.unicamp.fb.cli.cmd.BMListFragments;
 import ic.unicamp.fb.cli.cmd.BMListProducts;
 import ic.unicamp.fb.cli.cmd.BMMoveBlocks;
@@ -39,6 +41,7 @@ import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_BLOCKS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_FEATURES;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_FRAGMENTS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_PRODUCTS;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_FILES;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_MOVE_BLOCKS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_PROJECT_PRODUCT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_SYNC;
@@ -47,6 +50,7 @@ import static ic.unicamp.fb.cli.util.CmdTag.CMD_UPSERT_FEATURES;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_UPSERT_FRAGMENT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_UPSERT_PRODUCT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_VERSION;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_INSPECT_FILES;
 import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__BM_ASCII;
 import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__CMD_ACCEPTED;
 import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__CMD_END;
@@ -77,10 +81,12 @@ import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__WELCOME_SPLM;
                 BMListFeatures.class,
                 BMListFragments.class,
                 BMListBlocks.class,
+                BMListFiles.class,
                 BMSync.class,
                 BMMoveBlocks.class,
                 BMTagBlocks.class,
-                BMLinkFragments.class},
+                BMLinkFragments.class,
+                BMInspectFiles.class},
         footer = {"", "launching prompt ...", ""})
 public class Cmd implements Runnable {
 
@@ -178,6 +184,10 @@ public class Cmd implements Runnable {
                         CommandLine commandLine = new CommandLine(new BMListBlocks());
                         __executeCmd(inputs, commandLine);
                     }
+                    case CMD_LIST_FILES -> {
+                        CommandLine commandLine = new CommandLine(new BMListFiles());
+                        __executeCmd(inputs, commandLine);
+                    }
                     case CMD_SYNC -> {
                         CommandLine commandLine = new CommandLine(new BMSync());
                         __executeCmd(inputs, commandLine);
@@ -192,6 +202,10 @@ public class Cmd implements Runnable {
                     }
                     case CMD_LINK_FRAGMENTS -> {
                         CommandLine commandLine = new CommandLine(new BMLinkFragments());
+                        __executeCmd(inputs, commandLine);
+                    }
+                    case CMD_INSPECT_FILES -> {
+                        CommandLine commandLine = new CommandLine(new BMInspectFiles());
                         __executeCmd(inputs, commandLine);
                     }
                     default -> __printCmdNotValid();
