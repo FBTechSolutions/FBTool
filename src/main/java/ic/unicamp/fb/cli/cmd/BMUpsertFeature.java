@@ -6,6 +6,8 @@ import ic.unicamp.fb.graph.neo4j.services.FeatureServiceImpl;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 
+import static ic.unicamp.fb.cli.util.CommonUtil.retrieveStringFromPieces;
+
 //ok
 @Command(
         name = BMUpsertFeature.CMD_NAME,
@@ -34,14 +36,6 @@ public class BMUpsertFeature implements Runnable {
     }
 
     private String retrieveLabel() {
-        String featureLabel = "";
-        if (labelInParts != null) {
-            StringBuilder sb = new StringBuilder();
-            for (String s : labelInParts) {
-                sb.append(s);
-            }
-            featureLabel = sb.toString();
-        }
-        return featureLabel;
+        return retrieveStringFromPieces(labelInParts);
     }
 }
