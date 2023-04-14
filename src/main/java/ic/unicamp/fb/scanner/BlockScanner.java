@@ -49,9 +49,9 @@ public class BlockScanner implements IBlockScanner {
         return sha256hex1.equals(sha256hex2);
     }
 
-    private Map<String, String> retrieveOriginalBlocks(Path pathFile) {
+/*    private Map<String, String> retrieveOriginalBlocks(Path pathFile) {
         return new HashMap<>();
-    }
+    }*/
 
     @Override
     public Map<String, String> createInitialBlocks(Path pathFile) {
