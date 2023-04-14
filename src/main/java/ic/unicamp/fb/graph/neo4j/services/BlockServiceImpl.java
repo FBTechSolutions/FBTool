@@ -121,16 +121,19 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
 
     @Override
     public List<Block> getBlocksByFragment(String oldFragmentId) {
+        BlockService blockService = new BlockServiceImpl();
         String queryTemplate = "MATCH (b:Block)-[r:ASSOCIATED_TO]->(f:Fragment) return b,f";
         Iterable<Map<String, Object>> queryResult = Neo4jSessionFactory.getInstance().getNeo4jSession()
                 .query(queryTemplate, Collections.EMPTY_MAP);
         List<Block> result = new LinkedList<>();
         queryResult.forEach(map -> {
-            Fragment fragment = (Fragment) map.get("f");
             Block block = (Block) map.get("b");
+            Fragment fragment = (Fragment) map.get("f");
             if (fragment != null && block != null) {
                 if (fragment.getFragmentId().equals(oldFragmentId)) {
-                    result.add(block);
+                    Block fullBlock = blockService.getBlockByID(
+                            block.getBlockId());
+                    result.add(fullBlock);
                 }
             }
         });

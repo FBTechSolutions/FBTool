@@ -217,7 +217,7 @@ public class BMProjectProduct implements Runnable {
       }*/
     private void projectRawFiles(Map<String, List<String>> map, boolean clean, Path path)
             throws IOException {
-        System.out.println("Enter Project Files");
+        System.out.println("Projecting Raw files ...");
         for (String filePath : map.keySet()) {
             Path productRepository = Paths.get(String.valueOf(path), filePath);
             File file = new File(String.valueOf(productRepository));

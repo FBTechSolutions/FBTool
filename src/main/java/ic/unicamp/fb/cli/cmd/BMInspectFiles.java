@@ -64,9 +64,13 @@ public class BMInspectFiles implements Runnable {
                 Block fullBlock = blockService.getBlockByID(blockId);
                 if (fullBlock != null) {
                     BlockToFragment relation = fullBlock.getAssociatedTo();
-                    Fragment fragment = relation.getEndFragment();
-                    if (fragment != null) {
-                        fragId = fragment.getFragmentId();
+                    if (relation != null) {
+                        Fragment fragment = relation.getEndFragment();
+                        if (fragment != null) {
+                            fragId = fragment.getFragmentId();
+                        }
+                    }else{
+                        System.out.println("not fragment to "+ fullBlock.getBlockId() );
                     }
                 }
                 String message = String.format("  - block:%s fragment:%s", blockId,
