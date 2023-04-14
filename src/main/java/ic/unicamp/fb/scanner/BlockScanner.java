@@ -8,11 +8,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Stack;
-import java.util.UUID;
 
 public class BlockScanner implements IBlockScanner {
 
@@ -134,7 +132,7 @@ public class BlockScanner implements IBlockScanner {
                                         //line = "";
                                         thereIsLine = false;
                                     }
-                                }else{
+                                } else {
                                     throw new Exception("Not valid block");
                                 }
                             } else {

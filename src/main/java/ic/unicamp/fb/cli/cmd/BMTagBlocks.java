@@ -43,7 +43,7 @@ public class BMTagBlocks implements Runnable {
                 System.out.println(message);
             } else {
                 BlockToFragment blockToFragment = fullBlock.getAssociatedTo();
-                if(blockToFragment==null){
+                if (blockToFragment == null) {
                     blockToFragment = new BlockToFragment();
                     blockToFragment.setStartBlock(fullBlock);
                 }

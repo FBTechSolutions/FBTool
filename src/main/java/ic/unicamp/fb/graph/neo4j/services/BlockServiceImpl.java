@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import ic.unicamp.fb.graph.neo4j.factory.Neo4jSessionFactory;
 import ic.unicamp.fb.graph.neo4j.schema.Block;
 import ic.unicamp.fb.graph.neo4j.schema.Container;
-import ic.unicamp.fb.graph.neo4j.schema.Feature;
 import ic.unicamp.fb.graph.neo4j.schema.Fragment;
 import ic.unicamp.fb.graph.neo4j.schema.enums.DataState;
 import ic.unicamp.fb.graph.neo4j.schema.relations.BlockToBlock;

@@ -12,8 +12,6 @@ import picocli.CommandLine.Parameters;
 
 import java.util.List;
 
-import static ic.unicamp.fb.graph.neo4j.utils.FragmentUtil.retrieveOrCreateAStandardFragment;
-
 @Command(
         name = BMMoveBlocks.CMD_NAME,
         description = "This command will add the blocks from the temporal folder to the real folder")
@@ -50,7 +48,7 @@ public class BMMoveBlocks implements Runnable {
         for (Block block : blocks) {
             Block fullBlock = blockService.getBlockByID(block.getBlockId());
             BlockToFragment blockToFragment = fullBlock.getAssociatedTo();
-            if(blockToFragment==null){
+            if (blockToFragment == null) {
                 blockToFragment = new BlockToFragment();
                 blockToFragment.setStartBlock(fullBlock);
             }
