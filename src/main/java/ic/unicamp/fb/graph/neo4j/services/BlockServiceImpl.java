@@ -7,6 +7,7 @@ import ic.unicamp.fb.graph.neo4j.schema.Container;
 import ic.unicamp.fb.graph.neo4j.schema.Feature;
 import ic.unicamp.fb.graph.neo4j.schema.Fragment;
 import ic.unicamp.fb.graph.neo4j.schema.enums.DataState;
+import ic.unicamp.fb.graph.neo4j.schema.relations.BlockToBlock;
 import ic.unicamp.fb.graph.neo4j.schema.relations.ContainerToBlock;
 import org.neo4j.ogm.cypher.ComparisonOperator;
 import org.neo4j.ogm.cypher.Filter;
@@ -83,18 +84,22 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
 
     @Override
     public List<Block> getBlocksByFile(String pathFile) {
-        LinkedList<Block> blocks = Lists.newLinkedList();
         ContainerService containerService = new ContainerServiceImpl();
-        Container container = containerService.getContainerByID(pathFile);
-        ContainerToBlock blockRelation = container.getBlock();
-        Block block = blockRelation.getEndBlock();
         BlockService blockService = new BlockServiceImpl();
-        Block initial = blockService.getBlockByID(block.getBlockId());
-        blocks.add(initial);
-        while (initial.getGoNextBlock() != null && initial.getGoNextBlock().getEndBlock() != null) {
-            Block newBlock = initial.getGoNextBlock().getEndBlock();
-            initial = newBlock;
-            blocks.add(newBlock);
+
+        LinkedList<Block> blocks = Lists.newLinkedList();
+
+        Container fullContainer = containerService.getContainerByID(pathFile);
+        ContainerToBlock containerToBlockRelation = fullContainer.getBlock();
+        Block simpleBlock = containerToBlockRelation.getEndBlock();
+        Block initialFullBlock = blockService.getBlockByID(simpleBlock.getBlockId());
+        blocks.add(initialFullBlock);
+        BlockToBlock blockToBlockRelation = initialFullBlock.getGoNextBlock();
+        while (blockToBlockRelation != null && blockToBlockRelation.getEndBlock() != null) {
+            Block simpleNextBlock = blockToBlockRelation.getEndBlock();
+            Block fullNewBlock = blockService.getBlockByID(simpleNextBlock.getBlockId());
+            blocks.add(fullNewBlock);
+            blockToBlockRelation = fullNewBlock.getGoNextBlock();
         }
         return blocks;
     }

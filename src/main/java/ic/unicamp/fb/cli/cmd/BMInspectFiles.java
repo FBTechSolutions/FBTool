@@ -3,6 +3,7 @@ package ic.unicamp.fb.cli.cmd;
 import ic.unicamp.fb.graph.neo4j.schema.Block;
 import ic.unicamp.fb.graph.neo4j.schema.Container;
 import ic.unicamp.fb.graph.neo4j.schema.Fragment;
+import ic.unicamp.fb.graph.neo4j.schema.enums.ContainerType;
 import ic.unicamp.fb.graph.neo4j.schema.relations.BlockToFragment;
 import ic.unicamp.fb.graph.neo4j.services.BlockService;
 import ic.unicamp.fb.graph.neo4j.services.BlockServiceImpl;
@@ -23,30 +24,57 @@ public class BMInspectFiles implements Runnable {
     @CommandLine.Parameters(index = "0..*")
     String[] filesIds;
 
+    @CommandLine.Option(names = "-all", defaultValue = "false")
+    boolean all;
+
     @Override
     public void run() {
         System.out.println("Inspecting files..");
 
         ContainerService containerService = new ContainerServiceImpl();
         BlockService blockService = new BlockServiceImpl();
-        for (String filesId : filesIds) {
-            Container container = containerService.getContainerByID(filesId);
-            if (container != null) {
-                List<Block> blocks = blockService.getBlocksByFile(filesId);
-                for (Block block : blocks) {
-                    String fragId = "";
-                    BlockToFragment relation = block.getAssociatedTo();
+        if (all) {
+            for (Container container : containerService.findAll()) {
+                if (container.getContainerType() == ContainerType.FILE) {
+                    String fileId = container.getContainerId();
+                    printFileId(fileId);
+                    inspectAFile(containerService, blockService, fileId);
+                }
+            }
+        } else {
+            for (String fileId : filesIds) {
+                printFileId(fileId);
+                inspectAFile(containerService, blockService, fileId);
+            }
+        }
+    }
+
+    private static void printFileId(String fileId) {
+        String message = String.format("- file:%s :", fileId);
+        System.out.println(message);
+    }
+
+    private static void inspectAFile(ContainerService containerService, BlockService blockService, String fileId) {
+        Container fullContainer = containerService.getContainerByID(fileId);
+        if (fullContainer != null) {
+            List<Block> blocks = blockService.getBlocksByFile(fileId);
+            for (Block block : blocks) {
+                String blockId = block.getBlockId();
+                String fragId = "";
+                Block fullBlock = blockService.getBlockByID(blockId);
+                if (fullBlock != null) {
+                    BlockToFragment relation = fullBlock.getAssociatedTo();
                     Fragment fragment = relation.getEndFragment();
                     if (fragment != null) {
                         fragId = fragment.getFragmentId();
                     }
-                    String message = String.format("- block:%s fragment:%s", block.getBlockId(),
-                            fragId);
-                    System.out.println(message);
                 }
-            } else {
-                System.out.println(filesId + " file not found in the database");
+                String message = String.format("  - block:%s fragment:%s", blockId,
+                        fragId);
+                System.out.println(message);
             }
+        } else {
+            System.out.println(fileId + " file not found in the database");
         }
     }
 }
