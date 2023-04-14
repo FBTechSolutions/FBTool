@@ -25,8 +25,8 @@ public class BMTagBlocks implements Runnable {
     @Override
     public void run() {
         FragmentService fragmentService = new FragmentServiceImpl();
-        Fragment fragment = fragmentService.getFragmentByID(fragmentId);
-        if (fragment == null) {
+        Fragment fullFragment = fragmentService.getFragmentByID(fragmentId);
+        if (fullFragment == null) {
             System.out.println("No Fragment with the given ID could be found");
             return;
         }
@@ -37,16 +37,20 @@ public class BMTagBlocks implements Runnable {
 
         BlockService blockService = new BlockServiceImpl();
         for (String blockId : blockList) {
-            Block block = blockService.getBlockByID(blockId);
-            if (block == null) {
+            Block fullBlock = blockService.getBlockByID(blockId);
+            if (fullBlock == null) {
                 String message = String.format("No Block with the given ID (%s) could be found", blockId);
                 System.out.println(message);
             } else {
-                BlockToFragment relation = new BlockToFragment();
-                relation.setStartBlock(block);
-                relation.setEndFragment(fragment);
-                block.setAssociatedTo(relation);
-                blockService.createOrUpdate(block);
+                BlockToFragment blockToFragment = fullBlock.getAssociatedTo();
+                if(blockToFragment==null){
+                    blockToFragment = new BlockToFragment();
+                    blockToFragment.setStartBlock(fullBlock);
+                }
+                blockToFragment.setEndFragment(fullFragment);
+
+                fullBlock.setAssociatedTo(blockToFragment);
+                blockService.createOrUpdate(fullBlock);
                 String message = String.format("Block %s tagged", blockId);
                 System.out.println(message);
             }

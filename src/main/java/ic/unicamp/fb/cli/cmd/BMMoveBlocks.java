@@ -33,22 +33,31 @@ public class BMMoveBlocks implements Runnable {
         }
         FragmentService fragmentService = new FragmentServiceImpl();
 
-        Fragment oldF = fragmentService.getFragmentByID(oldFragmentId);
-        if (oldF == null) {
+        Fragment oldFullFragment = fragmentService.getFragmentByID(oldFragmentId);
+        if (oldFullFragment == null) {
             System.out.println("Fragment source not valid");
             return;
         }
-        Fragment newF = retrieveOrCreateAStandardFragment(fragmentService, newFragmentId, newFragmentId, newFragmentId);
+        Fragment newFullFragment = fragmentService.getFragmentByID(newFragmentId);
+        if (newFullFragment == null) {
+            System.out.println("Fragment target not valid");
+            return;
+        }
+        //newFullFragment = retrieveOrCreateAStandardFragment(fragmentService, newFragmentId, newFragmentId, newFragmentId);
 
         BlockService blockService = new BlockServiceImpl();
         List<Block> blocks = blockService.getBlocksByFragment(oldFragmentId);
         for (Block block : blocks) {
-            Block blockUpdated = blockService.getBlockByID(block.getBlockId());
-            BlockToFragment blockToFeature = new BlockToFragment();
-            blockToFeature.setStartBlock(block);
-            blockToFeature.setEndFragment(newF);
-            blockUpdated.setAssociatedTo(blockToFeature);
-            blockService.createOrUpdate(blockUpdated);
+            Block fullBlock = blockService.getBlockByID(block.getBlockId());
+            BlockToFragment blockToFragment = fullBlock.getAssociatedTo();
+            if(blockToFragment==null){
+                blockToFragment = new BlockToFragment();
+                blockToFragment.setStartBlock(fullBlock);
+            }
+            blockToFragment.setEndFragment(newFullFragment);
+
+            fullBlock.setAssociatedTo(blockToFragment);
+            blockService.createOrUpdate(fullBlock);
         }
     }
 }

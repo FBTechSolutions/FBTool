@@ -7,23 +7,24 @@ import static ic.unicamp.fb.cli.cmd.BMConfigure.FB_GENERIC_FRAGMENT;
 
 public class FragmentUtil {
     public static Fragment retrieveOrCreateGenericFragment(FragmentService fragmentService) {
-        Fragment defaultFragment = fragmentService.getFragmentByID(FB_GENERIC_FRAGMENT);
-        if (defaultFragment == null) {
-            defaultFragment = new Fragment();
-            defaultFragment.setFragmentId(FB_GENERIC_FRAGMENT);
-            defaultFragment.setFragmentLabel(FB_GENERIC_FRAGMENT);
+        Fragment fullFragment = fragmentService.getFragmentByID(FB_GENERIC_FRAGMENT);
+        if (fullFragment == null) {
+            fullFragment = new Fragment();
+            fullFragment.setFragmentId(FB_GENERIC_FRAGMENT);
+            fullFragment.setFragmentCode(FB_GENERIC_FRAGMENT);
+            fullFragment.setFragmentLabel(FB_GENERIC_FRAGMENT);
         }
-        return defaultFragment;
+        return fullFragment;
     }
 
     public static Fragment retrieveOrCreateAStandardFragment(FragmentService fragmentService, String fragmentId, String fragmentCode, String fragmentLabel) {
-        Fragment standardFragment = fragmentService.getFragmentByID(fragmentId);
-        if (standardFragment == null) {
-            standardFragment = new Fragment();
-            standardFragment.setFragmentId(fragmentId);
-            standardFragment.setFragmentCode(fragmentCode);
-            standardFragment.setFragmentLabel(fragmentLabel);
+        Fragment fullFragment = fragmentService.getFragmentByID(fragmentId);
+        if (fullFragment == null) {
+            fullFragment = new Fragment();
+            fullFragment.setFragmentId(fragmentId);
+            fullFragment.setFragmentCode(fragmentCode);
+            fullFragment.setFragmentLabel(fragmentLabel);
         }
-        return standardFragment;
+        return fullFragment;
     }
 }
