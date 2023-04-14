@@ -7,7 +7,7 @@ import ic.unicamp.fb.cli.cmd.BMCommit;
 import ic.unicamp.fb.cli.cmd.BMConfigure;
 import ic.unicamp.fb.cli.cmd.BMExit;
 import ic.unicamp.fb.cli.cmd.BMInspectFiles;
-import ic.unicamp.fb.cli.cmd.BMLinkFragments;
+import ic.unicamp.fb.cli.cmd.BMMapFragments;
 import ic.unicamp.fb.cli.cmd.BMListBlocks;
 import ic.unicamp.fb.cli.cmd.BMListFeatures;
 import ic.unicamp.fb.cli.cmd.BMListFiles;
@@ -50,6 +50,6 @@ public interface CmdTag {
 
     String CMD_TAG_BLOCKS = BMTagBlocks.CMD_NAME;
 
-    String CMD_LINK_FRAGMENTS = BMLinkFragments.CMD_NAME;
+    String CMD_MAP_FRAGMENTS = BMMapFragments.CMD_NAME;
     String CMD_INSPECT_FILES = BMInspectFiles.CMD_NAME;
 }

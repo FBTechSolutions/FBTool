@@ -14,10 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 //ok
-@CommandLine.Command(name = BMLinkFragments.CMD_NAME)
-public class BMLinkFragments implements Runnable {
+@CommandLine.Command(name = BMMapFragments.CMD_NAME)
+public class BMMapFragments implements Runnable {
 
-    public static final String CMD_NAME = "link-fragments";
+    public static final String CMD_NAME = "map-fragments";
 
     @Parameters(index = "0", description = "feature Id", defaultValue = "")
     String featureId;

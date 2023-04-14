@@ -7,7 +7,7 @@ import ic.unicamp.fb.cli.cmd.BMCommit;
 import ic.unicamp.fb.cli.cmd.BMConfigure;
 import ic.unicamp.fb.cli.cmd.BMExit;
 import ic.unicamp.fb.cli.cmd.BMInspectFiles;
-import ic.unicamp.fb.cli.cmd.BMLinkFragments;
+import ic.unicamp.fb.cli.cmd.BMMapFragments;
 import ic.unicamp.fb.cli.cmd.BMListBlocks;
 import ic.unicamp.fb.cli.cmd.BMListFeatures;
 import ic.unicamp.fb.cli.cmd.BMListFiles;
@@ -37,7 +37,7 @@ import static ic.unicamp.fb.cli.util.CmdTag.CMD_COMMIT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_CONFIGURE;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_EXIT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_INSPECT_FILES;
-import static ic.unicamp.fb.cli.util.CmdTag.CMD_LINK_FRAGMENTS;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_MAP_FRAGMENTS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_BLOCKS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_FEATURES;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_FILES;
@@ -85,8 +85,9 @@ import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__WELCOME_SPLM;
                 BMSync.class,
                 BMMoveBlocks.class,
                 BMTagBlocks.class,
-                BMLinkFragments.class,
-                BMInspectFiles.class},
+                BMMapFragments.class,
+                BMInspectFiles.class,
+                BMMapFragments.class},
         footer = {"", "launching prompt ...", ""})
 public class Cmd implements Runnable {
 
@@ -200,8 +201,8 @@ public class Cmd implements Runnable {
                         CommandLine commandLine = new CommandLine(new BMTagBlocks());
                         __executeCmd(inputs, commandLine);
                     }
-                    case CMD_LINK_FRAGMENTS -> {
-                        CommandLine commandLine = new CommandLine(new BMLinkFragments());
+                    case CMD_MAP_FRAGMENTS -> {
+                        CommandLine commandLine = new CommandLine(new BMMapFragments());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_INSPECT_FILES -> {
