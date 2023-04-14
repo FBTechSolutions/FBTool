@@ -16,6 +16,7 @@ import ic.unicamp.fb.cli.cmd.BMProjectProduct;
 import ic.unicamp.fb.cli.cmd.BMSync;
 import ic.unicamp.fb.cli.cmd.BMTagBlocks;
 import ic.unicamp.fb.cli.cmd.BMUpsertFeature;
+import ic.unicamp.fb.cli.cmd.BMUpsertFragment;
 import ic.unicamp.fb.cli.cmd.BMUpsertProduct;
 import ic.unicamp.fb.cli.cmd.BMVersion;
 
@@ -33,6 +34,8 @@ public interface CmdTag {
     String CMD_COMMIT = BMCommit.CMD_NAME;
     String CMD_UPSERT_PRODUCT = BMUpsertProduct.CMD_NAME;
     String CMD_UPSERT_FEATURES = BMUpsertFeature.CMD_NAME;
+
+    String CMD_UPSERT_FRAGMENT = BMUpsertFragment.CMD_NAME;
     String CMD_PROJECT_PRODUCT = BMProjectProduct.CMD_NAME;
 
     String CMD_LIST_PRODUCTS = BMListProducts.CMD_NAME;

@@ -16,6 +16,7 @@ import ic.unicamp.fb.cli.cmd.BMProjectProduct;
 import ic.unicamp.fb.cli.cmd.BMSync;
 import ic.unicamp.fb.cli.cmd.BMTagBlocks;
 import ic.unicamp.fb.cli.cmd.BMUpsertFeature;
+import ic.unicamp.fb.cli.cmd.BMUpsertFragment;
 import ic.unicamp.fb.cli.cmd.BMUpsertProduct;
 import ic.unicamp.fb.cli.cmd.BMVersion;
 import ic.unicamp.fb.cli.util.logger.SplMgrLogger;
@@ -43,6 +44,7 @@ import static ic.unicamp.fb.cli.util.CmdTag.CMD_PROJECT_PRODUCT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_SYNC;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_TAG_BLOCKS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_UPSERT_FEATURES;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_UPSERT_FRAGMENT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_UPSERT_PRODUCT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_VERSION;
 import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__BM_ASCII;
@@ -70,6 +72,7 @@ import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__WELCOME_SPLM;
                 BMProjectProduct.class,
                 BMUpsertProduct.class,
                 BMUpsertFeature.class,
+                BMUpsertFragment.class,
                 BMListProducts.class,
                 BMListFeatures.class,
                 BMListFragments.class,
@@ -149,6 +152,10 @@ public class Cmd implements Runnable {
                     }
                     case CMD_UPSERT_FEATURES -> {
                         CommandLine commandLine = new CommandLine(new BMUpsertFeature());
+                        __executeCmd(inputs, commandLine);
+                    }
+                    case CMD_UPSERT_FRAGMENT -> {
+                        CommandLine commandLine = new CommandLine(new BMUpsertFragment());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_PROJECT_PRODUCT -> {
