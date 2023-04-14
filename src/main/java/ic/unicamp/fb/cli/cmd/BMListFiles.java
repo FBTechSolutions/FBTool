@@ -22,8 +22,7 @@ public class BMListFiles implements Runnable {
         ContainerService containerService = new ContainerServiceImpl();
         for (Container container : containerService.findAll()) {
             if(container.getContainerType() == ContainerType.FILE){
-                String message = String.format("- id:%s type:%s", container.getContainerId(),
-                        container.getContainerType());
+                String message = String.format("- id:%s ", container.getContainerId());
                 System.out.println(message);
             }
         }
