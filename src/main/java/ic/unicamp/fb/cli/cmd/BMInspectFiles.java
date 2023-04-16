@@ -24,11 +24,21 @@ public class BMInspectFiles implements Runnable {
     @CommandLine.Parameters(index = "0..*")
     String[] filesIds;
 
-    @CommandLine.Option(names = "-all", defaultValue = "false")
+    @CommandLine.Option(names = "--all", defaultValue = "false")
     boolean all;
 
     @Override
     public void run() {
+        if (!all) {
+            if (filesIds == null) {
+                System.out.println("Add files to inspect");
+                return;
+            } else if (filesIds.length == 0) {
+                System.out.println("Add files to inspect");
+                return;
+            }
+        }
+
         System.out.println("Inspecting files..");
 
         ContainerService containerService = new ContainerServiceImpl();
