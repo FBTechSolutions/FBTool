@@ -27,7 +27,7 @@ public class BMListFeatures implements Runnable {
             System.out.println(message);
             if (isFragmentEnabled) {
                 for (FeatureToFragment relation : feature.getAssociatedTo()) {
-                    System.out.println("  - " + relation.getEndFragment().getFragmentId());
+                    System.out.println("  - " + relation.getEndFragment().getFragmentId() + " " + relation.getEndFragment().getFragmentLabel());
                 }
             }
         }

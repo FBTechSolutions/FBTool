@@ -11,7 +11,7 @@ import picocli.CommandLine.Parameters;
         description = "This command will remove a list of feature")
 public class BMRemoveFeatures implements Runnable {
 
-    public static final String CMD_NAME = "rm-features";
+    public static final String CMD_NAME = "remove-features";
 
     @Parameters(index = "0..*")
     String[] featureIds;

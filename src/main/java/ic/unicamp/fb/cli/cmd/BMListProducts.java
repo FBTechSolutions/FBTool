@@ -24,7 +24,7 @@ public class BMListProducts implements Runnable {
             System.out.printf("- id:%s  label:%s%n", product.getProductId(), product.getProductLabel());
             if (isFeatureEnabled) {
                 for (ProductToFeature relation : product.getAssociatedTo()) {
-                    System.out.println("  - " + relation.getEndFeature().getFeatureId());
+                    System.out.println("  - " + relation.getEndFeature().getFeatureId() + "  " + relation.getEndFeature().getFeatureLabel());
                 }
             }
         }
