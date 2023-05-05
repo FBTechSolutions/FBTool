@@ -29,11 +29,11 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
     @Override
     public Block getBlockByID(String blockId) {
         Filter filter = new Filter("blockId", ComparisonOperator.EQUALS, blockId);
-        Collection<Block> features = session.loadAll(Block.class, new Filters().add(filter));
-        if (features.size() > 1) {
+        Collection<Block> blocks = session.loadAll(Block.class, new Filters().add(filter));
+        if (blocks.size() > 1) {
             System.out.println("Database corrupted. Two or more IDs for a Block are not allowed.");
         }
-        Iterator<Block> iter = features.iterator();
+        Iterator<Block> iter = blocks.iterator();
         if (iter.hasNext()) {
             return iter.next();
         }
