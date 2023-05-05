@@ -1,28 +1,28 @@
 package ic.unicamp.fb.cli;
 
 import com.github.lalyos.jfiglet.FigletFont;
-import ic.unicamp.fb.cli.cmd.BMAdd;
-import ic.unicamp.fb.cli.cmd.BMAnalyze;
-import ic.unicamp.fb.cli.cmd.BMCommit;
-import ic.unicamp.fb.cli.cmd.BMConfigure;
-import ic.unicamp.fb.cli.cmd.BMExit;
-import ic.unicamp.fb.cli.cmd.BMInspectFiles;
-import ic.unicamp.fb.cli.cmd.BMMapFragments;
-import ic.unicamp.fb.cli.cmd.BMListBlocks;
-import ic.unicamp.fb.cli.cmd.BMListFeatures;
-import ic.unicamp.fb.cli.cmd.BMListFiles;
-import ic.unicamp.fb.cli.cmd.BMListFragments;
-import ic.unicamp.fb.cli.cmd.BMListProducts;
-import ic.unicamp.fb.cli.cmd.BMMoveBlocks;
-import ic.unicamp.fb.cli.cmd.BMProjectProduct;
-import ic.unicamp.fb.cli.cmd.BMRemoveFeatures;
-import ic.unicamp.fb.cli.cmd.BMSync;
-import ic.unicamp.fb.cli.cmd.BMTagBlocks;
-import ic.unicamp.fb.cli.cmd.BMUpsertBlockOut;
-import ic.unicamp.fb.cli.cmd.BMUpsertFeature;
-import ic.unicamp.fb.cli.cmd.BMUpsertFragment;
-import ic.unicamp.fb.cli.cmd.BMUpsertProduct;
-import ic.unicamp.fb.cli.cmd.BMVersion;
+import ic.unicamp.fb.cli.cmd.FBAdd;
+import ic.unicamp.fb.cli.cmd.FBAnalyze;
+import ic.unicamp.fb.cli.cmd.FBCommit;
+import ic.unicamp.fb.cli.cmd.FBConfigure;
+import ic.unicamp.fb.cli.cmd.FBExit;
+import ic.unicamp.fb.cli.cmd.FBInspectFiles;
+import ic.unicamp.fb.cli.cmd.FBListBlocks;
+import ic.unicamp.fb.cli.cmd.FBListFeatures;
+import ic.unicamp.fb.cli.cmd.FBListFiles;
+import ic.unicamp.fb.cli.cmd.FBListFragments;
+import ic.unicamp.fb.cli.cmd.FBListProducts;
+import ic.unicamp.fb.cli.cmd.FBMapFragmentToBitOrder;
+import ic.unicamp.fb.cli.cmd.FBMoveBlocks;
+import ic.unicamp.fb.cli.cmd.FBProjectProduct;
+import ic.unicamp.fb.cli.cmd.FBRemoveFeatures;
+import ic.unicamp.fb.cli.cmd.FBSync;
+import ic.unicamp.fb.cli.cmd.FBTagBlocks;
+import ic.unicamp.fb.cli.cmd.FBUpsertBlockOut;
+import ic.unicamp.fb.cli.cmd.FBUpsertFeature;
+import ic.unicamp.fb.cli.cmd.FBUpsertFragment;
+import ic.unicamp.fb.cli.cmd.FBUpsertProduct;
+import ic.unicamp.fb.cli.cmd.FBVersion;
 import ic.unicamp.fb.cli.util.logger.SplMgrLogger;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -39,14 +39,15 @@ import static ic.unicamp.fb.cli.util.CmdTag.CMD_COMMIT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_CONFIGURE;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_EXIT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_INSPECT_FILES;
-import static ic.unicamp.fb.cli.util.CmdTag.CMD_MAP_FRAGMENTS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_BLOCKS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_FEATURES;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_FILES;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_FRAGMENTS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_PRODUCTS;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_MAP_FRAGMENTS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_MOVE_BLOCKS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_PROJECT_PRODUCT;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_REMOVE_FEATURES;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_SYNC;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_TAG_BLOCKS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_UPSERT_BLOCK_OUT;
@@ -54,7 +55,6 @@ import static ic.unicamp.fb.cli.util.CmdTag.CMD_UPSERT_FEATURES;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_UPSERT_FRAGMENT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_UPSERT_PRODUCT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_VERSION;
-import static ic.unicamp.fb.cli.util.CmdTag.CMD_REMOVE_FEATURES;
 import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__BM_ASCII;
 import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__CMD_ACCEPTED;
 import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__CMD_END;
@@ -71,28 +71,28 @@ import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__WELCOME_SPLM;
         description = {"Description: This tool internally use git to stored the block data and a graph db to manage logic and relationships", ""},
         subcommands = {
                 // basic
-//                BMInit.class,
-//                BMExit.class,
-                BMVersion.class,
+//                FBInit.class,
+//                FBExit.class,
+                FBVersion.class,
                 // others
-                BMConfigure.class,
-                BMAnalyze.class,
-                BMProjectProduct.class,
-                BMUpsertProduct.class,
-                BMUpsertFeature.class,
-                BMUpsertFragment.class,
-                BMListProducts.class,
-                BMListFeatures.class,
-                BMListFragments.class,
-                BMListBlocks.class,
-                BMListFiles.class,
-                BMSync.class,
-                BMMoveBlocks.class,
-                BMTagBlocks.class,
-                BMMapFragments.class,
-                BMInspectFiles.class,
-                BMUpsertBlockOut.class,
-                BMRemoveFeatures.class},
+                FBConfigure.class,
+                FBAnalyze.class,
+                FBProjectProduct.class,
+                FBUpsertProduct.class,
+                FBUpsertFeature.class,
+                FBUpsertFragment.class,
+                FBListProducts.class,
+                FBListFeatures.class,
+                FBListFragments.class,
+                FBListBlocks.class,
+                FBListFiles.class,
+                FBSync.class,
+                FBMoveBlocks.class,
+                FBTagBlocks.class,
+                FBMapFragmentToBitOrder.class,
+                FBInspectFiles.class,
+                FBUpsertBlockOut.class,
+                FBRemoveFeatures.class},
         footer = {"", "launching prompt ...", ""})
 public class Cmd implements Runnable {
 
@@ -134,92 +134,92 @@ public class Cmd implements Runnable {
                     // basic
                     case CMD_EXIT -> {
                         alive = false;
-                        CommandLine commandLine = new CommandLine(new BMExit());
+                        CommandLine commandLine = new CommandLine(new FBExit());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_VERSION -> {
-                        CommandLine commandLine = new CommandLine(new BMVersion());
+                        CommandLine commandLine = new CommandLine(new FBVersion());
                         __executeCmd(inputs, commandLine);
                     }
                     //
                     case CMD_CONFIGURE -> {
-                        CommandLine commandLine = new CommandLine(new BMConfigure());
+                        CommandLine commandLine = new CommandLine(new FBConfigure());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_ANALYSE -> {
-                        CommandLine commandLine = new CommandLine(new BMAnalyze());
+                        CommandLine commandLine = new CommandLine(new FBAnalyze());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_ADD -> {
-                        CommandLine commandLine = new CommandLine(new BMAdd());
+                        CommandLine commandLine = new CommandLine(new FBAdd());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_COMMIT -> {
-                        CommandLine commandLine = new CommandLine(new BMCommit());
+                        CommandLine commandLine = new CommandLine(new FBCommit());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_UPSERT_PRODUCT -> {
-                        CommandLine commandLine = new CommandLine(new BMUpsertProduct());
+                        CommandLine commandLine = new CommandLine(new FBUpsertProduct());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_UPSERT_FEATURES -> {
-                        CommandLine commandLine = new CommandLine(new BMUpsertFeature());
+                        CommandLine commandLine = new CommandLine(new FBUpsertFeature());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_UPSERT_FRAGMENT -> {
-                        CommandLine commandLine = new CommandLine(new BMUpsertFragment());
+                        CommandLine commandLine = new CommandLine(new FBUpsertFragment());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_PROJECT_PRODUCT -> {
-                        CommandLine commandLine = new CommandLine(new BMProjectProduct());
+                        CommandLine commandLine = new CommandLine(new FBProjectProduct());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_LIST_PRODUCTS -> {
-                        CommandLine commandLine = new CommandLine(new BMListProducts());
+                        CommandLine commandLine = new CommandLine(new FBListProducts());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_LIST_FEATURES -> {
-                        CommandLine commandLine = new CommandLine(new BMListFeatures());
+                        CommandLine commandLine = new CommandLine(new FBListFeatures());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_LIST_FRAGMENTS -> {
-                        CommandLine commandLine = new CommandLine(new BMListFragments());
+                        CommandLine commandLine = new CommandLine(new FBListFragments());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_LIST_BLOCKS -> {
-                        CommandLine commandLine = new CommandLine(new BMListBlocks());
+                        CommandLine commandLine = new CommandLine(new FBListBlocks());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_LIST_FILES -> {
-                        CommandLine commandLine = new CommandLine(new BMListFiles());
+                        CommandLine commandLine = new CommandLine(new FBListFiles());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_SYNC -> {
-                        CommandLine commandLine = new CommandLine(new BMSync());
+                        CommandLine commandLine = new CommandLine(new FBSync());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_MOVE_BLOCKS -> {
-                        CommandLine commandLine = new CommandLine(new BMMoveBlocks());
+                        CommandLine commandLine = new CommandLine(new FBMoveBlocks());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_TAG_BLOCKS -> {
-                        CommandLine commandLine = new CommandLine(new BMTagBlocks());
+                        CommandLine commandLine = new CommandLine(new FBTagBlocks());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_MAP_FRAGMENTS -> {
-                        CommandLine commandLine = new CommandLine(new BMMapFragments());
+                        CommandLine commandLine = new CommandLine(new FBMapFragmentToBitOrder());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_INSPECT_FILES -> {
-                        CommandLine commandLine = new CommandLine(new BMInspectFiles());
+                        CommandLine commandLine = new CommandLine(new FBInspectFiles());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_UPSERT_BLOCK_OUT -> {
-                        CommandLine commandLine = new CommandLine(new BMUpsertBlockOut());
+                        CommandLine commandLine = new CommandLine(new FBUpsertBlockOut());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_REMOVE_FEATURES -> {
-                        CommandLine commandLine = new CommandLine(new BMRemoveFeatures());
+                        CommandLine commandLine = new CommandLine(new FBRemoveFeatures());
                         __executeCmd(inputs, commandLine);
                     }
                     default -> __printCmdNotValid();

@@ -1,3 +1,14 @@
+configuring javas
+sudo update-alternatives --install /usr/bin/java java /media/jc/Documents/programs/java/8/bin/java 1
+sudo update-alternatives --install /usr/bin/java java /media/jc/Documents/programs/java/11/bin/java 2
+sudo update-alternatives --install /usr/bin/java java /media/jc/Documents/programs/java/17/bin/java 3
+sudo update-alternatives --install /usr/bin/javac javac /media/jc/Documents/programs/java/8/bin/javac 1
+sudo update-alternatives --install /usr/bin/javac javac /media/jc/Documents/programs/java/11/bin/javac 2
+sudo update-alternatives --install /usr/bin/javac javac /media/jc/Documents/programs/java/17/bin/javac 3
+sudo update-alternatives --config java
+sudo update-alternatives --config javac
+
+
 sudo chmod a+x neo4j-desktop-1.5.0-x86_64.AppImage
 
 sudo update-alternatives --config java

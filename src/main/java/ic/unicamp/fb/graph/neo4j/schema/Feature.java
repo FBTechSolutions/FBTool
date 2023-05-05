@@ -1,6 +1,6 @@
 package ic.unicamp.fb.graph.neo4j.schema;
 
-import ic.unicamp.fb.graph.neo4j.schema.relations.FeatureToFragment;
+import ic.unicamp.fb.graph.neo4j.schema.relations.FeatureToBitOrder;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +12,6 @@ import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
-
-import java.util.List;
 
 import static org.neo4j.ogm.annotation.Relationship.Direction.OUTGOING;
 
@@ -35,8 +33,8 @@ public class Feature extends AbstractNode {
     @Property(name = "featureLabel")
     private String featureLabel;
 
-    @Relationship(type = "ASSOCIATED_TO", direction = OUTGOING)
-    private List<FeatureToFragment> associatedTo;
+    @Relationship(type = "HAS_A", direction = OUTGOING)
+    private FeatureToBitOrder associatedTo;
 
     @Override
     public Long getId() {

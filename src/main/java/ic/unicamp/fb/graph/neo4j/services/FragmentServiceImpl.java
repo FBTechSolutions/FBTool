@@ -1,17 +1,22 @@
 package ic.unicamp.fb.graph.neo4j.services;
 
 import ic.unicamp.fb.graph.neo4j.factory.Neo4jSessionFactory;
+import ic.unicamp.fb.graph.neo4j.schema.BitOrder;
 import ic.unicamp.fb.graph.neo4j.schema.Fragment;
+import ic.unicamp.fb.graph.neo4j.schema.relations.FragmentToBitOrder;
+import ic.unicamp.fb.graph.neo4j.schema.relations.ProductToFeature;
 import org.neo4j.ogm.cypher.ComparisonOperator;
 import org.neo4j.ogm.cypher.Filter;
 import org.neo4j.ogm.cypher.Filters;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class FragmentServiceImpl extends GenericService<Fragment> implements FragmentService {
 
@@ -36,19 +41,47 @@ public class FragmentServiceImpl extends GenericService<Fragment> implements Fra
     }
 
     @Override
-    public List<Fragment> getFragmentsByFeatureId(String featureId) {
-        String queryTemplate = "MATCH (p:Feature{featureId: '%s'})-[rel:ASSOCIATED_TO]->(f:Fragment) return f";
-        String query = String.format(queryTemplate, featureId);
+    public List<Fragment> calcFragmentsByFeatureId(String featureId) {
+        BitOrderService bitOrderService = new BitOrderServiceImpl();
+        BitOrder bitOrder = bitOrderService.getBitOrderByFeature(featureId);
+
+        String queryTemplate = "MATCH (fr:Fragment)-[rel:ASSOCIATED_TO]->(b:BitOrder{bitOrderId: '%s'}) return fr";
+        String query = String.format(queryTemplate, bitOrder.getBitOrderId());
         System.out.println(query);
         Iterable<Map<String, Object>> queryResult = Neo4jSessionFactory.getInstance().getNeo4jSession()
                 .query(query, Collections.EMPTY_MAP);
         List<Fragment> result = new LinkedList<>();
         queryResult.forEach(map -> {
-            Fragment fragment = (Fragment) map.get("f");
+            Fragment fragment = (Fragment) map.get("fr");
             Fragment fullFragment = getFragmentByID(fragment.getFragmentId());
             result.add(fullFragment);
         });
         return result;
+    }
+
+    @Override
+    public List<Fragment> calculateFragmentsByFeatureList(List<String> featureList) {
+        BitOrderService bitOrderService = new BitOrderServiceImpl();
+        FragmentService fragmentService = new FragmentServiceImpl();
+        List<Fragment> fragmentList = new LinkedList<>();
+        Set<String> bitOrderList = new HashSet<>();
+        for (String featureId : featureList) {
+            BitOrder bitOrder = bitOrderService.getBitOrderByFeature(featureId);
+            bitOrderList.add(String.valueOf(bitOrder.getBitOrderId()));
+        }
+
+        for (Fragment fragment : fragmentService.findAll()) {
+            Set<String> bitOrderListFromFragment = new HashSet<>();
+            List<FragmentToBitOrder> relations = fragment.getAssociatedTo();
+            for (FragmentToBitOrder relation : relations) {
+                BitOrder bitOrderTemp = relation.getEndBitOrder();
+                bitOrderListFromFragment.add(String.valueOf(bitOrderTemp.getBitOrderId()));
+            }
+            if (bitOrderList.containsAll(bitOrderListFromFragment)) {
+                fragmentList.add(fragment);
+            }
+        }
+        return fragmentList;
     }
 
     @Override

@@ -8,6 +8,7 @@ public interface FragmentService extends Service<Fragment> {
 
     Fragment getFragmentByID(String fragmentId);
 
-    List<Fragment> getFragmentsByFeatureId(String featureId);
+    List<Fragment> calcFragmentsByFeatureId(String featureId);
 
+    List<Fragment> calculateFragmentsByFeatureList(List<String> featureList);
 }

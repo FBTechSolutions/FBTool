@@ -1,2 +1,26 @@
 BUG 1
 treeWalk.isSubtree() do not recognized names in folders like "FB-Elevator-Antenna-v1.4". It is treat like a file.
+
+Important Bug:
+We must not link Features with Fragments like normal relations because some fragment depends on being active from a set of features.
+For this reason, we need a virtual link and not a strict relation in Database.
+It needs to take the order of the bit, as we explained before.
+
+Important Bug:
+The algorithm needs to improve in reducing the number of fragments and creating features.
+It is because, in some parts, the "else"  points to a known fragment, but in the generation, it is not part of the product.
+Consider adding an imaginary universe and the new calculations with that universe set to improve the algorithm.
+
+Improvement.
+Now instead of listing features with fragments.
+List a set of features with fragments associated or calculated from the list. Alternatively, since we have a list of products,
+take a product and calculate the list of fragments.
+
+Add new Command.
+List features by bit order.
+
+
+
+
+
+

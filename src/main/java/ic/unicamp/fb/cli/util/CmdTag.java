@@ -1,60 +1,60 @@
 package ic.unicamp.fb.cli.util;
 
 
-import ic.unicamp.fb.cli.cmd.BMAdd;
-import ic.unicamp.fb.cli.cmd.BMAnalyze;
-import ic.unicamp.fb.cli.cmd.BMCommit;
-import ic.unicamp.fb.cli.cmd.BMConfigure;
-import ic.unicamp.fb.cli.cmd.BMExit;
-import ic.unicamp.fb.cli.cmd.BMInspectFiles;
-import ic.unicamp.fb.cli.cmd.BMMapFragments;
-import ic.unicamp.fb.cli.cmd.BMListBlocks;
-import ic.unicamp.fb.cli.cmd.BMListFeatures;
-import ic.unicamp.fb.cli.cmd.BMListFiles;
-import ic.unicamp.fb.cli.cmd.BMListFragments;
-import ic.unicamp.fb.cli.cmd.BMListProducts;
-import ic.unicamp.fb.cli.cmd.BMMoveBlocks;
-import ic.unicamp.fb.cli.cmd.BMProjectProduct;
-import ic.unicamp.fb.cli.cmd.BMRemoveFeatures;
-import ic.unicamp.fb.cli.cmd.BMSync;
-import ic.unicamp.fb.cli.cmd.BMTagBlocks;
-import ic.unicamp.fb.cli.cmd.BMUpsertBlockOut;
-import ic.unicamp.fb.cli.cmd.BMUpsertFeature;
-import ic.unicamp.fb.cli.cmd.BMUpsertFragment;
-import ic.unicamp.fb.cli.cmd.BMUpsertProduct;
-import ic.unicamp.fb.cli.cmd.BMVersion;
+import ic.unicamp.fb.cli.cmd.FBAdd;
+import ic.unicamp.fb.cli.cmd.FBAnalyze;
+import ic.unicamp.fb.cli.cmd.FBCommit;
+import ic.unicamp.fb.cli.cmd.FBConfigure;
+import ic.unicamp.fb.cli.cmd.FBExit;
+import ic.unicamp.fb.cli.cmd.FBInspectFiles;
+import ic.unicamp.fb.cli.cmd.FBListBlocks;
+import ic.unicamp.fb.cli.cmd.FBListFeatures;
+import ic.unicamp.fb.cli.cmd.FBListFiles;
+import ic.unicamp.fb.cli.cmd.FBListFragments;
+import ic.unicamp.fb.cli.cmd.FBListProducts;
+import ic.unicamp.fb.cli.cmd.FBMapFragmentToBitOrder;
+import ic.unicamp.fb.cli.cmd.FBMoveBlocks;
+import ic.unicamp.fb.cli.cmd.FBProjectProduct;
+import ic.unicamp.fb.cli.cmd.FBRemoveFeatures;
+import ic.unicamp.fb.cli.cmd.FBSync;
+import ic.unicamp.fb.cli.cmd.FBTagBlocks;
+import ic.unicamp.fb.cli.cmd.FBUpsertBlockOut;
+import ic.unicamp.fb.cli.cmd.FBUpsertFeature;
+import ic.unicamp.fb.cli.cmd.FBUpsertFragment;
+import ic.unicamp.fb.cli.cmd.FBUpsertProduct;
+import ic.unicamp.fb.cli.cmd.FBVersion;
 
 public interface CmdTag {
 
     // basic
-    String CMD_EXIT = BMExit.CMD_NAME;
-    //String CMD_INIT = BMInit.CMD_NAME;
-    String CMD_VERSION = BMVersion.CMD_NAME;
+    String CMD_EXIT = FBExit.CMD_NAME;
+    //String CMD_INIT = FBInit.CMD_NAME;
+    String CMD_VERSION = FBVersion.CMD_NAME;
     //String CMD_SP = BMSB.CMD_NAME;
-    String CMD_CONFIGURE = BMConfigure.CMD_NAME;
-    String CMD_ANALYSE = BMAnalyze.CMD_NAME;
+    String CMD_CONFIGURE = FBConfigure.CMD_NAME;
+    String CMD_ANALYSE = FBAnalyze.CMD_NAME;
 
-    String CMD_ADD = BMAdd.CMD_NAME;
-    String CMD_COMMIT = BMCommit.CMD_NAME;
-    String CMD_UPSERT_PRODUCT = BMUpsertProduct.CMD_NAME;
-    String CMD_UPSERT_FEATURES = BMUpsertFeature.CMD_NAME;
+    String CMD_ADD = FBAdd.CMD_NAME;
+    String CMD_COMMIT = FBCommit.CMD_NAME;
+    String CMD_UPSERT_PRODUCT = FBUpsertProduct.CMD_NAME;
+    String CMD_UPSERT_FEATURES = FBUpsertFeature.CMD_NAME;
 
-    String CMD_UPSERT_FRAGMENT = BMUpsertFragment.CMD_NAME;
-    String CMD_PROJECT_PRODUCT = BMProjectProduct.CMD_NAME;
+    String CMD_UPSERT_FRAGMENT = FBUpsertFragment.CMD_NAME;
+    String CMD_PROJECT_PRODUCT = FBProjectProduct.CMD_NAME;
 
-    String CMD_LIST_PRODUCTS = BMListProducts.CMD_NAME;
-    String CMD_LIST_FEATURES = BMListFeatures.CMD_NAME;
-    String CMD_LIST_FRAGMENTS = BMListFragments.CMD_NAME;
-    String CMD_LIST_BLOCKS = BMListBlocks.CMD_NAME;
-    String CMD_LIST_FILES = BMListFiles.CMD_NAME;
-    String CMD_SYNC = BMSync.CMD_NAME;
-    String CMD_MOVE_BLOCKS = BMMoveBlocks.CMD_NAME;
+    String CMD_LIST_PRODUCTS = FBListProducts.CMD_NAME;
+    String CMD_LIST_FEATURES = FBListFeatures.CMD_NAME;
+    String CMD_LIST_FRAGMENTS = FBListFragments.CMD_NAME;
+    String CMD_LIST_BLOCKS = FBListBlocks.CMD_NAME;
+    String CMD_LIST_FILES = FBListFiles.CMD_NAME;
+    String CMD_SYNC = FBSync.CMD_NAME;
+    String CMD_MOVE_BLOCKS = FBMoveBlocks.CMD_NAME;
 
-    String CMD_TAG_BLOCKS = BMTagBlocks.CMD_NAME;
+    String CMD_TAG_BLOCKS = FBTagBlocks.CMD_NAME;
 
-    String CMD_MAP_FRAGMENTS = BMMapFragments.CMD_NAME;
-    String CMD_INSPECT_FILES = BMInspectFiles.CMD_NAME;
-    String CMD_UPSERT_BLOCK_OUT = BMUpsertBlockOut.CMD_NAME;
+    String CMD_MAP_FRAGMENTS = FBMapFragmentToBitOrder.CMD_NAME;
+    String CMD_INSPECT_FILES = FBInspectFiles.CMD_NAME;
+    String CMD_UPSERT_BLOCK_OUT = FBUpsertBlockOut.CMD_NAME;
 
-    String CMD_REMOVE_FEATURES = BMRemoveFeatures.CMD_NAME;
+    String CMD_REMOVE_FEATURES = FBRemoveFeatures.CMD_NAME;
 }
