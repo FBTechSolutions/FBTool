@@ -7,6 +7,8 @@ import ic.unicamp.fb.graph.neo4j.services.FeatureService;
 import ic.unicamp.fb.graph.neo4j.services.FeatureServiceImpl;
 import ic.unicamp.fb.graph.neo4j.services.ProductService;
 import ic.unicamp.fb.graph.neo4j.services.ProductServiceImpl;
+import ic.unicamp.fb.graph.neo4j.utils.FeatureUtil;
+import ic.unicamp.fb.graph.neo4j.utils.ProductUtil;
 import org.eclipse.jgit.util.StringUtils;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -36,8 +38,15 @@ public class FBUpsertProduct implements Runnable {
 
     @Override
     public void run() {
+        ProductService productService = new ProductServiceImpl();
+        FeatureService featureService = new FeatureServiceImpl();
+
         if (StringUtils.isEmptyOrNull(productId)) {
             System.out.println("This command requires an productId");
+            return;
+        }
+        if (productService.getProductByID(productId) == null) {
+            System.out.println("Required a valid productID");
             return;
         }
         if (featureIds == null) {
@@ -45,30 +54,17 @@ public class FBUpsertProduct implements Runnable {
             return;
         }
 
-        ProductService productService = new ProductServiceImpl();
-        FeatureService featureService = new FeatureServiceImpl();
-        Product product = productService.getProductByID(productId);
+        Product product = ProductUtil.retrieveOrCreateAStandardProductBean(productService, productId, productId);
         if (!isRemovingEnabled) {
-            if (product == null) {
-                product = new Product();
-                product.setProductId(productId);
-                product.setProductLabel(productId);
-            }
             List<ProductToFeature> updatedFeatures;
             if (isAddingEnabled) {
                 updatedFeatures = product.getAssociatedTo();
             } else {
                 updatedFeatures = new LinkedList<>();
             }
-
             for (String featureId : featureIds) {
+                Feature feature = FeatureUtil.retrieveOrCreateAStandardFeatureBean(featureService, featureId, featureId);
                 ProductToFeature relation = new ProductToFeature();
-                Feature feature = featureService.getFeatureByID(featureId);
-                if (feature == null) {
-                    feature = new Feature();
-                    feature.setFeatureId(featureId);
-                    feature.setFeatureLabel(featureId);
-                }
                 relation.setStartProduct(product);
                 relation.setEndFeature(feature);
                 updatedFeatures.add(relation);
@@ -76,10 +72,6 @@ public class FBUpsertProduct implements Runnable {
             product.setAssociatedTo(updatedFeatures);
             productService.createOrUpdate(product);
         } else {
-            if (product == null) {
-                System.out.println("Required a valid productID");
-                return;
-            }
             List<ProductToFeature> removeToList = new LinkedList<>();
             List<ProductToFeature> productToFeature = product.getAssociatedTo();
             for (String featureId : featureIds) {

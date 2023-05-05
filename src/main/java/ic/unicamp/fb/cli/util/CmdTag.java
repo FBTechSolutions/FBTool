@@ -16,6 +16,8 @@ import ic.unicamp.fb.cli.cmd.FBMapFragmentToBitOrder;
 import ic.unicamp.fb.cli.cmd.FBMoveBlocks;
 import ic.unicamp.fb.cli.cmd.FBProjectProduct;
 import ic.unicamp.fb.cli.cmd.FBRemoveFeatures;
+import ic.unicamp.fb.cli.cmd.FBRemoveFragments;
+import ic.unicamp.fb.cli.cmd.FBRemoveProducts;
 import ic.unicamp.fb.cli.cmd.FBSync;
 import ic.unicamp.fb.cli.cmd.FBTagBlocks;
 import ic.unicamp.fb.cli.cmd.FBUpsertBlockOut;
@@ -57,4 +59,7 @@ public interface CmdTag {
     String CMD_UPSERT_BLOCK_OUT = FBUpsertBlockOut.CMD_NAME;
 
     String CMD_REMOVE_FEATURES = FBRemoveFeatures.CMD_NAME;
+    String CMD_REMOVE_PRODUCTS = FBRemoveProducts.CMD_NAME;
+    String CMD_REMOVE_FRAGMENTS = FBRemoveFragments.CMD_NAME;
+
 }

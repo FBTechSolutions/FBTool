@@ -16,6 +16,8 @@ import ic.unicamp.fb.cli.cmd.FBMapFragmentToBitOrder;
 import ic.unicamp.fb.cli.cmd.FBMoveBlocks;
 import ic.unicamp.fb.cli.cmd.FBProjectProduct;
 import ic.unicamp.fb.cli.cmd.FBRemoveFeatures;
+import ic.unicamp.fb.cli.cmd.FBRemoveFragments;
+import ic.unicamp.fb.cli.cmd.FBRemoveProducts;
 import ic.unicamp.fb.cli.cmd.FBSync;
 import ic.unicamp.fb.cli.cmd.FBTagBlocks;
 import ic.unicamp.fb.cli.cmd.FBUpsertBlockOut;
@@ -48,6 +50,8 @@ import static ic.unicamp.fb.cli.util.CmdTag.CMD_MAP_FRAGMENTS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_MOVE_BLOCKS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_PROJECT_PRODUCT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_REMOVE_FEATURES;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_REMOVE_PRODUCTS;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_REMOVE_FRAGMENTS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_SYNC;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_TAG_BLOCKS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_UPSERT_BLOCK_OUT;
@@ -92,7 +96,9 @@ import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__WELCOME_SPLM;
                 FBMapFragmentToBitOrder.class,
                 FBInspectFiles.class,
                 FBUpsertBlockOut.class,
-                FBRemoveFeatures.class},
+                FBRemoveFeatures.class,
+                FBRemoveProducts.class,
+                FBRemoveFragments.class},
         footer = {"", "launching prompt ...", ""})
 public class Cmd implements Runnable {
 
@@ -220,6 +226,14 @@ public class Cmd implements Runnable {
                     }
                     case CMD_REMOVE_FEATURES -> {
                         CommandLine commandLine = new CommandLine(new FBRemoveFeatures());
+                        __executeCmd(inputs, commandLine);
+                    }
+                    case CMD_REMOVE_PRODUCTS -> {
+                        CommandLine commandLine = new CommandLine(new FBRemoveProducts());
+                        __executeCmd(inputs, commandLine);
+                    }
+                    case CMD_REMOVE_FRAGMENTS -> {
+                        CommandLine commandLine = new CommandLine(new FBRemoveFragments());
                         __executeCmd(inputs, commandLine);
                     }
                     default -> __printCmdNotValid();

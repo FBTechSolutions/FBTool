@@ -41,7 +41,7 @@ public class FBMapFragmentToBitOrder implements Runnable {
         BitOrderService bitOrderService = new BitOrderServiceImpl();
         List<FragmentToBitOrder> relations = new ArrayList<>();
         for (String bitOrderId : bitOrderList) {
-            BitOrder fullBitOrder= bitOrderService.getBitOrderByID(bitOrderId);
+            BitOrder fullBitOrder = bitOrderService.getBitOrderByID(bitOrderId);
             if (fullBitOrder == null) {
                 String message = String.format("No Bit Order with the given ID (%s) could be found", bitOrderId);
                 System.out.println(message);

@@ -8,7 +8,7 @@ import picocli.CommandLine.Parameters;
 
 @Command(
         name = FBRemoveFeatures.CMD_NAME,
-        description = "This command will remove a list of feature")
+        description = "This command will remove a list of features")
 public class FBRemoveFeatures implements Runnable {
 
     public static final String CMD_NAME = "remove-features";

@@ -34,7 +34,7 @@ public class FeatureUtil {
         List<String> featureIds = new LinkedList<>();
         for (ProductToFeature rel : featureList) {
             Feature tempFeature = rel.getEndFeature();
-            if(tempFeature!=null){
+            if (tempFeature != null) {
                 featureIds.add(tempFeature.getFeatureId());
             }
         }

@@ -2,8 +2,6 @@ package ic.unicamp.fb.graph.neo4j.services;
 
 import ic.unicamp.fb.graph.neo4j.factory.Neo4jSessionFactory;
 import ic.unicamp.fb.graph.neo4j.schema.BitOrder;
-import ic.unicamp.fb.graph.neo4j.schema.Feature;
-import ic.unicamp.fb.graph.neo4j.schema.Fragment;
 import org.neo4j.ogm.cypher.ComparisonOperator;
 import org.neo4j.ogm.cypher.Filter;
 import org.neo4j.ogm.cypher.Filters;

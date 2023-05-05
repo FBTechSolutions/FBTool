@@ -195,19 +195,6 @@ public class FBProjectProduct implements Runnable {
         }
         return false;
     }
-
-    /*  private void projectRawFiles(Map<String, List<Block>> map, boolean clean) throws IOException {
-        for (String path : map.keySet()) {
-          File file = new File(path);
-          if (!file.exists()) {
-              Files.createFile(file.toPath());
-          }
-          for (Block block : map.get(path)) {
-            String rawContent = gitBlock.retrieveContent(block.getBlockId());
-            Files.writeString(Paths.get(file.toURI()), rawContent);
-          }
-        }
-      }*/
     private void projectRawFiles(Map<String, List<String>> map, boolean clean, Path path)
             throws IOException {
         System.out.println("Projecting Raw files ...");
@@ -232,22 +219,3 @@ public class FBProjectProduct implements Runnable {
         }
     }
 }
-/*  private final GraphAPI graph = GraphBuilder.createGraphInstance();
-  private final IBlockAPI gitBlock = GitBlockManager.createGitBlockInstance();
-  private final Git git = (Git) gitBlock.retrieveDirector();*/
-
-// blocks tags(bm project features_list/ default)
-// without blocks tags ( bm project -prod)
-
-/*    try {
-      //
-      git.checkout().setName("BM_ALL").setOrphan(true).call();
-
-    } catch (GitAPIException e) {
-      throw new RuntimeException(e);
-    }*/
-//process blocks by Feature (query in the DB)
-//create new branch
-//project files and stuff
-
-//set an ID for the fist commit

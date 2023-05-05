@@ -34,9 +34,8 @@ public class FBUpsertFeature implements Runnable {
     @Override
     public void run() {
         String featureLabel = retrieveLabel();
-
         FeatureService featureService = new FeatureServiceImpl();
-        Feature feature = FeatureUtil.retrieveOrCreateAStandardFeatureBean(featureService,featureId,featureLabel);
+        Feature feature = FeatureUtil.retrieveOrCreateAStandardFeatureBean(featureService, featureId, featureLabel);
         BitOrderService bitOrderService = new BitOrderServiceImpl();
         BitOrder bitOrder = BitOrderUtil.retrieveOrCreateAStandardBitOrderBean(bitOrderService, Integer.parseInt(bitOrderId));
         FeatureToBitOrder rel = new FeatureToBitOrder();

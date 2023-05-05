@@ -25,4 +25,8 @@ public class FragmentUtil {
         }
         return fullFragment;
     }
+    public static boolean exitsFragmentBean(FragmentService fragmentService, String fragmentId) {
+        Fragment fullFragment = fragmentService.getFragmentByID(fragmentId);
+        return fullFragment != null;
+    }
 }

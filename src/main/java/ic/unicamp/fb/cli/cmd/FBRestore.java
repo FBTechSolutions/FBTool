@@ -26,22 +26,3 @@ public class FBRestore implements Runnable {
         }
     }
 }
-/*  private final GraphAPI graph = GraphBuilder.createGraphInstance();
-  private final IBlockAPI gitBlock = GitBlockManager.createGitBlockInstance();
-  private final Git git = (Git) gitBlock.retrieveDirector();*/
-
-// blocks tags(bm project features_list/ default)
-// without blocks tags ( bm project -prod)
-
-/*    try {
-      //
-      git.checkout().setName("BM_ALL").setOrphan(true).call();
-
-    } catch (GitAPIException e) {
-      throw new RuntimeException(e);
-    }*/
-//process blocks by Feature (query in the DB)
-//create new branch
-//project files and stuff
-
-//set an ID for the fist commit
