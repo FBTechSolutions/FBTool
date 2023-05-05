@@ -50,8 +50,8 @@ public class FBMoveBlocks implements Runnable {
             BlockToFragment blockToFragment = fullBlock.getAssociatedTo();
             if (blockToFragment == null) {
                 blockToFragment = new BlockToFragment();
-                blockToFragment.setStartBlock(fullBlock);
             }
+            blockToFragment.setStartBlock(fullBlock);
             blockToFragment.setEndFragment(newFullFragment);
 
             fullBlock.setAssociatedTo(blockToFragment);

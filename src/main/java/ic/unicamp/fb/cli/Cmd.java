@@ -7,6 +7,7 @@ import ic.unicamp.fb.cli.cmd.FBCommit;
 import ic.unicamp.fb.cli.cmd.FBConfigure;
 import ic.unicamp.fb.cli.cmd.FBExit;
 import ic.unicamp.fb.cli.cmd.FBInspectFiles;
+import ic.unicamp.fb.cli.cmd.FBListBitOrders;
 import ic.unicamp.fb.cli.cmd.FBListBlocks;
 import ic.unicamp.fb.cli.cmd.FBListFeatures;
 import ic.unicamp.fb.cli.cmd.FBListFiles;
@@ -46,6 +47,7 @@ import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_FEATURES;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_FILES;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_FRAGMENTS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_PRODUCTS;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_BIT_ORDERS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_MAP_FRAGMENTS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_MOVE_BLOCKS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_PROJECT_PRODUCT;
@@ -198,6 +200,10 @@ public class Cmd implements Runnable {
                     }
                     case CMD_LIST_FILES -> {
                         CommandLine commandLine = new CommandLine(new FBListFiles());
+                        __executeCmd(inputs, commandLine);
+                    }
+                    case CMD_LIST_BIT_ORDERS -> {
+                        CommandLine commandLine = new CommandLine(new FBListBitOrders());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_SYNC -> {
