@@ -195,6 +195,7 @@ public class FBProjectProduct implements Runnable {
         }
         return false;
     }
+
     private void projectRawFiles(Map<String, List<String>> map, boolean clean, Path path)
             throws IOException {
         System.out.println("Projecting Raw files ...");

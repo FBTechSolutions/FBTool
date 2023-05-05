@@ -31,7 +31,7 @@ public class FBListFeatures implements Runnable {
 
             if (isOrderEnabled) {
                 BitOrder bitOrder = bitOrderService.getBitOrderByFeature(feature.getFeatureId());
-                System.out.println("  - " + bitOrder.getBitOrderId());
+                System.out.printf("  - bit:%s %n", bitOrder.getBitOrderId());
             }
         }
     }

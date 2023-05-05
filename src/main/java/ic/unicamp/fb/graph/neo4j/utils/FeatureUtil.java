@@ -30,7 +30,7 @@ public class FeatureUtil {
         return fullFeature;
     }
 
-    public static List<String> retrieveFeatureIdsByRelation(List<ProductToFeature> featureList) {
+    public static List<String> retrieveFeatureIdsByProductToFeatureRelation(List<ProductToFeature> featureList) {
         List<String> featureIds = new LinkedList<>();
         for (ProductToFeature rel : featureList) {
             Feature tempFeature = rel.getEndFeature();

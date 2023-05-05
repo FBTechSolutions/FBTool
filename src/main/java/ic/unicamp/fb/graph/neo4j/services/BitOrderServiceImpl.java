@@ -2,6 +2,8 @@ package ic.unicamp.fb.graph.neo4j.services;
 
 import ic.unicamp.fb.graph.neo4j.factory.Neo4jSessionFactory;
 import ic.unicamp.fb.graph.neo4j.schema.BitOrder;
+import ic.unicamp.fb.graph.neo4j.schema.Fragment;
+import ic.unicamp.fb.graph.neo4j.schema.relations.FragmentToBitOrder;
 import org.neo4j.ogm.cypher.ComparisonOperator;
 import org.neo4j.ogm.cypher.Filter;
 import org.neo4j.ogm.cypher.Filters;
@@ -22,7 +24,7 @@ public class BitOrderServiceImpl extends GenericService<BitOrder> implements Bit
 
     @Override
     public BitOrder getBitOrderByID(String bitOrderId) {
-        Filter filter = new Filter("bitOrderId", ComparisonOperator.EQUALS, bitOrderId);
+        Filter filter = new Filter("bitOrderId", ComparisonOperator.EQUALS, Integer.parseInt(bitOrderId));
         Collection<BitOrder> bitOrders = session.loadAll(BitOrder.class, new Filters().add(filter));
         if (bitOrders.size() > 1) {
             System.out.println("Database corrupted. Two or more IDs for a Fragment are not allowed.");
@@ -49,6 +51,24 @@ public class BitOrderServiceImpl extends GenericService<BitOrder> implements Bit
             result.add(fullBitOrder);
         });
         return result.get(0);
+    }
+
+    @Override
+    public List<BitOrder> getBitOrderByFragment(String fragmentId) {
+        FragmentService fragmentService = new FragmentServiceImpl();
+        Fragment fragment = fragmentService.getFragmentByID(fragmentId);
+        List<BitOrder> bitOrderList = new LinkedList<>();
+        List<FragmentToBitOrder> relations = fragment.getAssociatedTo();
+        if (relations != null) {
+            for (FragmentToBitOrder fragmentToBitOrder : relations) {
+                BitOrder bitOrder = fragmentToBitOrder.getEndBitOrder();
+                if (bitOrder != null) {
+                    BitOrder fullBitOrder = getBitOrderByID(String.valueOf(bitOrder.getBitOrderId()));
+                    bitOrderList.add(fullBitOrder);
+                }
+            }
+        }
+        return bitOrderList;
     }
 
     @Override

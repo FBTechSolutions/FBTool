@@ -34,13 +34,15 @@ public class FBListProducts implements Runnable {
         for (Product product : productService.findAll()) {
             System.out.printf("- id:%s  label:%s%n", product.getProductId(), product.getProductLabel());
             if (isFeatureEnabled) {
+                System.out.println("  features ...");
                 for (ProductToFeature relation : product.getAssociatedTo()) {
                     System.out.println("  - " + relation.getEndFeature().getFeatureId() + "  " + relation.getEndFeature().getFeatureLabel());
                 }
             }
             if (isFragmentEnabled) {
+                System.out.println("  fragments ...");
                 List<ProductToFeature> featureList = product.getAssociatedTo();
-                List<String> featureIds = FeatureUtil.retrieveFeatureIdsByRelation(featureList);
+                List<String> featureIds = FeatureUtil.retrieveFeatureIdsByProductToFeatureRelation(featureList);
                 List<Fragment> fragmentList = fragmentService.calculateFragmentsByFeatureList(featureIds);
                 for (Fragment fragment : fragmentList) {
                     System.out.println("  - " + fragment.getFragmentId() + "  " + fragment.getFragmentLabel());

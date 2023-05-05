@@ -72,12 +72,18 @@ public class FragmentServiceImpl extends GenericService<Fragment> implements Fra
         for (Fragment fragment : fragmentService.findAll()) {
             Set<String> bitOrderListFromFragment = new HashSet<>();
             List<FragmentToBitOrder> relations = fragment.getAssociatedTo();
-            for (FragmentToBitOrder relation : relations) {
-                BitOrder bitOrderTemp = relation.getEndBitOrder();
-                bitOrderListFromFragment.add(String.valueOf(bitOrderTemp.getBitOrderId()));
+            if (relations != null) {
+                for (FragmentToBitOrder relation : relations) {
+                    BitOrder bitOrderTemp = relation.getEndBitOrder();
+                    bitOrderListFromFragment.add(String.valueOf(bitOrderTemp.getBitOrderId()));
+                }
+            } else {
+                System.out.println("fragment " + fragment.getFragmentId() + " does not have a bitOrders");
             }
-            if (bitOrderList.containsAll(bitOrderListFromFragment)) {
-                fragmentList.add(fragment);
+            if (!bitOrderListFromFragment.isEmpty()) {
+                if (bitOrderList.containsAll(bitOrderListFromFragment)) {
+                    fragmentList.add(fragment);
+                }
             }
         }
         return fragmentList;

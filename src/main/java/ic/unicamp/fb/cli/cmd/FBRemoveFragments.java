@@ -1,12 +1,8 @@
 package ic.unicamp.fb.cli.cmd;
 
-import ic.unicamp.fb.graph.neo4j.schema.Feature;
 import ic.unicamp.fb.graph.neo4j.schema.Fragment;
-import ic.unicamp.fb.graph.neo4j.services.FeatureService;
-import ic.unicamp.fb.graph.neo4j.services.FeatureServiceImpl;
 import ic.unicamp.fb.graph.neo4j.services.FragmentService;
 import ic.unicamp.fb.graph.neo4j.services.FragmentServiceImpl;
-import ic.unicamp.fb.graph.neo4j.utils.FragmentUtil;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 
@@ -29,7 +25,7 @@ public class FBRemoveFragments implements Runnable {
         FragmentService fragmentService = new FragmentServiceImpl();
         for (String fragmentId : fragmentIds) {
             Fragment fullFragment = fragmentService.getFragmentByID(fragmentId);
-            if(fullFragment!=null){
+            if (fullFragment != null) {
                 fragmentService.delete(fullFragment.getId());
             }
         }
