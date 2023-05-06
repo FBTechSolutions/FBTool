@@ -55,7 +55,7 @@ public class FBMoveBlocks implements Runnable {
             blockToFragment.setEndFragment(newFullFragment);
 
             fullBlock.setAssociatedTo(blockToFragment);
-            blockService.createOrUpdate(fullBlock);
+            blockService.createOrUpdate(fullBlock, 1);
         }
     }
 }

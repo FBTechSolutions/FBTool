@@ -10,5 +10,7 @@ public interface Service<T> {
 
     T createOrUpdate(T object);
 
+    T createOrUpdate(T object, int depth);
+
     Class<T> getEntityType();
 }

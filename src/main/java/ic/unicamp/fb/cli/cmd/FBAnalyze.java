@@ -164,7 +164,7 @@ public class FBAnalyze implements Runnable {
 
     private void createContainers(Container container) {
         ContainerService containerService = new ContainerServiceImpl();
-        containerService.createOrUpdate(container);
+        containerService.createOrUpdate(container, 20);
     }
 
     private void changeTreeToSchemaForm(TreeWalk treeWalk, Container main) throws IOException {

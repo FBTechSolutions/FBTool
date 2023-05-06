@@ -44,7 +44,7 @@ public class FBProjectProduct implements Runnable {
     private final Git git = (Git) gitVC.retrieveDirector();
     public static final String CMD_NAME = "project";
 
-    @Option(names = "-clean", defaultValue = "false")
+    @Option(names = "--clean", defaultValue = "false")
     boolean clean;
 
     @Parameters(index = "0..*")
