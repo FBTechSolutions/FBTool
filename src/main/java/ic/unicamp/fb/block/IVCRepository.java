@@ -12,5 +12,7 @@ public interface IVCRepository {
 
     Path getOutDirectory(String name);
 
+    Path getParentDirectory();
+
     Git createGitDir(Path repositoryPath);
 }

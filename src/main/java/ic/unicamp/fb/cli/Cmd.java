@@ -6,6 +6,7 @@ import ic.unicamp.fb.cli.cmd.FBAnalyze;
 import ic.unicamp.fb.cli.cmd.FBCommit;
 import ic.unicamp.fb.cli.cmd.FBConfigure;
 import ic.unicamp.fb.cli.cmd.FBExit;
+import ic.unicamp.fb.cli.cmd.FBGenerateCuts;
 import ic.unicamp.fb.cli.cmd.FBInspectFiles;
 import ic.unicamp.fb.cli.cmd.FBListBitOrders;
 import ic.unicamp.fb.cli.cmd.FBListBlocks;
@@ -61,6 +62,7 @@ import static ic.unicamp.fb.cli.util.CmdTag.CMD_UPSERT_FEATURES;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_UPSERT_FRAGMENT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_UPSERT_PRODUCT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_VERSION;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_GENERATE_CUTS;
 import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__BM_ASCII;
 import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__CMD_ACCEPTED;
 import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__CMD_END;
@@ -100,7 +102,8 @@ import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__WELCOME_SPLM;
                 FBUpsertBlockOut.class,
                 FBRemoveFeatures.class,
                 FBRemoveProducts.class,
-                FBRemoveFragments.class},
+                FBRemoveFragments.class,
+                FBGenerateCuts.class},
         footer = {"", "launching prompt ...", ""})
 public class Cmd implements Runnable {
 
@@ -240,6 +243,10 @@ public class Cmd implements Runnable {
                     }
                     case CMD_REMOVE_FRAGMENTS -> {
                         CommandLine commandLine = new CommandLine(new FBRemoveFragments());
+                        __executeCmd(inputs, commandLine);
+                    }
+                    case CMD_GENERATE_CUTS -> {
+                        CommandLine commandLine = new CommandLine(new FBGenerateCuts());
                         __executeCmd(inputs, commandLine);
                     }
                     default -> __printCmdNotValid();

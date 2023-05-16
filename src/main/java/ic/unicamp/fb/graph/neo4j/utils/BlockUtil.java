@@ -16,4 +16,13 @@ public class BlockUtil {
         }
         return fullBlock;
     }
+    public static Block retrieveOrCreateABlockBeanByState(BlockService blockService, String blockId, DataState dataState, BlockState blockState) {
+        Block fullBlock = blockService.getBlockByID(blockId);
+        if (fullBlock == null) {
+            fullBlock = new Block();
+            fullBlock.setVcBlockState(dataState);
+            fullBlock.setBlockState(blockState);
+        }
+        return fullBlock;
+    }
 }

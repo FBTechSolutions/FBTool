@@ -49,6 +49,11 @@ public class GitRepository implements IVCRepository {
     }
 
     @Override
+    public Path getParentDirectory() {
+        return Paths.get(String.valueOf(path));
+    }
+
+    @Override
     public Git createGitDir(Path repositoryPath) {
         try {
 

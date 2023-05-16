@@ -6,6 +6,7 @@ import ic.unicamp.fb.cli.cmd.FBAnalyze;
 import ic.unicamp.fb.cli.cmd.FBCommit;
 import ic.unicamp.fb.cli.cmd.FBConfigure;
 import ic.unicamp.fb.cli.cmd.FBExit;
+import ic.unicamp.fb.cli.cmd.FBGenerateCuts;
 import ic.unicamp.fb.cli.cmd.FBInspectFiles;
 import ic.unicamp.fb.cli.cmd.FBListBitOrders;
 import ic.unicamp.fb.cli.cmd.FBListBlocks;
@@ -63,5 +64,7 @@ public interface CmdTag {
     String CMD_REMOVE_PRODUCTS = FBRemoveProducts.CMD_NAME;
     String CMD_REMOVE_FRAGMENTS = FBRemoveFragments.CMD_NAME;
     String CMD_LIST_BIT_ORDERS = FBListBitOrders.CMD_NAME;
+
+    String CMD_GENERATE_CUTS = FBGenerateCuts.CMD_NAME;
 
 }
