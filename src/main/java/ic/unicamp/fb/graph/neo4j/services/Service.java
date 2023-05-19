@@ -8,6 +8,8 @@ public interface Service<T> {
 
     void delete(Long id);
 
+    void deleteAll();
+
     T createOrUpdate(T object);
 
     T createOrUpdate(T object, int depth);

@@ -3,6 +3,7 @@ package ic.unicamp.fb.cli;
 import com.github.lalyos.jfiglet.FigletFont;
 import ic.unicamp.fb.cli.cmd.FBAdd;
 import ic.unicamp.fb.cli.cmd.FBAnalyze;
+import ic.unicamp.fb.cli.cmd.FBCleanDBBlocks;
 import ic.unicamp.fb.cli.cmd.FBCommit;
 import ic.unicamp.fb.cli.cmd.FBConfigure;
 import ic.unicamp.fb.cli.cmd.FBExit;
@@ -63,6 +64,7 @@ import static ic.unicamp.fb.cli.util.CmdTag.CMD_UPSERT_FRAGMENT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_UPSERT_PRODUCT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_VERSION;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_GENERATE_CUTS;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_CLEAN_DB_BLOCKS;
 import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__BM_ASCII;
 import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__CMD_ACCEPTED;
 import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__CMD_END;
@@ -103,7 +105,8 @@ import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__WELCOME_SPLM;
                 FBRemoveFeatures.class,
                 FBRemoveProducts.class,
                 FBRemoveFragments.class,
-                FBGenerateCuts.class},
+                FBGenerateCuts.class,
+                FBCleanDBBlocks.class},
         footer = {"", "launching prompt ...", ""})
 public class Cmd implements Runnable {
 
@@ -247,6 +250,10 @@ public class Cmd implements Runnable {
                     }
                     case CMD_GENERATE_CUTS -> {
                         CommandLine commandLine = new CommandLine(new FBGenerateCuts());
+                        __executeCmd(inputs, commandLine);
+                    }
+                    case CMD_CLEAN_DB_BLOCKS -> {
+                        CommandLine commandLine = new CommandLine(new FBCleanDBBlocks());
                         __executeCmd(inputs, commandLine);
                     }
                     default -> __printCmdNotValid();

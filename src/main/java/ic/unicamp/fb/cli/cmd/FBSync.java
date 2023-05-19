@@ -32,6 +32,7 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.treewalk.TreeWalk;
+import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 
@@ -241,6 +242,9 @@ public class FBSync implements Runnable {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+            //calling another command
+            CommandLine commandLine = new CommandLine(new FBListBlocks());
+            commandLine.execute();
         }
 
         //from first commit to last commit differences

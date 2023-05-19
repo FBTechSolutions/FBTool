@@ -25,6 +25,9 @@ public class FBUpsertProduct implements Runnable {
 
     public static final String CMD_NAME = "upsert-product";
 
+    @CommandLine.Option(names = {"--new"}, description = "Creating a Product", defaultValue = "false")
+    private boolean isCreatedAProduct;
+
     @CommandLine.Option(names = {"--add", "--adding"}, description = "Add feature to Product", defaultValue = "false")
     private boolean isAddingEnabled;
 
@@ -45,9 +48,11 @@ public class FBUpsertProduct implements Runnable {
             System.out.println("This command requires an productId");
             return;
         }
-        if (productService.getProductByID(productId) == null) {
-            System.out.println("Required a valid productID");
-            return;
+        if(!isCreatedAProduct){
+            if (productService.getProductByID(productId) == null) {
+                System.out.println("Required a valid productID");
+                return;
+            }
         }
         if (featureIds == null) {
             System.out.println("This command requires an at least a feature");

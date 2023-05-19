@@ -3,6 +3,7 @@ package ic.unicamp.fb.cli.util;
 
 import ic.unicamp.fb.cli.cmd.FBAdd;
 import ic.unicamp.fb.cli.cmd.FBAnalyze;
+import ic.unicamp.fb.cli.cmd.FBCleanDBBlocks;
 import ic.unicamp.fb.cli.cmd.FBCommit;
 import ic.unicamp.fb.cli.cmd.FBConfigure;
 import ic.unicamp.fb.cli.cmd.FBExit;
@@ -67,4 +68,5 @@ public interface CmdTag {
 
     String CMD_GENERATE_CUTS = FBGenerateCuts.CMD_NAME;
 
+    String CMD_CLEAN_DB_BLOCKS = FBCleanDBBlocks.CMD_NAME;
 }

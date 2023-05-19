@@ -7,6 +7,7 @@ import ic.unicamp.fb.graph.neo4j.services.BlockService;
 import ic.unicamp.fb.graph.neo4j.services.BlockServiceImpl;
 import ic.unicamp.fb.graph.neo4j.services.FragmentService;
 import ic.unicamp.fb.graph.neo4j.services.FragmentServiceImpl;
+import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 
@@ -57,5 +58,9 @@ public class FBMoveBlocks implements Runnable {
             fullBlock.setAssociatedTo(blockToFragment);
             blockService.createOrUpdate(fullBlock, 1);
         }
+
+        //calling another command
+        CommandLine commandLine = new CommandLine(new FBInspectFiles());
+        commandLine.execute("--all");
     }
 }

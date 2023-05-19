@@ -40,7 +40,7 @@ public class FBListProducts implements Runnable {
                 }
             }
             if (isFragmentEnabled) {
-                System.out.println("  fragments ...");
+                System.out.println("  calculating fragments ...");
                 List<ProductToFeature> featureList = product.getAssociatedTo();
                 List<String> featureIds = FeatureUtil.retrieveFeatureIdsByProductToFeatureRelation(featureList);
                 List<Fragment> fragmentList = fragmentService.calculateFragmentsByFeatureList(featureIds);

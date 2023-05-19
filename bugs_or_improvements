@@ -18,6 +18,10 @@ take a product and calculate the list of fragments.
 
 Add new Command.
 List features by bit order.
+//////////////////////////////
+
+Bug Reported. We can not applied fb sync Project_SPL two many times. Because it will create full new blocks.
+
 
 
 

@@ -1,3 +1,8 @@
+MATCH (n:FBTool)
+WHERE ID(n) = 15
+SET n.lastBlockId = 33
+
+
 configuring javas
 sudo update-alternatives --install /usr/bin/java java /media/jc/Documents/programs/java/8/bin/java 1
 sudo update-alternatives --install /usr/bin/java java /media/jc/Documents/programs/java/11/bin/java 2

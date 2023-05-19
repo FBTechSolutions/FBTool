@@ -22,7 +22,12 @@ public abstract class GenericService<T extends AbstractNode> implements Service<
 
     @Override
     public void delete(Long id) {
-        session.delete(session.load(getEntityType(), id));
+        session.delete(session.load(getEntityType(), id));;
+    }
+
+    @Override
+    public void deleteAll() {
+        session.deleteAll(getEntityType());
     }
 
     @Override
