@@ -3,6 +3,7 @@ package ic.unicamp.fb.cli.util;
 
 import ic.unicamp.fb.cli.cmd.FBAdd;
 import ic.unicamp.fb.cli.cmd.FBAnalyze;
+import ic.unicamp.fb.cli.cmd.FBCheckAnd;
 import ic.unicamp.fb.cli.cmd.FBCleanDBBlocks;
 import ic.unicamp.fb.cli.cmd.FBCommit;
 import ic.unicamp.fb.cli.cmd.FBConfigure;
@@ -17,6 +18,7 @@ import ic.unicamp.fb.cli.cmd.FBListFragments;
 import ic.unicamp.fb.cli.cmd.FBListProducts;
 import ic.unicamp.fb.cli.cmd.FBMapFragmentToBitOrder;
 import ic.unicamp.fb.cli.cmd.FBMoveBlocks;
+import ic.unicamp.fb.cli.cmd.FBProjectFeatures;
 import ic.unicamp.fb.cli.cmd.FBProjectProduct;
 import ic.unicamp.fb.cli.cmd.FBRemoveFeatures;
 import ic.unicamp.fb.cli.cmd.FBRemoveFragments;
@@ -47,6 +49,7 @@ public interface CmdTag {
     String CMD_UPSERT_FRAGMENT = FBUpsertFragment.CMD_NAME;
     String CMD_PROJECT_PRODUCT = FBProjectProduct.CMD_NAME;
 
+    String CMD_PROJECT_FEATURES = FBProjectFeatures.CMD_NAME;
     String CMD_LIST_PRODUCTS = FBListProducts.CMD_NAME;
     String CMD_LIST_FEATURES = FBListFeatures.CMD_NAME;
     String CMD_LIST_FRAGMENTS = FBListFragments.CMD_NAME;
@@ -69,4 +72,6 @@ public interface CmdTag {
     String CMD_GENERATE_CUTS = FBGenerateCuts.CMD_NAME;
 
     String CMD_CLEAN_DB_BLOCKS = FBCleanDBBlocks.CMD_NAME;
+
+    String CMD_CHECK_AND = FBCheckAnd.CMD_NAME;
 }

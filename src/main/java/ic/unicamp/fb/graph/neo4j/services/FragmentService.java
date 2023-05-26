@@ -11,4 +11,6 @@ public interface FragmentService extends Service<Fragment> {
     List<Fragment> calcFragmentsByFeatureId(String featureId);
 
     List<Fragment> calculateFragmentsByFeatureList(List<String> featureList);
+
+    Fragment retrieveUniqueAndFragment(List<Integer> orderList);
 }

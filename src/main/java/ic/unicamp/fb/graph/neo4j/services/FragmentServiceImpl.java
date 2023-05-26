@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class FragmentServiceImpl extends GenericService<Fragment> implements FragmentService {
 
@@ -87,6 +88,33 @@ public class FragmentServiceImpl extends GenericService<Fragment> implements Fra
             }
         }
         return fragmentList;
+    }
+
+    @Override
+    public Fragment retrieveUniqueAndFragment(List<Integer> orderList) {
+        Set<String> OrderStringList = orderList.stream()
+                .map(String::valueOf)
+                .collect(Collectors.toSet());
+
+        FragmentService fragmentService = new FragmentServiceImpl();
+        for (Fragment fragment : fragmentService.findAll()) {
+            Set<String> bitOrderListFromFragment = new HashSet<>();
+            List<FragmentToBitOrder> relations = fragment.getAssociatedTo();
+            if (relations != null) {
+                for (FragmentToBitOrder relation : relations) {
+                    BitOrder bitOrderTemp = relation.getEndBitOrder();
+                    bitOrderListFromFragment.add(String.valueOf(bitOrderTemp.getBitOrderId()));
+                }
+            } else {
+                System.out.println("fragment " + fragment.getFragmentId() + " does not have a bitOrders");
+            }
+            if (!bitOrderListFromFragment.isEmpty()) {
+                if (OrderStringList.equals(bitOrderListFromFragment)) {
+                    return fragment;
+                }
+            }
+        }
+        return null;
     }
 
     @Override

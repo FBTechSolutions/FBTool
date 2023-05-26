@@ -1,8 +1,10 @@
 package ic.unicamp.fb.graph.neo4j.utils;
 
 import ic.unicamp.fb.graph.neo4j.schema.Feature;
+import ic.unicamp.fb.graph.neo4j.schema.Fragment;
 import ic.unicamp.fb.graph.neo4j.schema.relations.ProductToFeature;
 import ic.unicamp.fb.graph.neo4j.services.FeatureService;
+import ic.unicamp.fb.graph.neo4j.services.FragmentService;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -10,8 +12,8 @@ import java.util.List;
 import static ic.unicamp.fb.cli.cmd.FBConfigure.FB_GENERIC_FEATURE;
 
 public class FeatureUtil {
-    public static Feature retrieveOrCreateGenericFeatureBean(FeatureService productService) {
-        Feature fullFeature = productService.getFeatureByID(FB_GENERIC_FEATURE);
+    public static Feature retrieveOrCreateGenericFeatureBean(FeatureService featureService) {
+        Feature fullFeature = featureService.getFeatureByID(FB_GENERIC_FEATURE);
         if (fullFeature == null) {
             fullFeature = new Feature();
             fullFeature.setFeatureId(FB_GENERIC_FEATURE);
@@ -20,8 +22,8 @@ public class FeatureUtil {
         return fullFeature;
     }
 
-    public static Feature retrieveOrCreateAStandardFeatureBean(FeatureService productService, String featureId, String featureLabel) {
-        Feature fullFeature = productService.getFeatureByID(featureId);
+    public static Feature retrieveOrCreateAStandardFeatureBean(FeatureService featureService, String featureId, String featureLabel) {
+        Feature fullFeature = featureService.getFeatureByID(featureId);
         if (fullFeature == null) {
             fullFeature = new Feature();
             fullFeature.setFeatureId(featureId);
@@ -47,5 +49,10 @@ public class FeatureUtil {
             featureIds.add(feature.getFeatureId());
         }
         return featureIds;
+    }
+
+    public static boolean exitsFeatureBean(FeatureService featureService, String featureId) {
+        Feature fullFeature = featureService.getFeatureByID(featureId);
+        return fullFeature != null;
     }
 }

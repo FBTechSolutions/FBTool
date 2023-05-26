@@ -3,6 +3,7 @@ package ic.unicamp.fb.cli;
 import com.github.lalyos.jfiglet.FigletFont;
 import ic.unicamp.fb.cli.cmd.FBAdd;
 import ic.unicamp.fb.cli.cmd.FBAnalyze;
+import ic.unicamp.fb.cli.cmd.FBCheckAnd;
 import ic.unicamp.fb.cli.cmd.FBCleanDBBlocks;
 import ic.unicamp.fb.cli.cmd.FBCommit;
 import ic.unicamp.fb.cli.cmd.FBConfigure;
@@ -17,6 +18,7 @@ import ic.unicamp.fb.cli.cmd.FBListFragments;
 import ic.unicamp.fb.cli.cmd.FBListProducts;
 import ic.unicamp.fb.cli.cmd.FBMapFragmentToBitOrder;
 import ic.unicamp.fb.cli.cmd.FBMoveBlocks;
+import ic.unicamp.fb.cli.cmd.FBProjectFeatures;
 import ic.unicamp.fb.cli.cmd.FBProjectProduct;
 import ic.unicamp.fb.cli.cmd.FBRemoveFeatures;
 import ic.unicamp.fb.cli.cmd.FBRemoveFragments;
@@ -53,6 +55,7 @@ import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_BIT_ORDERS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_MAP_FRAGMENTS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_MOVE_BLOCKS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_PROJECT_PRODUCT;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_PROJECT_FEATURES;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_REMOVE_FEATURES;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_REMOVE_FRAGMENTS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_REMOVE_PRODUCTS;
@@ -65,6 +68,7 @@ import static ic.unicamp.fb.cli.util.CmdTag.CMD_UPSERT_PRODUCT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_VERSION;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_GENERATE_CUTS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_CLEAN_DB_BLOCKS;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_CHECK_AND;
 import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__BM_ASCII;
 import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__CMD_ACCEPTED;
 import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__CMD_END;
@@ -88,6 +92,7 @@ import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__WELCOME_SPLM;
                 FBConfigure.class,
                 FBAnalyze.class,
                 FBProjectProduct.class,
+                FBProjectFeatures.class,
                 FBUpsertProduct.class,
                 FBUpsertFeature.class,
                 FBUpsertFragment.class,
@@ -106,7 +111,8 @@ import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__WELCOME_SPLM;
                 FBRemoveProducts.class,
                 FBRemoveFragments.class,
                 FBGenerateCuts.class,
-                FBCleanDBBlocks.class},
+                FBCleanDBBlocks.class,
+                FBCheckAnd.class},
         footer = {"", "launching prompt ...", ""})
 public class Cmd implements Runnable {
 
@@ -188,6 +194,10 @@ public class Cmd implements Runnable {
                         CommandLine commandLine = new CommandLine(new FBProjectProduct());
                         __executeCmd(inputs, commandLine);
                     }
+                    case CMD_PROJECT_FEATURES -> {
+                        CommandLine commandLine = new CommandLine(new FBProjectFeatures());
+                        __executeCmd(inputs, commandLine);
+                    }
                     case CMD_LIST_PRODUCTS -> {
                         CommandLine commandLine = new CommandLine(new FBListProducts());
                         __executeCmd(inputs, commandLine);
@@ -254,6 +264,10 @@ public class Cmd implements Runnable {
                     }
                     case CMD_CLEAN_DB_BLOCKS -> {
                         CommandLine commandLine = new CommandLine(new FBCleanDBBlocks());
+                        __executeCmd(inputs, commandLine);
+                    }
+                    case CMD_CHECK_AND -> {
+                        CommandLine commandLine = new CommandLine(new FBCheckAnd());
                         __executeCmd(inputs, commandLine);
                     }
                     default -> __printCmdNotValid();

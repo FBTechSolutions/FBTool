@@ -21,6 +21,13 @@
             <version>6.5.0.202303070854-r</version>
         </dependency>
         <!-- -->
+        <!-- Historical in commands -->
+        <dependency>
+            <groupId>org.jline</groupId>
+            <artifactId>jline-reader</artifactId>
+            <version>3.23.0</version>
+        </dependency>
+        <!-- -->
         <!-- CLI dependencies -->
         <dependency>
             <groupId>info.picocli</groupId>
