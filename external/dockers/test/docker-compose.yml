@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  neo4j:
+    image: jcupephd/fbelevator:0.1
+    volumes:
+      - ./data:/data
+      - ./logs:/logs
+      - ./import:/var/lib/neo4j/import
+      - ./plugins:/plugins
+      
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+volumes:
+  data:
+  logs:
+  import:
