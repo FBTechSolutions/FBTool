@@ -1,0 +1,326 @@
+MATCH (n:FBTool)
+WHERE ID(n) = 15
+SET n.lastBlockId = 33
+
+
+configuring javas
+sudo update-alternatives --install /usr/bin/java java /media/jc/Documents/programs/java/8/bin/java 1
+sudo update-alternatives --install /usr/bin/java java /media/jc/Documents/programs/java/11/bin/java 2
+sudo update-alternatives --install /usr/bin/java java /media/jc/Documents/programs/java/17/bin/java 3
+sudo update-alternatives --install /usr/bin/javac javac /media/jc/Documents/programs/java/8/bin/javac 1
+sudo update-alternatives --install /usr/bin/javac javac /media/jc/Documents/programs/java/11/bin/javac 2
+sudo update-alternatives --install /usr/bin/javac javac /media/jc/Documents/programs/java/17/bin/javac 3
+sudo update-alternatives --config java
+sudo update-alternatives --config javac
+
+
+sudo chmod a+x neo4j-desktop-1.5.0-x86_64.AppImage
+
+sudo update-alternatives --config java
+
+Configures the default for the program "java". That's the Java VM.
+
+sudo update-alternatives --config javac
+
+MATCH (n:Block {blockId: '0000000000000038'})
+DETACH DELETE n;
+
+
+https://github.com/FeatureIDE/FeatureIDE/tree/develop/plugins/de.ovgu.featureide.examples
+
+
+http://localhost:7474/browser/
+http://localhost:7474/browser/
+
+https://www.tabnine.com/code/java/methods/org.eclipse.jgit.api.CheckoutCommand/setOrphan
+docker container rm cc3f2ff51cab cd20b396a061
+
+
+
+
+
+
+https://neo4j.com/developer/docker-run-neo4j/
+
+docker run     --name neo4jphd     -p7474:7474 -p7687:7687     -d     -v $HOME/neo4j/data:/data     -v $HOME/neo4j/logs:/logs     -v $HOME/neo4j/import:/var/lib/neo4j/import     -v $HOME/neo4j/plugins:/plugins     --env NEO4J_AUTH=neo4j/test     neo4j:latest
+
+docker exec -it testneo4j bash
+cypher-shell -u neo4j -p test
+
+MATCH (n)
+DETACH DELETE n;
+
+match(n) return n;
+
+https://console.neo4j.io/
+# https://github.com/neo4j/neo4j-ogm/blob/master/neo4j-ogm-docs/src/main/asciidoc/reference/annotations.adoc
+
+# List the containers and remove
+docker container ls -all
+
+# docker remove
+docker rm --force 7032df946de9
+docker rm --force janusgraph-default
+
+#Server
+# docker run -it -p 8182:8182 janusgraph/janusgraph
+-> 5775 [gremlin-server-boss-1] INFO  org.apache.tinkerpop.gremlin.server.GremlinServer  - Channel started at port 8182.
+
+# 1 client
+# bin/gremlin.sh
+->
+
+
+# server
+//docker run --rm --name janusgraph-default docker.io/janusgraph/janusgraph:latest
+# client
+//docker run --rm --link janusgraph-default:janusgraph -e GREMLIN_REMOTE_HOSTS=janusgraph \
+//    -it docker.io/janusgraph/janusgraph:latest ./bin/gremlin.sh
+
+##############################
+https://dgraph.io/blog/post/slash-intro-to-schema/
+https://www.youtube.com/watch?v=WDiUcqimeOY
+
+///Schema
+type ContainerBlock  {
+	containerId: String! @id # ... The path
+
+  goParent: ContainerBlock
+	goChildren: [ContainerBlock] @hasInverse(field:goParent)
+	goContent: ContentBlock  @hasInverse(field:belongsTo)
+}
+
+type ContentBlock  {
+	contentId: String! @id  # ... A generated id, e.g.,000000000001
+	currentState: BlockState! # ... Sync or not sync
+
+  goPrevious: ContentBlock
+  goNext: ContentBlock @hasInverse(field:goPrevious)
+  goData: Data
+
+  belongsTo: ContainerBlock
+  associatedTo: Feature
+
+}
+
+type Data  {
+	dataId: ID!
+  currentState: DataState
+  sha: String # ... sha generated from the content
+
+  belongsTo: ContentBlock @hasInverse(field:goData)
+}
+
+type Feature  {
+	featureId: String! @id # ... e.g., f1
+  label: String
+
+	belongsTo: Product
+  associatedTo:[ContentBlock] @hasInverse(field:associatedTo)
+}
+
+type Product  {
+  productId: String! @id # ... e.g., p1
+	label: String
+
+  associatedTo: [Feature] @hasInverse(field:belongsTo)
+}
+
+enum DataState {
+	NORMAL
+	STAGE
+	PRODUCTION
+}
+
+enum BlockState {
+	SYNC
+	TOUPDATE
+	TOINSERT
+	TOREMOVE
+}
+
+
+
+///schema
+// Adding a product
+mutation MyMutation {
+  addProduct(input: {productId: "p1", label: "Product 1"}) {
+    product {
+      label
+      productId
+    }
+  }
+}
+mutation MyMutation {
+  addProduct(input: {productId: "p2", label: "Product 2"}) {
+    product {
+      label
+      productId
+    }
+  }
+}
+
+//adding a features
+mutation MyMutation {
+  addFeature(input: {featureId: "f1", label: "feature 1"}) {
+    feature {
+      label
+      featureId
+    }
+  }
+}
+mutation MyMutation {
+  addFeature(input: {featureId: "f2", label: "feature 2"}) {
+    feature {
+      label
+      featureId
+    }
+  }
+}
+mutation MyMutation {
+  addFeature(input: {featureId: "f3", label: "feature 3"}) {
+    feature {
+      label
+    }
+  }
+}
+
+mutation MyMutation {
+  addFeature(input: {featureId: "f4", label: "feature4"}) {
+    feature {
+      label
+    }
+  }
+}
+
+
+// update relation between feature and products
+
+mutation MyMutation {
+  updateFeature(input: {set: {belongsTo: {productId: "p1"}}, filter: {featureId: {eq: "f1"}}}) {
+    feature {
+      label
+    }
+  }
+}
+
+mutation MyMutation {
+  updateFeature(input: {filter: {featureId: {eq: "f2"}}, set: {belongsTo: {productId: "p1"}}}) {
+    feature {
+      label
+    }
+  }
+}
+
+// creating content blocks
+
+mutation MyMutation {
+  addContentBlock(input: {contentId: "0000000000000000", state: SYNC}) {
+    contentBlock {
+      contentId
+    }
+  }
+}
+mutation MyMutation {
+  addContentBlock(input: {contentId: "0000000000000001", state: SYNC}) {
+    contentBlock {
+      contentId
+    }
+  }
+}
+
+//adding relation
+
+mutation MyMutation {
+  addData(input: {sha: "29932f3915935d773dc8d52c292cadd81c81071d", state: NORMAL, belongsTo: {contentId: "0000000000000000"}}) {
+    data {
+      sha
+      dataId
+      state
+    }
+  }
+}
+//asocied a feature to a block
+
+mutation MyMutation {
+  updateContentBlock(input: {filter: {contentId: {eq: "0000000000000001"}}, set: {associatedTo: {featureId: "f1"}}}) {
+    contentBlock {
+      contentId
+    }
+  }
+}
+
+##################################################################################################################
+Tip0: blue-surf-590541 is the name then the server then the domain then the port
+Tip1: change the two pointers of a relation.
+
+mutation MyMutation {
+  addProduct(input: {productId: "P1", label: "Product 1", associatedTo: [{featureId: "F1", label: "Feature 1"}, {featureId: "F2", label: "Feature 2"}, {featureId: "F3", label: "Feature 3"}]}) {
+    product {
+      label
+      productId
+      associatedTo {
+        featureId
+        label
+      }
+    }
+  }
+}
+
+TIP2: There is way to only delete one of the array
+mutation MyMutation {
+  updateProduct(input: {filter: {productId: {eq: "P1"}}, set: {}, remove: {associatedTo: {featureId: "F1"}}}) {
+    product {
+      associatedTo {
+        featureId
+        label
+      }
+    }
+  }
+}
+//
+{
+   "set": [
+    {
+      "productId":"P10",
+      "label":"Product 10",
+      "dgraph.type": "Product"
+    }
+  ]
+}
+
+{
+   "set": [
+    {
+      "dgraph.type": "Product",
+      "Product.label": "Product 10",
+      "Product.productId": "P10"
+    }
+  ]
+}
+
+{
+   "set": [
+    {
+      "dgraph.type": "Product",
+      "Product.label": "Product 11",
+      "Product.productId": "P11",
+      "Product.associatedTo":[
+       {   "dgraph.type" : "Feature",
+           "uid": "_:Feature",
+           "Feature.featureId": "F10",
+           "Feature.label": "F10"
+       }
+      ]
+    }
+  ]
+}
+//////////////////////////////
+query getFeature(featureId: string) {
+    features(func: eq(Feature.featureId, featureId)) {
+      uid
+      Feature.featureId
+      Feature.label
+    }
+}
+

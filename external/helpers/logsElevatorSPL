@@ -1,0 +1,459 @@
+// add code to the repository
+fb configure
+fb analyze
+fb add
+fb commit
+fb inspect-files --all
+fb list-products
+fb project FB_Generic_SPL_Prod
+// add and commit cuts to the projected source code
+git add .
+git commit -m "cuts added"
+//
+fb sync FB_Generic_SPL_Prod ///Improvement maybe add a command to review what is new or was will be updated
+fb add
+fb commit
+fb inspect-files --all
+
+// add features
+fb upsert-feature F0000 0 Elevator
+fb upsert-feature F0001 1 Behavior
+fb upsert-feature F0002 2 VoiceOutput
+fb upsert-feature F0003 3 CallButtons
+fb upsert-feature F0004 4 Safety
+fb upsert-feature F0005 5 Modes
+fb upsert-feature F0006 6 Service
+fb upsert-feature F0007 7 Priorities
+fb upsert-feature F0008 8 DirectedCall
+fb upsert-feature F0009 9 UndirectedCall
+fb upsert-feature F0010 10 Permission
+fb upsert-feature F0011 11 Overloaded
+fb upsert-feature F0012 12 Sabbath
+fb upsert-feature F0013 13 FiFo
+fb upsert-feature F0014 14 ShortestPath
+fb upsert-feature F0015 15 RushHour
+fb upsert-feature F0016 16 FloorPriority
+fb upsert-feature F0017 17 PersonPriority
+fb upsert-feature F0018 18 FloorPermission
+fb upsert-feature F0019 19 PermissionControl
+fb upsert-feature F0020 20 Security
+fb upsert-feature F0021 21 NF001
+fb upsert-feature F0022 22 NF002
+fb upsert-feature F0023 23 NF003
+fb upsert-feature F0024 24 NF004
+fb upsert-feature F0025 25 NF005
+fb upsert-feature F0026 26 NF006
+fb upsert-feature F0027 27 NF007
+fb upsert-feature F0028 28 NF008
+fb upsert-feature F0029 29 NF009
+fb upsert-feature F0030 30 NF010
+fb upsert-feature F0031 31 NF011
+fb upsert-feature F0032 32 NF012
+fb upsert-feature F0033 33 NF013
+fb upsert-feature F0034 34 NF014
+fb upsert-feature F0035 35 NF015
+fb upsert-feature F0036 36 NF016
+fb upsert-feature F0037 37 NF017
+fb upsert-feature F0038 38 NF018
+fb upsert-feature F0039 39 NF019
+fb upsert-feature F0040 40 NF020
+fb upsert-feature F0041 41 NF021
+fb upsert-feature F0042 42 NF022
+fb upsert-feature F0043 43 NF023
+fb upsert-feature F0044 44 NF024
+fb upsert-feature F0045 45 NF025
+fb upsert-feature F0046 46 NF026
+fb upsert-feature F0047 47 NF027
+fb upsert-feature F0048 48 NF028
+fb list-features
+
+// add fragments
+
+upsert-fragment sF0000 sElevator
+upsert-fragment sF0001 sBehavior
+upsert-fragment sF0002 sVoiceOutput
+upsert-fragment sF0003 sCallButtons
+upsert-fragment sF0004 sSafety
+upsert-fragment sF0005 sModes
+upsert-fragment sF0006 sService
+upsert-fragment sF0007 sPriorities
+upsert-fragment sF0008 sDirectedCall
+upsert-fragment sF0009 sUndirectedCall
+upsert-fragment sF0010 sPermission
+upsert-fragment sF0011 sOverloaded
+upsert-fragment sF0012 sSabbath
+upsert-fragment sF0013 sFiFo
+upsert-fragment sF0014 sShortestPath
+upsert-fragment sF0015 sRushHour
+upsert-fragment sF0016 sFloorPriority
+upsert-fragment sF0017 sPersonPriority
+upsert-fragment sF0018 sFloorPermission
+upsert-fragment sF0019 sPermissionControl
+upsert-fragment sF0020 sSecurity
+upsert-fragment sF0021 nsF0001
+upsert-fragment sF0022 nsF0002
+upsert-fragment sF0023 nsF0003
+upsert-fragment sF0024 nsF0004
+upsert-fragment sF0025 nsF0005
+upsert-fragment sF0026 nsF0006
+upsert-fragment sF0027 nsF0007
+upsert-fragment sF0028 nsF0008
+upsert-fragment sF0029 nsF0009
+upsert-fragment sF0030 nsF0010
+upsert-fragment sF0031 nsF0011
+upsert-fragment sF0032 nsF0012
+upsert-fragment sF0033 nsF0013
+upsert-fragment sF0034 nsF0014
+upsert-fragment sF0035 nsF0015
+upsert-fragment sF0036 nsF0016
+upsert-fragment sF0037 nsF0017
+upsert-fragment sF0038 nsF0018
+upsert-fragment sF0039 nsF0019
+upsert-fragment sF0040 nsF0020
+upsert-fragment sF0041 nsF0021
+upsert-fragment sF0042 nsF0022
+upsert-fragment sF0043 nsF0023
+upsert-fragment sF0044 nsF0024
+upsert-fragment sF0045 nsF0025
+upsert-fragment sF0046 nsF0026
+upsert-fragment sF0047 nsF0027
+upsert-fragment sF0048 nsF0028
+upsert-fragment sF0049 sF0003F0008
+upsert-fragment sF0050 sF0003F0018
+upsert-fragment sF0051 sF0003F0009F0018
+upsert-fragment sF0052 sF0003F0006F0018
+upsert-fragment sF0053 sF0003F0006
+
+// move blocks fromd default fragment to Elevator fragment
+(fb) move-blocks FB_Generic_Fragment sF0000
+
+// get order and tag fragments to order
+(fb) list-features --o
+
+map-frag-to-order sF0000 0
+map-frag-to-order sF0001 1
+map-frag-to-order sF0002 2
+map-frag-to-order sF0003 3
+map-frag-to-order sF0004 4
+map-frag-to-order sF0005 5
+map-frag-to-order sF0006 6
+map-frag-to-order sF0007 7
+map-frag-to-order sF0008 8
+map-frag-to-order sF0009 9
+map-frag-to-order sF0010 10
+map-frag-to-order sF0011 11
+map-frag-to-order sF0012 12
+map-frag-to-order sF0013 13
+map-frag-to-order sF0014 14
+map-frag-to-order sF0015 15
+map-frag-to-order sF0016 16
+map-frag-to-order sF0017 17
+map-frag-to-order sF0018 18
+map-frag-to-order sF0019 19
+map-frag-to-order sF0020 20
+map-frag-to-order sF0021 21
+map-frag-to-order sF0022 22
+map-frag-to-order sF0023 23
+map-frag-to-order sF0024 24
+map-frag-to-order sF0025 25
+map-frag-to-order sF0026 26
+map-frag-to-order sF0027 27
+map-frag-to-order sF0028 28
+map-frag-to-order sF0029 29
+map-frag-to-order sF0030 30
+map-frag-to-order sF0031 31
+map-frag-to-order sF0032 32
+map-frag-to-order sF0033 33
+map-frag-to-order sF0034 34
+map-frag-to-order sF0035 35
+map-frag-to-order sF0036 36
+map-frag-to-order sF0037 37
+map-frag-to-order sF0038 38
+map-frag-to-order sF0039 39
+map-frag-to-order sF0040 40
+map-frag-to-order sF0041 41
+map-frag-to-order sF0042 42
+map-frag-to-order sF0043 43
+map-frag-to-order sF0044 44
+map-frag-to-order sF0045 45
+map-frag-to-order sF0046 46
+map-frag-to-order sF0047 47
+map-frag-to-order sF0048 48
+map-frag-to-order sF0049 3 8
+map-frag-to-order sF0050 3 18
+map-frag-to-order sF0051 3 9 18
+map-frag-to-order sF0052 3 6 18
+map-frag-to-order sF0053 3 6
+
+fb list-fragments --o
+
+fb upsert-product --new SPL_Product F0000
+fb list-products --frag
+
+//Upserting old product configurations
+// upsert-product Enterprise Elevator Behavior Modes ShortestPath Service CallButtons DirectedCall Security Permission FloorPermission  
+upsert-product --new Enterprise F0000 F0001 F0005 F0014 F0006 F0003 F0008 F0020 F0010 F0018  
+
+// upsert-product HomeBasic Elevator Behavior Modes FIFO CallButtons UndirectedCall 
+upsert-product --new HomeBasic F0000 F0001 F0005 F0013 F0003 F0009 
+
+// upsert-product HomePremium Elevator Behavior Modes FIFO Service CallButtons UndirectedCall
+upsert-product --new HomePremium F0000 F0001 F0005 F0013 F0006 F0003 F0009
+
+// upsert-product Professional Elevator Behavior Modes ShortestPath CallButtons DirectedCall
+upsert-product --new Professional F0000 F0001 F0005 F0014 F0003 F0008
+
+// upsert-product Starter Elevator Behavior Modes Sabbath
+upsert-product --new Starter F0000 F0001 F0005 F0012
+
+// upsert-product Ultimate Elevator Behavior Modes ShortestPath Service CallButtons UndirectedCall Security Permission FloorPermission
+upsert-product --new Ultimate F0000 F0001 F0005 F0014 F0006 F0003 F0009 F0020 F0010 F0018
+
+fb list-products
+
+fb project SPL_Product
+//tagging framents to blocks
+//Control Unit
+tag-blocks sF0003 0000000000000063
+tag-blocks sF0003 0000000000000061
+tag-blocks sF0003 0000000000000059
+tag-blocks sF0038 0000000000000057
+tag-blocks sF0033 0000000000000056
+tag-blocks sF0049 0000000000000055
+tag-blocks sF0003 0000000000000054
+tag-blocks sF0038 0000000000000053
+tag-blocks sF0003 0000000000000051
+tag-blocks sF0008 0000000000000049
+tag-blocks sF0003 0000000000000048
+tag-blocks sF0006 0000000000000046
+tag-blocks sF0012 0000000000000045
+tag-blocks sF0003 0000000000000044
+tag-blocks sF0003 0000000000000042
+tag-blocks sF0008 0000000000000041
+tag-blocks sF0003 0000000000000039
+tag-blocks sF0006 0000000000000038
+tag-blocks sF0018 0000000000000037
+//ITickListener
+tag-blocks sF0003 0000000000000065
+//ITriggerListener
+tag-blocks sF0003 0000000000000067
+//Request
+tag-blocks sF0047 0000000000000090
+tag-blocks sF0046 0000000000000089
+tag-blocks sF0044 0000000000000088
+tag-blocks sF0047 0000000000000087
+tag-blocks sF0045 0000000000000086
+tag-blocks sF0044 0000000000000085
+tag-blocks sF0047 0000000000000084
+tag-blocks sF0044 0000000000000083
+tag-blocks sF0047 0000000000000082
+tag-blocks sF0044 0000000000000081
+tag-blocks sF0043 0000000000000080
+tag-blocks sF0047 0000000000000079
+tag-blocks sF0046 0000000000000078
+tag-blocks sF0047 0000000000000077
+tag-blocks sF0044 0000000000000076
+tag-blocks sF0041 0000000000000075
+tag-blocks sF0042 0000000000000074
+tag-blocks sF0047 0000000000000073
+tag-blocks sF0044 0000000000000072
+tag-blocks sF0047 0000000000000071
+tag-blocks sF0044 0000000000000070
+tag-blocks sF0043 0000000000000069
+tag-blocks sF0047 0000000000000068
+//Elevator
+tag-blocks sF0018 0000000000000098
+tag-blocks sF0006 0000000000000096
+tag-blocks sF0018 0000000000000095
+tag-blocks sF0006 0000000000000093
+tag-blocks sF0018 0000000000000092
+//ElevatorState
+tag-blocks sF0003 0000000000000116
+tag-blocks sF0018 0000000000000114
+tag-blocks sF0003 0000000000000112
+tag-blocks sF0040 0000000000000110
+tag-blocks sF0022 0000000000000109
+tag-blocks sF0003 0000000000000107
+tag-blocks sF0003 0000000000000105
+tag-blocks sF0003 0000000000000103
+tag-blocks sF0006 0000000000000101
+tag-blocks sF0018 0000000000000100
+//FloorChooseDialog
+tag-blocks sF0035 0000000000000121
+tag-blocks sF0029 0000000000000120
+tag-blocks sF0035 0000000000000119
+tag-blocks sF0029 0000000000000118
+tag-blocks sF0035 0000000000000117
+//FloorComposite
+tag-blocks sF0003 0000000000000166
+tag-blocks sF0008 0000000000000165
+tag-blocks sF0050 0000000000000164
+tag-blocks sF0003 0000000000000163
+tag-blocks sF0003 0000000000000161
+tag-blocks sF0003 0000000000000159
+tag-blocks sF0003 0000000000000157
+tag-blocks sF0003 0000000000000155
+tag-blocks sF0028 0000000000000154
+tag-blocks sF0008 0000000000000153
+tag-blocks sF0018 0000000000000152
+tag-blocks sF0034 0000000000000150
+tag-blocks sF0008 0000000000000149
+tag-blocks sF0018 0000000000000147
+tag-blocks sF0037 0000000000000146
+tag-blocks sF0032 0000000000000145
+tag-blocks sF0051 0000000000000144
+tag-blocks sF0032 0000000000000143
+tag-blocks sF0026 0000000000000142
+tag-blocks sF0050 0000000000000141
+tag-blocks sF0026 0000000000000140
+tag-blocks sF0050 0000000000000139
+tag-blocks sF0026 0000000000000138
+tag-blocks sF0038 0000000000000136
+tag-blocks sF0036 0000000000000134
+tag-blocks sF0031 0000000000000133
+tag-blocks sF0024 0000000000000132
+tag-blocks sF0036 0000000000000131
+tag-blocks sF0031 0000000000000130
+tag-blocks sF0024 0000000000000129
+tag-blocks sF0036 0000000000000128
+tag-blocks sF0030 0000000000000127
+tag-blocks sF0036 0000000000000126
+tag-blocks sF0031 0000000000000125
+tag-blocks sF0024 0000000000000124
+tag-blocks sF0036 0000000000000123
+//JBackgroundPanel
+//MainWindow
+tag-blocks sF0003 0000000000000209
+tag-blocks sF0052 0000000000000207
+tag-blocks sF0053 0000000000000205
+tag-blocks sF0006 0000000000000203
+tag-blocks sF0053 0000000000000201
+tag-blocks sF0053 0000000000000199
+tag-blocks sF0018 0000000000000197
+tag-blocks sF0003 0000000000000195
+tag-blocks sF0003 0000000000000193
+tag-blocks sF0052 0000000000000192
+tag-blocks sF0018 0000000000000190
+tag-blocks sF0027 0000000000000188
+tag-blocks sF0053 0000000000000187
+tag-blocks sF0006 0000000000000186
+tag-blocks sF0027 0000000000000185
+tag-blocks sF0026 0000000000000184
+tag-blocks sF0050 0000000000000183
+tag-blocks sF0026 0000000000000182
+tag-blocks sF0039 0000000000000180
+tag-blocks sF0050 0000000000000179
+tag-blocks sF0023 0000000000000178
+tag-blocks sF0003 0000000000000176
+tag-blocks sF0024 0000000000000174
+tag-blocks sF0049 0000000000000173
+tag-blocks sF0003 0000000000000172
+tag-blocks sF0024 0000000000000171
+tag-blocks sF0049 0000000000000170
+tag-blocks sF0003 0000000000000169
+tag-blocks sF0024 0000000000000168
+//TestElevator
+tag-blocks sF0003 0000000000000219
+tag-blocks sF0003 0000000000000217
+tag-blocks sF0025 0000000000000215
+tag-blocks sF0013 0000000000000214
+tag-blocks sF0021 0000000000000213
+tag-blocks sF0003 0000000000000211
+
+fb inspect-files --all
+
+fb project Enterprise
+fb project HomeBasic
+fb project HomePremium
+fb project Professional
+fb project Starter
+fb project Ultimate
+
+// Comparing and fixing Enterprise product
+
+// Fixing ControlUnit
+upsert-product --add Enterprise F0038 
+tag-blocks sF0048 0000000000000054
+upsert-product --add Enterprise F0047 
+upsert-product --add Enterprise F0046
+upsert-product --add Enterprise F0044
+// Fixing SimulationUnit
+upsert-product --add Enterprise F0040
+// fixing FloorChooseDialog
+upsert-product --add Enterprise F0035
+upsert-product --add Enterprise F0029
+// fixing FloorComposite
+upsert-product --add Enterprise F0034
+upsert-product --add Enterprise F0037
+upsert-product --add Enterprise F0026
+upsert-product --add Enterprise F0036
+upsert-product --add Enterprise F0038
+upsert-product --add Enterprise F0024
+upsert-product --add Enterprise F0030
+
+upsert-product --add Enterprise F0032 //error here
+
+upsert-feature F0049 49 NF029 //not used
+upsert-fragment sF0054 nsF0029 //not used
+map-frag-to-order sF0054 49 //not used
+
+tag-blocks sF0054 0000000000000143 //error here
+upsert-product --add Enterprise F0049 //error here
+upsert-product --rm Enterprise F0049 //fix error
+upsert-product --rm Enterprise F0032 //fix error
+tag-blocks sF0032 0000000000000143 //fixing error
+
+// Main Windows
+
+upsert-product --add Enterprise F0027
+tag-blocks sF0054 0000000000000186 //reusing created before fragment
+
+upsert-feature F0050 50 NF030
+upsert-fragment sF0055 nsF0030
+map-frag-to-order sF0055 50
+tag-blocks sF0055 0000000000000169
+
+upsert-feature F0051 51 NF031
+upsert-fragment sF0056 nsF0031
+map-frag-to-order sF0056 51
+tag-blocks sF0056 0000000000000172
+
+// test
+fixed
+
+//Project HomeBasic
+//controlUnit
+upsert-product --add HomeBasic F0038
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
