@@ -36,7 +36,7 @@ public class FBAdd implements Runnable {
                 String content = temporalGitVC.retrieveContent(blockId);
                 gitVC.upsertContent(blockId, content);
                 temporalGitVC.removeContent(blockId);
-                git.add().addFilepattern(".bm/" + blockId).call();
+                git.add().addFilepattern(".fb/" + blockId).call();
                 Block fullBlock = blockService.getBlockByID(blockId);
                 fullBlock.setVcBlockState(DataState.STAGE);
                 fullBlock.setBlockState(BlockState.TO_INSERT);

@@ -13,11 +13,11 @@ import java.util.regex.Pattern;
 public class FBDirectoryUtil {
 
     private static final Pattern pattern = Pattern.compile("\\.fb");//, Pattern.CASE_INSENSITIVE
-    public static String BMDirectoryName = ".fb";
+    public static String FBDirectoryName = ".fb";
 
     public static Path getFBDirectoryAsPath() {
         String currentDirectory = System.getProperty("user.dir");
-        return Paths.get(currentDirectory, BMDirectoryName);
+        return Paths.get(currentDirectory, FBDirectoryName);
     }
 
     public static File getFBDirectoryAsFile() {
@@ -29,8 +29,8 @@ public class FBDirectoryUtil {
     }
 
     public static boolean createFBDirectory() {
-        File bmDirectoryAsFile = FBDirectoryUtil.getFBDirectoryAsFile();
-        boolean file_was_created = bmDirectoryAsFile.mkdir();
+        File fbDirectoryAsFile = FBDirectoryUtil.getFBDirectoryAsFile();
+        boolean file_was_created = fbDirectoryAsFile.mkdir();
         if (file_was_created) {
             setHiddenAttr(FBDirectoryUtil.getFBDirectoryAsPath());
             return true;

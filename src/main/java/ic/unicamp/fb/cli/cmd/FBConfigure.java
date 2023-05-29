@@ -53,10 +53,10 @@ public class FBConfigure implements Runnable {
     @Override
     public void run() {
         upsertGitDir();
-        upsertBMDir();
+        upsertFBDir();
     }
 
-    private void upsertBMDir() {
+    private void upsertFBDir() {
         //set up environment
         setUpHiddenFolderAndFBBranch();
         //set up initial db state
@@ -109,13 +109,13 @@ public class FBConfigure implements Runnable {
         productService.createOrUpdate(product);
 
         // bm config
-        FBConfigService bmConfigService = new FBConfigServiceImpl();
-        FBToolConfiguration bmConfig = bmConfigService.getFBConfigByDefaultID();
-        if (bmConfig == null) {
-            bmConfig = new FBToolConfiguration();
-            bmConfig.setConfigId(FBConfigServiceImpl.FB_CONFIG_ID);
-            bmConfig.setLastBlockId(0);
-            bmConfigService.createOrUpdate(bmConfig);
+        FBConfigService fbConfigService = new FBConfigServiceImpl();
+        FBToolConfiguration fbConfig = fbConfigService.getFBConfigByDefaultID();
+        if (fbConfig == null) {
+            fbConfig = new FBToolConfiguration();
+            fbConfig.setConfigId(FBConfigServiceImpl.FB_CONFIG_ID);
+            fbConfig.setLastBlockId(0);
+            fbConfigService.createOrUpdate(fbConfig);
         }
     }
 
@@ -128,11 +128,11 @@ public class FBConfigure implements Runnable {
         doCheckoutToFBBranch(gitForBlocks);
         if (!FBDirectoryUtil.existsFBDirectory()) {
             FBDirectoryUtil.createFBDirectory();
-            SplMgrLogger.message_ln("- BM directory was created", false);
+            SplMgrLogger.message_ln("- FB directory was created", false);
         }
         if (!FBDirectoryUtil.existsFBContactFile()) {
             FBDirectoryUtil.createFBContactFile();
-            commitBMDirectory();
+            commitFBDirectory();
         }
     }
 
@@ -153,13 +153,13 @@ public class FBConfigure implements Runnable {
         }
     }
 
-    private void commitBMDirectory() {
+    private void commitFBDirectory() {
         IVCSAPI gitBlockManager = GitVCSManager.createInstance();
         Git git = (Git) gitBlockManager.retrieveDirector();
         try {
             git.checkout().setName(FBBranchLabel).call();
             git.add().addFilepattern(".").call();
-            git.commit().setMessage("BM: Adding BM directory").call();
+            git.commit().setMessage("FB: Adding FB directory").call();
         } catch (GitAPIException e) {
             throw new RuntimeException(e);
         }
@@ -174,7 +174,7 @@ public class FBConfigure implements Runnable {
             FileUtils.writeStringToFile(myFile, createGitIgnoreContent(), "ISO-8859-1");
             git.add().addFilepattern(".gitignore").call();
             git.add().addFilepattern(".").call();
-            git.commit().setMessage("BM: Adding Head with a commit").call();
+            git.commit().setMessage("FB: Adding Head with a commit").call();
         } catch (GitAPIException | IOException e) {
             throw new RuntimeException(e);
         }
@@ -182,7 +182,7 @@ public class FBConfigure implements Runnable {
 
     private String createGitIgnoreContent() {
         String msg = "# prod\n" +
-                ".bm/logs/bm.log\n";
+                ".fb/logs/fb.log\n";
         return msg;
     }
 }

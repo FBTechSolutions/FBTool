@@ -6,7 +6,7 @@ import ic.unicamp.fb.block.IVCSAPI;
 import ic.unicamp.fb.block.utils.FBDirectoryUtil;
 import ic.unicamp.fb.block.utils.DirectoryUtil;
 import ic.unicamp.fb.block.utils.GitDirectoryUtil;
-import ic.unicamp.fb.block.utils.TempBMDirectoryUtil;
+import ic.unicamp.fb.block.utils.TempFBDirectoryUtil;
 import ic.unicamp.fb.cli.util.logger.SplMgrLogger;
 import ic.unicamp.fb.graph.neo4j.schema.Block;
 import ic.unicamp.fb.graph.neo4j.schema.Container;
@@ -62,8 +62,8 @@ public class FBAnalyze implements Runnable {
             IVCSAPI temporalVC = GitVCSManager.createTemporalGitBlockInstance();
             Git git = (Git) temporalVC.retrieveDirector();
             git.checkout().setName(GitVCS.FBBranchLabel).call();
-            if (!TempBMDirectoryUtil.existsBmTemporalDirectory()) {
-                TempBMDirectoryUtil.createBMTemporalDirectory();
+            if (!TempFBDirectoryUtil.existsFBTemporalDirectory()) {
+                TempFBDirectoryUtil.createFBTemporalDirectory();
                 SplMgrLogger.message_ln("- Temporal Directory for blocks was created", false);
             }
 

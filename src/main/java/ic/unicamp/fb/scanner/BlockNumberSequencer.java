@@ -18,13 +18,13 @@ public class BlockNumberSequencer {
     }
 
     private static long generateNextCode() {
-        FBToolConfiguration bmConfig = fbConfigService.getFBConfigByDefaultID();
-        long code = bmConfig.getLastBlockId() + 1;
+        FBToolConfiguration fbConfig = fbConfigService.getFBConfigByDefaultID();
+        long code = fbConfig.getLastBlockId() + 1;
         if (code == 10000000000000000L) {
             code = 0;
         }
-        bmConfig.setLastBlockId(code);
-        fbConfigService.createOrUpdate(bmConfig);
+        fbConfig.setLastBlockId(code);
+        fbConfigService.createOrUpdate(fbConfig);
         return code;
     }
 }

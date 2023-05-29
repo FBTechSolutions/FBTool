@@ -91,7 +91,7 @@ public class FBProjectProduct implements Runnable {
             try {
                 Git gitRepository = repository.createGitDir(path);
                 gitRepository.add().addFilepattern(".").call();
-                gitRepository.commit().setMessage("BM: Projecting Commit").call();
+                gitRepository.commit().setMessage("FB: Projecting Commit").call();
             } catch (GitAPIException e) {
                 throw new RuntimeException(e);
             }
