@@ -10,38 +10,38 @@ import java.nio.file.Paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class BMDirectoryUtil {
+public class FBDirectoryUtil {
 
     private static final Pattern pattern = Pattern.compile("\\.fb");//, Pattern.CASE_INSENSITIVE
     public static String BMDirectoryName = ".fb";
 
-    public static Path getBMDirectoryAsPath() {
+    public static Path getFBDirectoryAsPath() {
         String currentDirectory = System.getProperty("user.dir");
         return Paths.get(currentDirectory, BMDirectoryName);
     }
 
-    public static File getBMDirectoryAsFile() {
-        return new File(String.valueOf(BMDirectoryUtil.getBMDirectoryAsPath()));
+    public static File getFBDirectoryAsFile() {
+        return new File(String.valueOf(FBDirectoryUtil.getFBDirectoryAsPath()));
     }
 
-    public static boolean existsBmDirectory() {
-        return BMDirectoryUtil.getBMDirectoryAsFile().exists();
+    public static boolean existsFBDirectory() {
+        return FBDirectoryUtil.getFBDirectoryAsFile().exists();
     }
 
-    public static boolean createBMDirectory() {
-        File bmDirectoryAsFile = BMDirectoryUtil.getBMDirectoryAsFile();
+    public static boolean createFBDirectory() {
+        File bmDirectoryAsFile = FBDirectoryUtil.getFBDirectoryAsFile();
         boolean file_was_created = bmDirectoryAsFile.mkdir();
         if (file_was_created) {
-            setHiddenAttr(BMDirectoryUtil.getBMDirectoryAsPath());
+            setHiddenAttr(FBDirectoryUtil.getFBDirectoryAsPath());
             return true;
         }
         return false;
     }
 
-    public static boolean removeBMDirectory() {
-        if (BMDirectoryUtil.existsBmDirectory()) {
+    public static boolean removeFBDirectory() {
+        if (FBDirectoryUtil.existsFBDirectory()) {
             try {
-                FileUtils.deleteDirectory(BMDirectoryUtil.getBMDirectoryAsFile());
+                FileUtils.deleteDirectory(FBDirectoryUtil.getFBDirectoryAsFile());
                 return true;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -65,9 +65,9 @@ public class BMDirectoryUtil {
         return matcher.find();
     }
 
-    public static void createBMContactFile() {
+    public static void createFBContactFile() {
         File myFile =
-                new File(getBMDirectoryAsPath().toString(), "support");
+                new File(getFBDirectoryAsPath().toString(), "support");
         try {
             FileUtils.writeStringToFile(myFile,
                     "Please if you have some bug contact with Junior using the jcupe.cas@gmail.com email",
@@ -77,9 +77,9 @@ public class BMDirectoryUtil {
         }
     }
 
-    public static boolean existsBMContactFile() {
+    public static boolean existsFBContactFile() {
         File myFile =
-                new File(getBMDirectoryAsPath().toString(), "support");
+                new File(getFBDirectoryAsPath().toString(), "support");
         return myFile.exists();
     }
 }

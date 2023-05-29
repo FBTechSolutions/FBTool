@@ -26,7 +26,7 @@ public class FBCommit implements Runnable {
     @Override
     public void run() {
         try {
-            git.checkout().setName(GitVCS.BMBranchLabel).call();
+            git.checkout().setName(GitVCS.FBBranchLabel).call();
 
             BlockService blockService = new BlockServiceImpl();
             List<Block> stageBlocks = blockService.getBlockByVCBlockState(DataState.STAGE);

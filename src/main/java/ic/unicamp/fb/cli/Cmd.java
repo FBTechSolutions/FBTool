@@ -69,7 +69,7 @@ import static ic.unicamp.fb.cli.util.CmdTag.CMD_VERSION;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_GENERATE_CUTS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_CLEAN_DB_BLOCKS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_CHECK_AND;
-import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__BM_ASCII;
+import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__FB_ASCII;
 import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__CMD_ACCEPTED;
 import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__CMD_END;
 import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__CMD_NOT_VALID;
@@ -126,7 +126,7 @@ public class Cmd implements Runnable {
     private void __showToolSignature() {
         String asciiArt = null;
         try {
-            asciiArt = FigletFont.convertOneLine(INF_0__BM_ASCII);
+            asciiArt = FigletFont.convertOneLine(INF_0__FB_ASCII);
         } catch (IOException e) {
             e.printStackTrace();
         }

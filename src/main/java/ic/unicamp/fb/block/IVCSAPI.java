@@ -20,9 +20,9 @@ public interface IVCSAPI {
 
     public Object retrieveDirector(); // e.g, git
 
-    public Boolean exitBMBranch();
+    public Boolean exitFBBranch();
 
-    public void createBMBranch();
+    public void createFBBranch();
 
     public String getCurrentDirectory();
 }

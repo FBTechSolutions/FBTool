@@ -1,7 +1,7 @@
 package ic.unicamp.fb.block;
 
 
-import ic.unicamp.fb.block.utils.BMDirectoryUtil;
+import ic.unicamp.fb.block.utils.FBDirectoryUtil;
 import ic.unicamp.fb.block.utils.GitDirectoryUtil;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ListBranchCommand.ListMode;
@@ -23,7 +23,7 @@ import java.util.List;
 public class GitVCS implements IVCSAPI {
 
     private Git git;
-    public static String BMBranchLabel = "fb_block";
+    public static String FBBranchLabel = "fb_block";
 
     public GitVCS() {
         FileRepositoryBuilder repositoryBuilder = new FileRepositoryBuilder();
@@ -38,7 +38,7 @@ public class GitVCS implements IVCSAPI {
     }
 
     public String getCurrentDirectory() {
-        return BMDirectoryUtil.getBMDirectoryAsPath().toString();
+        return FBDirectoryUtil.getFBDirectoryAsPath().toString();
     }
 
     //content
@@ -113,12 +113,12 @@ public class GitVCS implements IVCSAPI {
 
     //utils
     @Override
-    public Boolean exitBMBranch() {
+    public Boolean exitFBBranch() {
         List<Ref> call;
         try {
             call = git.branchList().setListMode(ListMode.ALL).call();
             for (Ref ref : call) {
-                if (ref.getName().contains(BMBranchLabel)) {
+                if (ref.getName().contains(FBBranchLabel)) {
                     return true;
                 }
             }
@@ -129,10 +129,10 @@ public class GitVCS implements IVCSAPI {
     }
 
     @Override
-    public void createBMBranch() {
+    public void createFBBranch() {
         try {
-            git.branchCreate().setName(BMBranchLabel).call();
-            git.checkout().setName(BMBranchLabel).call();
+            git.branchCreate().setName(FBBranchLabel).call();
+            git.checkout().setName(FBBranchLabel).call();
         } catch (GitAPIException e) {
             throw new RuntimeException(e);
         }

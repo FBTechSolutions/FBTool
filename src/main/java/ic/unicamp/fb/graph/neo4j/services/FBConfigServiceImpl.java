@@ -8,9 +8,9 @@ import org.neo4j.ogm.cypher.Filters;
 import java.util.Collection;
 import java.util.Iterator;
 
-public class BMConfigServiceImpl extends GenericService<FBToolConfiguration> implements BMConfigService {
+public class FBConfigServiceImpl extends GenericService<FBToolConfiguration> implements FBConfigService {
 
-    public static String BM_CONFIG_ID = "BM_CONFIG_ID";
+    public static String FB_CONFIG_ID = "FB_CONFIG_ID";
 
     @Override
     public Iterable<FBToolConfiguration> findAll() {
@@ -18,8 +18,8 @@ public class BMConfigServiceImpl extends GenericService<FBToolConfiguration> imp
     }
 
     @Override
-    public FBToolConfiguration getBMConfigByDefaultID() {
-        Filter filter = new Filter("configId", ComparisonOperator.EQUALS, BM_CONFIG_ID);
+    public FBToolConfiguration getFBConfigByDefaultID() {
+        Filter filter = new Filter("configId", ComparisonOperator.EQUALS, FB_CONFIG_ID);
         Collection<FBToolConfiguration> features = session.loadAll(FBToolConfiguration.class, new Filters().add(filter));
         if (features.size() > 1) {
             System.out.println("Database corrupted. Two or more IDs for a Configuration are not allowed.");

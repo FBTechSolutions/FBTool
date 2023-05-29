@@ -2,7 +2,7 @@ package ic.unicamp.fb.cli.cmd;
 
 import ic.unicamp.fb.block.GitVCSManager;
 import ic.unicamp.fb.block.IVCSAPI;
-import ic.unicamp.fb.block.utils.BMDirectoryUtil;
+import ic.unicamp.fb.block.utils.FBDirectoryUtil;
 import ic.unicamp.fb.block.utils.GitDirectoryUtil;
 import ic.unicamp.fb.cli.util.logger.SplMgrLogger;
 import ic.unicamp.fb.graph.neo4j.schema.BitOrder;
@@ -13,8 +13,8 @@ import ic.unicamp.fb.graph.neo4j.schema.Product;
 import ic.unicamp.fb.graph.neo4j.schema.relations.FeatureToBitOrder;
 import ic.unicamp.fb.graph.neo4j.schema.relations.FragmentToBitOrder;
 import ic.unicamp.fb.graph.neo4j.schema.relations.ProductToFeature;
-import ic.unicamp.fb.graph.neo4j.services.BMConfigService;
-import ic.unicamp.fb.graph.neo4j.services.BMConfigServiceImpl;
+import ic.unicamp.fb.graph.neo4j.services.FBConfigService;
+import ic.unicamp.fb.graph.neo4j.services.FBConfigServiceImpl;
 import ic.unicamp.fb.graph.neo4j.services.BitOrderService;
 import ic.unicamp.fb.graph.neo4j.services.BitOrderServiceImpl;
 import ic.unicamp.fb.graph.neo4j.services.FeatureService;
@@ -33,7 +33,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import static ic.unicamp.fb.block.GitVCS.BMBranchLabel;
+import static ic.unicamp.fb.block.GitVCS.FBBranchLabel;
 import static ic.unicamp.fb.graph.neo4j.utils.BitOrderUtil.retrieveOrCreateGenericBitOrderBean;
 import static ic.unicamp.fb.graph.neo4j.utils.FeatureUtil.retrieveOrCreateGenericFeatureBean;
 import static ic.unicamp.fb.graph.neo4j.utils.FragmentUtil.retrieveOrCreateGenericFragmentBean;
@@ -58,7 +58,7 @@ public class FBConfigure implements Runnable {
 
     private void upsertBMDir() {
         //set up environment
-        setUpHiddenFolderAndBMBranch();
+        setUpHiddenFolderAndFBBranch();
         //set up initial db state
         setUpDB();
     }
@@ -109,37 +109,37 @@ public class FBConfigure implements Runnable {
         productService.createOrUpdate(product);
 
         // bm config
-        BMConfigService bmConfigService = new BMConfigServiceImpl();
-        FBToolConfiguration bmConfig = bmConfigService.getBMConfigByDefaultID();
+        FBConfigService bmConfigService = new FBConfigServiceImpl();
+        FBToolConfiguration bmConfig = bmConfigService.getFBConfigByDefaultID();
         if (bmConfig == null) {
             bmConfig = new FBToolConfiguration();
-            bmConfig.setConfigId(BMConfigServiceImpl.BM_CONFIG_ID);
+            bmConfig.setConfigId(FBConfigServiceImpl.FB_CONFIG_ID);
             bmConfig.setLastBlockId(0);
             bmConfigService.createOrUpdate(bmConfig);
         }
     }
 
-    private void setUpHiddenFolderAndBMBranch() {
+    private void setUpHiddenFolderAndFBBranch() {
         IVCSAPI gitForBlocks = GitVCSManager.createInstance();
-        if (!gitForBlocks.exitBMBranch()) {
-            gitForBlocks.createBMBranch();
-            SplMgrLogger.message_ln("- " + BMBranchLabel + " branch was created", false);
+        if (!gitForBlocks.exitFBBranch()) {
+            gitForBlocks.createFBBranch();
+            SplMgrLogger.message_ln("- " + FBBranchLabel + " branch was created", false);
         }
-        doCheckoutToBMBranch(gitForBlocks);
-        if (!BMDirectoryUtil.existsBmDirectory()) {
-            BMDirectoryUtil.createBMDirectory();
+        doCheckoutToFBBranch(gitForBlocks);
+        if (!FBDirectoryUtil.existsFBDirectory()) {
+            FBDirectoryUtil.createFBDirectory();
             SplMgrLogger.message_ln("- BM directory was created", false);
         }
-        if (!BMDirectoryUtil.existsBMContactFile()) {
-            BMDirectoryUtil.createBMContactFile();
+        if (!FBDirectoryUtil.existsFBContactFile()) {
+            FBDirectoryUtil.createFBContactFile();
             commitBMDirectory();
         }
     }
 
-    private void doCheckoutToBMBranch(IVCSAPI gitBlock) {
+    private void doCheckoutToFBBranch(IVCSAPI gitBlock) {
         Git git = (Git) gitBlock.retrieveDirector();
         try {
-            git.checkout().setName(BMBranchLabel).call();
+            git.checkout().setName(FBBranchLabel).call();
         } catch (GitAPIException e) {
             throw new RuntimeException(e);
         }
@@ -157,7 +157,7 @@ public class FBConfigure implements Runnable {
         IVCSAPI gitBlockManager = GitVCSManager.createInstance();
         Git git = (Git) gitBlockManager.retrieveDirector();
         try {
-            git.checkout().setName(BMBranchLabel).call();
+            git.checkout().setName(FBBranchLabel).call();
             git.add().addFilepattern(".").call();
             git.commit().setMessage("BM: Adding BM directory").call();
         } catch (GitAPIException e) {

@@ -8,7 +8,6 @@ import ic.unicamp.fb.graph.neo4j.schema.enums.BlockState;
 import ic.unicamp.fb.graph.neo4j.schema.enums.DataState;
 import ic.unicamp.fb.graph.neo4j.services.BlockService;
 import ic.unicamp.fb.graph.neo4j.services.BlockServiceImpl;
-import ic.unicamp.fb.graph.neo4j.utils.BlockUtil;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import picocli.CommandLine.Command;
@@ -30,7 +29,7 @@ public class FBAdd implements Runnable {
     public void run() {
         BlockService blockService = new BlockServiceImpl();
         try {
-            git.checkout().setName(GitVCS.BMBranchLabel).call();
+            git.checkout().setName(GitVCS.FBBranchLabel).call();
             List<Block> temporalBlockList = blockService.getBlockByVCBlockState(DataState.TEMPORAL);
             for (Block block : temporalBlockList) {
                 String blockId = block.getBlockId();

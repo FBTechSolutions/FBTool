@@ -1,13 +1,13 @@
 package ic.unicamp.fb.scanner;
 
 import ic.unicamp.fb.graph.neo4j.schema.FBToolConfiguration;
-import ic.unicamp.fb.graph.neo4j.services.BMConfigService;
-import ic.unicamp.fb.graph.neo4j.services.BMConfigServiceImpl;
+import ic.unicamp.fb.graph.neo4j.services.FBConfigService;
+import ic.unicamp.fb.graph.neo4j.services.FBConfigServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 
 public class BlockNumberSequencer {
 
-    private static final BMConfigService bmConfigService = new BMConfigServiceImpl();
+    private static final FBConfigService fbConfigService = new FBConfigServiceImpl();
 
     public static String getNextStringCode() {
         return transformToString(generateNextCode());
@@ -18,13 +18,13 @@ public class BlockNumberSequencer {
     }
 
     private static long generateNextCode() {
-        FBToolConfiguration bmConfig = bmConfigService.getBMConfigByDefaultID();
+        FBToolConfiguration bmConfig = fbConfigService.getFBConfigByDefaultID();
         long code = bmConfig.getLastBlockId() + 1;
         if (code == 10000000000000000L) {
             code = 0;
         }
         bmConfig.setLastBlockId(code);
-        bmConfigService.createOrUpdate(bmConfig);
+        fbConfigService.createOrUpdate(bmConfig);
         return code;
     }
 }

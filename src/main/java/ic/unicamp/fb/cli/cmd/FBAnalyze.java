@@ -3,7 +3,7 @@ package ic.unicamp.fb.cli.cmd;
 import ic.unicamp.fb.block.GitVCS;
 import ic.unicamp.fb.block.GitVCSManager;
 import ic.unicamp.fb.block.IVCSAPI;
-import ic.unicamp.fb.block.utils.BMDirectoryUtil;
+import ic.unicamp.fb.block.utils.FBDirectoryUtil;
 import ic.unicamp.fb.block.utils.DirectoryUtil;
 import ic.unicamp.fb.block.utils.GitDirectoryUtil;
 import ic.unicamp.fb.block.utils.TempBMDirectoryUtil;
@@ -61,7 +61,7 @@ public class FBAnalyze implements Runnable {
         try {
             IVCSAPI temporalVC = GitVCSManager.createTemporalGitBlockInstance();
             Git git = (Git) temporalVC.retrieveDirector();
-            git.checkout().setName(GitVCS.BMBranchLabel).call();
+            git.checkout().setName(GitVCS.FBBranchLabel).call();
             if (!TempBMDirectoryUtil.existsBmTemporalDirectory()) {
                 TempBMDirectoryUtil.createBMTemporalDirectory();
                 SplMgrLogger.message_ln("- Temporal Directory for blocks was created", false);
@@ -239,7 +239,7 @@ public class FBAnalyze implements Runnable {
         try (Stream<Path> walk = Files.walk(path)) {
             result = walk.filter(Files::isRegularFile)
                     .filter(aPath -> !GitDirectoryUtil.existNameInPath(aPath))
-                    .filter(aPath -> !BMDirectoryUtil.existNameInPath(aPath))
+                    .filter(aPath -> !FBDirectoryUtil.existNameInPath(aPath))
                     .collect(Collectors.toList());
         }
         return result;

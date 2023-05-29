@@ -12,7 +12,7 @@ public class TempBMDirectoryUtil {
     public static String BMTemporalDirName = "temporal";
 
     public static Path getBMDirectoryAsPath() {
-        String currentDirectory = BMDirectoryUtil.getBMDirectoryAsPath().toString();
+        String currentDirectory = FBDirectoryUtil.getFBDirectoryAsPath().toString();
         return Paths.get(currentDirectory, BMTemporalDirName);
     }
 
