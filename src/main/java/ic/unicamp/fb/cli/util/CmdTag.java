@@ -7,6 +7,7 @@ import ic.unicamp.fb.cli.cmd.FBCheckAnd;
 import ic.unicamp.fb.cli.cmd.FBCleanDBBlocks;
 import ic.unicamp.fb.cli.cmd.FBCommit;
 import ic.unicamp.fb.cli.cmd.FBConfigure;
+import ic.unicamp.fb.cli.cmd.FBDBConnection;
 import ic.unicamp.fb.cli.cmd.FBExit;
 import ic.unicamp.fb.cli.cmd.FBGenerateCuts;
 import ic.unicamp.fb.cli.cmd.FBInspectFiles;
@@ -74,4 +75,5 @@ public interface CmdTag {
     String CMD_CLEAN_DB_BLOCKS = FBCleanDBBlocks.CMD_NAME;
 
     String CMD_CHECK_AND = FBCheckAnd.CMD_NAME;
+    String CMD_DB_CONNECTION = FBDBConnection.CMD_NAME;
 }
