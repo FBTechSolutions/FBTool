@@ -1,5 +1,6 @@
 package ic.unicamp.fb.graph.neo4j.factory;
 
+import org.eclipse.jgit.util.StringUtils;
 import org.neo4j.ogm.config.Configuration;
 import org.neo4j.ogm.session.Session;
 import org.neo4j.ogm.session.SessionFactory;
@@ -35,18 +36,25 @@ public class Neo4jSessionFactory {
     }
 
     private void loadCredentialsFromFile() throws IOException {
-/*        System.out.println("Working Directory = " + System.getProperty("user.dir"));
-        String configFilePath = "main/resources/config.properties";
-        Properties prop = new Properties();
-        FileInputStream fileInputStream = new FileInputStream(configFilePath);
-        prop.load(fileInputStream);
-        this.uri = prop.getProperty("neo4j_uri");
-        this.user = prop.getProperty("neo4j_user");
-        this.password = prop.getProperty("neo4j_password");*/
-        // FIXME : Fix loading properties.
         this.uri = "neo4j://localhost:7687";
         this.user = "neo4j";
-        this.password = "12345678";
+        this.password = "password";
+    }
+
+    public void reWriteCredentials(String user, String password, String uri) {
+        if (StringUtils.isEmptyOrNull(uri)) {
+            this.uri = "neo4j://localhost:7687";
+        } else {
+            this.uri = uri;
+        }
+        this.user = user;
+        this.password = password;
+        Configuration configuration = new Configuration.Builder()
+                .uri(uri)
+                .credentials(user, password)
+                .build();
+        sessionFactory = new SessionFactory(configuration,
+                "ic.unicamp.fb.graph.neo4j.schema");
     }
 
     public Session getNeo4jSession() {

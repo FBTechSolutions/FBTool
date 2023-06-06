@@ -7,6 +7,7 @@ import ic.unicamp.fb.cli.cmd.FBCheckAnd;
 import ic.unicamp.fb.cli.cmd.FBCleanDBBlocks;
 import ic.unicamp.fb.cli.cmd.FBCommit;
 import ic.unicamp.fb.cli.cmd.FBConfigure;
+import ic.unicamp.fb.cli.cmd.FBDBConnection;
 import ic.unicamp.fb.cli.cmd.FBExit;
 import ic.unicamp.fb.cli.cmd.FBGenerateCuts;
 import ic.unicamp.fb.cli.cmd.FBInspectFiles;
@@ -42,20 +43,24 @@ import java.util.Scanner;
 
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_ADD;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_ANALYSE;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_CHECK_AND;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_CLEAN_DB_BLOCKS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_COMMIT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_CONFIGURE;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_DB_CONNECTION;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_EXIT;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_GENERATE_CUTS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_INSPECT_FILES;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_BIT_ORDERS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_BLOCKS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_FEATURES;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_FILES;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_FRAGMENTS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_PRODUCTS;
-import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_BIT_ORDERS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_MAP_FRAGMENTS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_MOVE_BLOCKS;
-import static ic.unicamp.fb.cli.util.CmdTag.CMD_PROJECT_PRODUCT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_PROJECT_FEATURES;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_PROJECT_PRODUCT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_REMOVE_FEATURES;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_REMOVE_FRAGMENTS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_REMOVE_PRODUCTS;
@@ -66,13 +71,10 @@ import static ic.unicamp.fb.cli.util.CmdTag.CMD_UPSERT_FEATURES;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_UPSERT_FRAGMENT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_UPSERT_PRODUCT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_VERSION;
-import static ic.unicamp.fb.cli.util.CmdTag.CMD_GENERATE_CUTS;
-import static ic.unicamp.fb.cli.util.CmdTag.CMD_CLEAN_DB_BLOCKS;
-import static ic.unicamp.fb.cli.util.CmdTag.CMD_CHECK_AND;
-import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__FB_ASCII;
 import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__CMD_ACCEPTED;
 import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__CMD_END;
 import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__CMD_NOT_VALID;
+import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__FB_ASCII;
 import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__PROMPT;
 import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__SPLM_AUTHOR;
 import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__SPLM_VERSION;
@@ -112,7 +114,8 @@ import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__WELCOME_SPLM;
                 FBRemoveFragments.class,
                 FBGenerateCuts.class,
                 FBCleanDBBlocks.class,
-                FBCheckAnd.class},
+                FBCheckAnd.class,
+                FBDBConnection.class},
         footer = {"", "launching prompt ...", ""})
 public class Cmd implements Runnable {
 
@@ -268,6 +271,10 @@ public class Cmd implements Runnable {
                     }
                     case CMD_CHECK_AND -> {
                         CommandLine commandLine = new CommandLine(new FBCheckAnd());
+                        __executeCmd(inputs, commandLine);
+                    }
+                    case CMD_DB_CONNECTION -> {
+                        CommandLine commandLine = new CommandLine(new FBDBConnection());
                         __executeCmd(inputs, commandLine);
                     }
                     default -> __printCmdNotValid();
