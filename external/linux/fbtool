@@ -1,9 +1,3 @@
 
 #!/bin/sh
 java -jar /media/jc/Documents/phd/codes/fbtool/external/linux/fbtool-1.0.jar "$@"
-#one create the fbtool file
-#pwd to get the full path
-#chmod +x fbtool
-#sudo mv fbtool /usr/local/bin
-#sudo /usr/local/bin/fbtool
-#fbtool version
