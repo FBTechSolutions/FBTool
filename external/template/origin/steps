@@ -1,12 +1,14 @@
 ## Template to load a specific version with data.
 
-## copy the template in a path
-## execute the linux command to add fbtool to you linux system
-## Get the source code of the track Elevator
-## Run docker-compose up -d
-## Check the database with neo4j and password as credentials
-## Go to the path of the track Elevevator
-## Execute fbtool to have the promp
-## Now you can test it
-## (fb) project Enterprise --clean
+## Step1: Copy this template in a path
+## Step2: Add fbtool
+## Step3: Get the source code of the track Elevator and put it in the track folder
+## Step4: Load the database with docker in the docker folder.
+## Step4: docker-compose up -d
+## Step4: id:neo4j and password:password in http://localhost:7474/browser/
+## Step5: Execute the linux command fbtool inside the track folder
+## Step5: If you do not want this command use java -jar /media/jc/Documents/phd/codes/fbtool/external/linux/fbtool-1.0.jar
+## Step6: It is ready
+## Step7: Project a product
+## Step7: (fb) project Enterprise --clean
 

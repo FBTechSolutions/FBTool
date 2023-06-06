@@ -1,0 +1,9 @@
+#### Building a dockerhub image
+To create the image you need to execute:
+sudo chown jc:jc neo4j.dump
+chmod +x entrypoint.sh
+path-to-folder$docker login
+path-to-folder$ docker build -t jcupephd/fbelevator:0.1 .
+path-to-folder$ docker push jcupephd/fbelevator:0.1
+
+
