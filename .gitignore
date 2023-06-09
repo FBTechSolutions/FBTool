@@ -16,7 +16,7 @@ logs/fb.log
 .mtj.tmp/
 
 # Package Files #
-*.jar
+#*.jar
 *.war
 *.nar
 *.ear
