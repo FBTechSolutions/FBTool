@@ -1,7 +1,7 @@
 package ic.unicamp.fb.graph.neo4j.schema.relations;
 
-import ic.unicamp.fb.graph.neo4j.schema.BitOrder;
-import ic.unicamp.fb.graph.neo4j.schema.Fragment;
+import ic.unicamp.fb.graph.neo4j.schema.Index;
+import ic.unicamp.fb.graph.neo4j.schema.Feature;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,16 +15,16 @@ import org.neo4j.ogm.annotation.StartNode;
 @FieldDefaults(makeFinal = false, level = AccessLevel.PRIVATE)
 @Setter
 @Getter
-@RelationshipEntity(type = "ASSOCIATED_TO")
-public class FragmentToBitOrder {
+@RelationshipEntity(type = "HAS_A")
+public class FeatureToIndex {
 
     @Id
     @GeneratedValue
     private Long relationshipId;
 
     @StartNode
-    private Fragment startFragment;
+    private Feature startFeature;
 
     @EndNode
-    private BitOrder endBitOrder;
+    private Index endIndex;
 }

@@ -1,10 +1,10 @@
 package ic.unicamp.fb.cli.cmd;
 
-import ic.unicamp.fb.graph.neo4j.schema.BitOrder;
+import ic.unicamp.fb.graph.neo4j.schema.Index;
 import ic.unicamp.fb.graph.neo4j.schema.Fragment;
-import ic.unicamp.fb.graph.neo4j.schema.relations.FragmentToBitOrder;
-import ic.unicamp.fb.graph.neo4j.services.BitOrderService;
-import ic.unicamp.fb.graph.neo4j.services.BitOrderServiceImpl;
+import ic.unicamp.fb.graph.neo4j.schema.relations.FragmentToIndex;
+import ic.unicamp.fb.graph.neo4j.services.IndexService;
+import ic.unicamp.fb.graph.neo4j.services.IndexServiceImpl;
 import ic.unicamp.fb.graph.neo4j.services.FragmentService;
 import ic.unicamp.fb.graph.neo4j.services.FragmentServiceImpl;
 import picocli.CommandLine;
@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 //ok
-@CommandLine.Command(name = FBMapFragmentToBitOrder.CMD_NAME)
-public class FBMapFragmentToBitOrder implements Runnable {
+@CommandLine.Command(name = FBMapFragmentToIndex.CMD_NAME)
+public class FBMapFragmentToIndex implements Runnable {
 
     public static final String CMD_NAME = "map-frag-to-order";
 
@@ -23,7 +23,7 @@ public class FBMapFragmentToBitOrder implements Runnable {
     String fragmentId;
 
     @Parameters(index = "1..*")
-    String[] bitOrderList;
+    String[] indexList;
 
     @Override
     public void run() {
@@ -33,22 +33,22 @@ public class FBMapFragmentToBitOrder implements Runnable {
             System.out.println("No Fragment with the given ID could be found");
             return;
         }
-        if (bitOrderList == null) {
+        if (indexList == null) {
             System.out.println("This command requires bit order ids");
             return;
         }
 
-        BitOrderService bitOrderService = new BitOrderServiceImpl();
-        List<FragmentToBitOrder> relations = new ArrayList<>();
-        for (String bitOrderId : bitOrderList) {
-            BitOrder fullBitOrder = bitOrderService.getBitOrderByID(bitOrderId);
-            if (fullBitOrder == null) {
-                String message = String.format("No Bit Order with the given ID (%s) could be found", bitOrderId);
+        IndexService indexService = new IndexServiceImpl();
+        List<FragmentToIndex> relations = new ArrayList<>();
+        for (String indexId : indexList) {
+            Index fullIndex = indexService.getIndexByID(indexId);
+            if (fullIndex == null) {
+                String message = String.format("No Bit Order with the given ID (%s) could be found", indexId);
                 System.out.println(message);
             } else {
-                FragmentToBitOrder relation = new FragmentToBitOrder();
+                FragmentToIndex relation = new FragmentToIndex();
                 relation.setStartFragment(fullFragment);
-                relation.setEndBitOrder(fullBitOrder);
+                relation.setEndIndex(fullIndex);
                 relations.add(relation);
             }
         }

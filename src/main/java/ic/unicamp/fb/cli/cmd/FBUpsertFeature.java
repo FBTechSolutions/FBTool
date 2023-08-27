@@ -1,13 +1,13 @@
 package ic.unicamp.fb.cli.cmd;
 
-import ic.unicamp.fb.graph.neo4j.schema.BitOrder;
+import ic.unicamp.fb.graph.neo4j.schema.Index;
 import ic.unicamp.fb.graph.neo4j.schema.Feature;
-import ic.unicamp.fb.graph.neo4j.schema.relations.FeatureToBitOrder;
-import ic.unicamp.fb.graph.neo4j.services.BitOrderService;
-import ic.unicamp.fb.graph.neo4j.services.BitOrderServiceImpl;
+import ic.unicamp.fb.graph.neo4j.schema.relations.FeatureToIndex;
+import ic.unicamp.fb.graph.neo4j.services.IndexService;
+import ic.unicamp.fb.graph.neo4j.services.IndexServiceImpl;
 import ic.unicamp.fb.graph.neo4j.services.FeatureService;
 import ic.unicamp.fb.graph.neo4j.services.FeatureServiceImpl;
-import ic.unicamp.fb.graph.neo4j.utils.BitOrderUtil;
+import ic.unicamp.fb.graph.neo4j.utils.IndexUtil;
 import ic.unicamp.fb.graph.neo4j.utils.FeatureUtil;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
@@ -25,8 +25,8 @@ public class FBUpsertFeature implements Runnable {
     @Parameters(index = "0", description = "featureId (required)", defaultValue = "")
     String featureId;
 
-    @Parameters(index = "1", description = "bit Order (required)", defaultValue = "100")
-    String bitOrderId;
+    @Parameters(index = "1", description = "index (required)", defaultValue = "100")
+    String indexId;
 
     @Parameters(index = "2..*")
     String[] labelInParts;
@@ -36,11 +36,11 @@ public class FBUpsertFeature implements Runnable {
         String featureLabel = retrieveLabel();
         FeatureService featureService = new FeatureServiceImpl();
         Feature feature = FeatureUtil.retrieveOrCreateAStandardFeatureBean(featureService, featureId, featureLabel);
-        BitOrderService bitOrderService = new BitOrderServiceImpl();
-        BitOrder bitOrder = BitOrderUtil.retrieveOrCreateAStandardBitOrderBean(bitOrderService, Integer.parseInt(bitOrderId));
-        FeatureToBitOrder rel = new FeatureToBitOrder();
+        IndexService indexService = new IndexServiceImpl();
+        Index index = IndexUtil.retrieveOrCreateAStandardIndexBean(indexService, Integer.parseInt(indexId));
+        FeatureToIndex rel = new FeatureToIndex();
         rel.setStartFeature(feature);
-        rel.setEndBitOrder(bitOrder);
+        rel.setEndIndex(index);
         feature.setAssociatedTo(rel);
         featureService.createOrUpdate(feature);
     }

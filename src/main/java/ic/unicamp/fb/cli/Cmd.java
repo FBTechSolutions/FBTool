@@ -11,13 +11,13 @@ import ic.unicamp.fb.cli.cmd.FBDBConnection;
 import ic.unicamp.fb.cli.cmd.FBExit;
 import ic.unicamp.fb.cli.cmd.FBGenerateCuts;
 import ic.unicamp.fb.cli.cmd.FBInspectFiles;
-import ic.unicamp.fb.cli.cmd.FBListBitOrders;
+import ic.unicamp.fb.cli.cmd.FBListIndexes;
 import ic.unicamp.fb.cli.cmd.FBListBlocks;
 import ic.unicamp.fb.cli.cmd.FBListFeatures;
 import ic.unicamp.fb.cli.cmd.FBListFiles;
 import ic.unicamp.fb.cli.cmd.FBListFragments;
 import ic.unicamp.fb.cli.cmd.FBListProducts;
-import ic.unicamp.fb.cli.cmd.FBMapFragmentToBitOrder;
+import ic.unicamp.fb.cli.cmd.FBMapFragmentToIndex;
 import ic.unicamp.fb.cli.cmd.FBMoveBlocks;
 import ic.unicamp.fb.cli.cmd.FBProjectFeatures;
 import ic.unicamp.fb.cli.cmd.FBProjectProduct;
@@ -51,7 +51,7 @@ import static ic.unicamp.fb.cli.util.CmdTag.CMD_DB_CONNECTION;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_EXIT;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_GENERATE_CUTS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_INSPECT_FILES;
-import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_BIT_ORDERS;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_OF_INDEXES;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_BLOCKS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_FEATURES;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_LIST_FILES;
@@ -106,7 +106,7 @@ import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__WELCOME_SPLM;
                 FBSync.class,
                 FBMoveBlocks.class,
                 FBTagBlocks.class,
-                FBMapFragmentToBitOrder.class,
+                FBMapFragmentToIndex.class,
                 FBInspectFiles.class,
                 FBUpsertBlockOut.class,
                 FBRemoveFeatures.class,
@@ -221,8 +221,8 @@ public class Cmd implements Runnable {
                         CommandLine commandLine = new CommandLine(new FBListFiles());
                         __executeCmd(inputs, commandLine);
                     }
-                    case CMD_LIST_BIT_ORDERS -> {
-                        CommandLine commandLine = new CommandLine(new FBListBitOrders());
+                    case CMD_LIST_OF_INDEXES -> {
+                        CommandLine commandLine = new CommandLine(new FBListIndexes());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_SYNC -> {
@@ -238,7 +238,7 @@ public class Cmd implements Runnable {
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_MAP_FRAGMENTS -> {
-                        CommandLine commandLine = new CommandLine(new FBMapFragmentToBitOrder());
+                        CommandLine commandLine = new CommandLine(new FBMapFragmentToIndex());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_INSPECT_FILES -> {

@@ -1,6 +1,6 @@
 package ic.unicamp.fb.graph.neo4j.schema;
 
-import ic.unicamp.fb.graph.neo4j.schema.relations.FeatureToBitOrder;
+import ic.unicamp.fb.graph.neo4j.schema.relations.FeatureToIndex;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,7 +34,7 @@ public class Feature extends AbstractNode {
     private String featureLabel;
 
     @Relationship(type = "HAS_A", direction = OUTGOING)
-    private FeatureToBitOrder associatedTo;
+    private FeatureToIndex associatedTo;
 
     @Override
     public Long getId() {

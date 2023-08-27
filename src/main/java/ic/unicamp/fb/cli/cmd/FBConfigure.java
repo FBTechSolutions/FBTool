@@ -5,18 +5,18 @@ import ic.unicamp.fb.block.IVCSAPI;
 import ic.unicamp.fb.block.utils.FBDirectoryUtil;
 import ic.unicamp.fb.block.utils.GitDirectoryUtil;
 import ic.unicamp.fb.cli.util.logger.SplMgrLogger;
-import ic.unicamp.fb.graph.neo4j.schema.BitOrder;
+import ic.unicamp.fb.graph.neo4j.schema.Index;
 import ic.unicamp.fb.graph.neo4j.schema.FBToolConfiguration;
 import ic.unicamp.fb.graph.neo4j.schema.Feature;
 import ic.unicamp.fb.graph.neo4j.schema.Fragment;
 import ic.unicamp.fb.graph.neo4j.schema.Product;
-import ic.unicamp.fb.graph.neo4j.schema.relations.FeatureToBitOrder;
-import ic.unicamp.fb.graph.neo4j.schema.relations.FragmentToBitOrder;
+import ic.unicamp.fb.graph.neo4j.schema.relations.FeatureToIndex;
+import ic.unicamp.fb.graph.neo4j.schema.relations.FragmentToIndex;
 import ic.unicamp.fb.graph.neo4j.schema.relations.ProductToFeature;
 import ic.unicamp.fb.graph.neo4j.services.FBConfigService;
 import ic.unicamp.fb.graph.neo4j.services.FBConfigServiceImpl;
-import ic.unicamp.fb.graph.neo4j.services.BitOrderService;
-import ic.unicamp.fb.graph.neo4j.services.BitOrderServiceImpl;
+import ic.unicamp.fb.graph.neo4j.services.IndexService;
+import ic.unicamp.fb.graph.neo4j.services.IndexServiceImpl;
 import ic.unicamp.fb.graph.neo4j.services.FeatureService;
 import ic.unicamp.fb.graph.neo4j.services.FeatureServiceImpl;
 import ic.unicamp.fb.graph.neo4j.services.FragmentService;
@@ -34,7 +34,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static ic.unicamp.fb.block.GitVCS.FBBranchLabel;
-import static ic.unicamp.fb.graph.neo4j.utils.BitOrderUtil.retrieveOrCreateGenericBitOrderBean;
+import static ic.unicamp.fb.graph.neo4j.utils.IndexUtil.retrieveOrCreateGenericIndexBean;
 import static ic.unicamp.fb.graph.neo4j.utils.FeatureUtil.retrieveOrCreateGenericFeatureBean;
 import static ic.unicamp.fb.graph.neo4j.utils.FragmentUtil.retrieveOrCreateGenericFragmentBean;
 import static ic.unicamp.fb.graph.neo4j.utils.ProductUtil.retrieveOrCreateGenericProductBean;
@@ -68,30 +68,30 @@ public class FBConfigure implements Runnable {
         ProductService productService = new ProductServiceImpl();
         FeatureService featureService = new FeatureServiceImpl();
         FragmentService fragmentService = new FragmentServiceImpl();
-        BitOrderService BitOrderService = new BitOrderServiceImpl();
+        IndexService IndexService = new IndexServiceImpl();
 
-        // bitOrder
-        BitOrder bitOrder = retrieveOrCreateGenericBitOrderBean(BitOrderService);
-        bitOrder = BitOrderService.createOrUpdate(bitOrder);
+        // index
+        Index index = retrieveOrCreateGenericIndexBean(IndexService);
+        index = IndexService.createOrUpdate(index);
 
         // fragment
         Fragment fragment = retrieveOrCreateGenericFragmentBean(fragmentService);
         // fragment relation
-        List<FragmentToBitOrder> bitOrderList = new LinkedList<>();
-        FragmentToBitOrder relation1 = new FragmentToBitOrder();
+        List<FragmentToIndex> indexList = new LinkedList<>();
+        FragmentToIndex relation1 = new FragmentToIndex();
         relation1.setStartFragment(fragment);
-        relation1.setEndBitOrder(bitOrder);
-        bitOrderList.add(relation1);
+        relation1.setEndIndex(index);
+        indexList.add(relation1);
         // fragment update
-        fragment.setAssociatedTo(bitOrderList);
+        fragment.setAssociatedTo(indexList);
         fragmentService.createOrUpdate(fragment);
 
         // feature
         Feature feature = retrieveOrCreateGenericFeatureBean(featureService);
         // relations
-        FeatureToBitOrder relation2 = new FeatureToBitOrder();
+        FeatureToIndex relation2 = new FeatureToIndex();
         relation2.setStartFeature(feature);
-        relation2.setEndBitOrder(bitOrder);
+        relation2.setEndIndex(index);
         // update
         feature.setAssociatedTo(relation2);
         feature = featureService.createOrUpdate(feature);

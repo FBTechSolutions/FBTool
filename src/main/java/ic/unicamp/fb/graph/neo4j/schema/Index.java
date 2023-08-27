@@ -16,17 +16,17 @@ import org.neo4j.ogm.annotation.Property;
 @Getter
 @NoArgsConstructor(force = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@NodeEntity(label = "BitOrder")
+@NodeEntity(label = "Index")
 @ToString
-public class BitOrder extends AbstractNode {
+public class Index extends AbstractNode {
 
     @NonNull
     @GeneratedValue
     @Id
     private Long id;
 
-    @Property(name = "bitOrderId")
-    private int bitOrderId;
+    @Property(name = "indexId")
+    private int indexId;
 
     @Override
     public Long getId() {

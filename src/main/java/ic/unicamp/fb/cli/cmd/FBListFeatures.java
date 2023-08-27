@@ -1,9 +1,9 @@
 package ic.unicamp.fb.cli.cmd;
 
-import ic.unicamp.fb.graph.neo4j.schema.BitOrder;
+import ic.unicamp.fb.graph.neo4j.schema.Index;
 import ic.unicamp.fb.graph.neo4j.schema.Feature;
-import ic.unicamp.fb.graph.neo4j.services.BitOrderService;
-import ic.unicamp.fb.graph.neo4j.services.BitOrderServiceImpl;
+import ic.unicamp.fb.graph.neo4j.services.IndexService;
+import ic.unicamp.fb.graph.neo4j.services.IndexServiceImpl;
 import ic.unicamp.fb.graph.neo4j.services.FeatureService;
 import ic.unicamp.fb.graph.neo4j.services.FeatureServiceImpl;
 import picocli.CommandLine;
@@ -23,15 +23,15 @@ public class FBListFeatures implements Runnable {
     public void run() {
         System.out.println("Fetching feature list...");
         FeatureService featureService = new FeatureServiceImpl();
-        BitOrderService bitOrderService = new BitOrderServiceImpl();
+        IndexService indexService = new IndexServiceImpl();
         for (Feature feature : featureService.findAll()) {
             String message = String.format("- id:%s label:%s", feature.getFeatureId(),
                     feature.getFeatureLabel());
             System.out.println(message);
 
             if (isOrderEnabled) {
-                BitOrder bitOrder = bitOrderService.getBitOrderByFeature(feature.getFeatureId());
-                System.out.printf("  - bit:%s %n", bitOrder.getBitOrderId());
+                Index index = indexService.getIndexByFeature(feature.getFeatureId());
+                System.out.printf("  - bit:%s %n", index.getIndexId());
             }
         }
     }

@@ -1,9 +1,9 @@
 package ic.unicamp.fb.cli.cmd;
 
-import ic.unicamp.fb.graph.neo4j.schema.BitOrder;
+import ic.unicamp.fb.graph.neo4j.schema.Index;
 import ic.unicamp.fb.graph.neo4j.schema.Fragment;
-import ic.unicamp.fb.graph.neo4j.services.BitOrderService;
-import ic.unicamp.fb.graph.neo4j.services.BitOrderServiceImpl;
+import ic.unicamp.fb.graph.neo4j.services.IndexService;
+import ic.unicamp.fb.graph.neo4j.services.IndexServiceImpl;
 import ic.unicamp.fb.graph.neo4j.services.FeatureService;
 import ic.unicamp.fb.graph.neo4j.services.FeatureServiceImpl;
 import ic.unicamp.fb.graph.neo4j.services.FragmentService;
@@ -37,18 +37,18 @@ public class FBCheckAnd implements Runnable {
                 System.out.println("Feature Not Found " + featuresId);
             }
         }
-        LinkedList<Integer> bitOrderList = new LinkedList<>();
-        BitOrderService bitOrderService = new BitOrderServiceImpl();
+        LinkedList<Integer> indexList = new LinkedList<>();
+        IndexService indexService = new IndexServiceImpl();
         for (String featureId : featureList) {
-           BitOrder bitOrder =  bitOrderService.getBitOrderByFeature(featureId);
-           if(bitOrder!=null){
-               bitOrderList.add(bitOrder.getBitOrderId());
+           Index index =  indexService.getIndexByFeature(featureId);
+           if(index!=null){
+               indexList.add(index.getIndexId());
            }else{
                System.out.println("Bit order mot Found for feature " + featureId);
            }
         }
         FragmentService fragmentService = new FragmentServiceImpl();
-        Fragment fragment =fragmentService.retrieveUniqueAndFragment(bitOrderList);
+        Fragment fragment =fragmentService.retrieveUniqueAndFragment(indexList);
         if(fragment!=null){
             System.out.println("Fragment already exits:");
             System.out.println(fragment.getFragmentId() + " " + fragment.getFragmentLabel());

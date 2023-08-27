@@ -1,6 +1,6 @@
 package ic.unicamp.fb.graph.neo4j.schema;
 
-import ic.unicamp.fb.graph.neo4j.schema.relations.FragmentToBitOrder;
+import ic.unicamp.fb.graph.neo4j.schema.relations.FragmentToIndex;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,7 +36,7 @@ public class Fragment extends AbstractNode {
     private String fragmentLabel;// e.g., CallButtons and DirectedCall
 
     @Relationship(type = "ASSOCIATED_TO", direction = OUTGOING)
-    private List<FragmentToBitOrder> associatedTo;
+    private List<FragmentToIndex> associatedTo;
 
     @Override
     public Long getId() {

@@ -11,13 +11,13 @@ import ic.unicamp.fb.cli.cmd.FBDBConnection;
 import ic.unicamp.fb.cli.cmd.FBExit;
 import ic.unicamp.fb.cli.cmd.FBGenerateCuts;
 import ic.unicamp.fb.cli.cmd.FBInspectFiles;
-import ic.unicamp.fb.cli.cmd.FBListBitOrders;
+import ic.unicamp.fb.cli.cmd.FBListIndexes;
 import ic.unicamp.fb.cli.cmd.FBListBlocks;
 import ic.unicamp.fb.cli.cmd.FBListFeatures;
 import ic.unicamp.fb.cli.cmd.FBListFiles;
 import ic.unicamp.fb.cli.cmd.FBListFragments;
 import ic.unicamp.fb.cli.cmd.FBListProducts;
-import ic.unicamp.fb.cli.cmd.FBMapFragmentToBitOrder;
+import ic.unicamp.fb.cli.cmd.FBMapFragmentToIndex;
 import ic.unicamp.fb.cli.cmd.FBMoveBlocks;
 import ic.unicamp.fb.cli.cmd.FBProjectFeatures;
 import ic.unicamp.fb.cli.cmd.FBProjectProduct;
@@ -61,14 +61,14 @@ public interface CmdTag {
 
     String CMD_TAG_BLOCKS = FBTagBlocks.CMD_NAME;
 
-    String CMD_MAP_FRAGMENTS = FBMapFragmentToBitOrder.CMD_NAME;
+    String CMD_MAP_FRAGMENTS = FBMapFragmentToIndex.CMD_NAME;
     String CMD_INSPECT_FILES = FBInspectFiles.CMD_NAME;
     String CMD_UPSERT_BLOCK_OUT = FBUpsertBlockOut.CMD_NAME;
 
     String CMD_REMOVE_FEATURES = FBRemoveFeatures.CMD_NAME;
     String CMD_REMOVE_PRODUCTS = FBRemoveProducts.CMD_NAME;
     String CMD_REMOVE_FRAGMENTS = FBRemoveFragments.CMD_NAME;
-    String CMD_LIST_BIT_ORDERS = FBListBitOrders.CMD_NAME;
+    String CMD_LIST_OF_INDEXES = FBListIndexes.CMD_NAME;
 
     String CMD_GENERATE_CUTS = FBGenerateCuts.CMD_NAME;
 

@@ -1,9 +1,9 @@
 package ic.unicamp.fb.graph.neo4j.services;
 
 import ic.unicamp.fb.graph.neo4j.factory.Neo4jSessionFactory;
-import ic.unicamp.fb.graph.neo4j.schema.BitOrder;
+import ic.unicamp.fb.graph.neo4j.schema.Index;
 import ic.unicamp.fb.graph.neo4j.schema.Fragment;
-import ic.unicamp.fb.graph.neo4j.schema.relations.FragmentToBitOrder;
+import ic.unicamp.fb.graph.neo4j.schema.relations.FragmentToIndex;
 import org.neo4j.ogm.cypher.ComparisonOperator;
 import org.neo4j.ogm.cypher.Filter;
 import org.neo4j.ogm.cypher.Filters;
@@ -42,11 +42,11 @@ public class FragmentServiceImpl extends GenericService<Fragment> implements Fra
 
     @Override
     public List<Fragment> calcFragmentsByFeatureId(String featureId) {
-        BitOrderService bitOrderService = new BitOrderServiceImpl();
-        BitOrder bitOrder = bitOrderService.getBitOrderByFeature(featureId);
+        IndexService indexService = new IndexServiceImpl();
+        Index index = indexService.getIndexByFeature(featureId);
 
-        String queryTemplate = "MATCH (fr:Fragment)-[rel:ASSOCIATED_TO]->(b:BitOrder{bitOrderId: '%s'}) return fr";
-        String query = String.format(queryTemplate, bitOrder.getBitOrderId());
+        String queryTemplate = "MATCH (fr:Fragment)-[rel:ASSOCIATED_TO]->(i:Index{indexId: '%s'}) return fr";
+        String query = String.format(queryTemplate, index.getIndexId());
         System.out.println(query);
         Iterable<Map<String, Object>> queryResult = Neo4jSessionFactory.getInstance().getNeo4jSession()
                 .query(query, Collections.EMPTY_MAP);
@@ -61,28 +61,28 @@ public class FragmentServiceImpl extends GenericService<Fragment> implements Fra
 
     @Override
     public List<Fragment> calculateFragmentsByFeatureList(List<String> featureList) {
-        BitOrderService bitOrderService = new BitOrderServiceImpl();
+        IndexService indexService = new IndexServiceImpl();
         FragmentService fragmentService = new FragmentServiceImpl();
         List<Fragment> fragmentList = new LinkedList<>();
-        Set<String> bitOrderList = new HashSet<>();
+        Set<String> indexList = new HashSet<>();
         for (String featureId : featureList) {
-            BitOrder bitOrder = bitOrderService.getBitOrderByFeature(featureId);
-            bitOrderList.add(String.valueOf(bitOrder.getBitOrderId()));
+            Index index = indexService.getIndexByFeature(featureId);
+            indexList.add(String.valueOf(index.getIndexId()));
         }
 
         for (Fragment fragment : fragmentService.findAll()) {
-            Set<String> bitOrderListFromFragment = new HashSet<>();
-            List<FragmentToBitOrder> relations = fragment.getAssociatedTo();
+            Set<String> indexListFromFragment = new HashSet<>();
+            List<FragmentToIndex> relations = fragment.getAssociatedTo();
             if (relations != null) {
-                for (FragmentToBitOrder relation : relations) {
-                    BitOrder bitOrderTemp = relation.getEndBitOrder();
-                    bitOrderListFromFragment.add(String.valueOf(bitOrderTemp.getBitOrderId()));
+                for (FragmentToIndex relation : relations) {
+                    Index indexTemp = relation.getEndIndex();
+                    indexListFromFragment.add(String.valueOf(indexTemp.getIndexId()));
                 }
             } else {
-                System.out.println("fragment " + fragment.getFragmentId() + " does not have a bitOrders");
+                System.out.println("fragment " + fragment.getFragmentId() + " does not have a Indexes");
             }
-            if (!bitOrderListFromFragment.isEmpty()) {
-                if (bitOrderList.containsAll(bitOrderListFromFragment)) {
+            if (!indexListFromFragment.isEmpty()) {
+                if (indexList.containsAll(indexListFromFragment)) {
                     fragmentList.add(fragment);
                 }
             }
@@ -98,18 +98,18 @@ public class FragmentServiceImpl extends GenericService<Fragment> implements Fra
 
         FragmentService fragmentService = new FragmentServiceImpl();
         for (Fragment fragment : fragmentService.findAll()) {
-            Set<String> bitOrderListFromFragment = new HashSet<>();
-            List<FragmentToBitOrder> relations = fragment.getAssociatedTo();
+            Set<String> indexListFromFragment = new HashSet<>();
+            List<FragmentToIndex> relations = fragment.getAssociatedTo();
             if (relations != null) {
-                for (FragmentToBitOrder relation : relations) {
-                    BitOrder bitOrderTemp = relation.getEndBitOrder();
-                    bitOrderListFromFragment.add(String.valueOf(bitOrderTemp.getBitOrderId()));
+                for (FragmentToIndex relation : relations) {
+                    Index indexTemp = relation.getEndIndex();
+                    indexListFromFragment.add(String.valueOf(indexTemp.getIndexId()));
                 }
             } else {
-                System.out.println("fragment " + fragment.getFragmentId() + " does not have a bitOrders");
+                System.out.println("fragment " + fragment.getFragmentId() + " does not have a Indexes");
             }
-            if (!bitOrderListFromFragment.isEmpty()) {
-                if (OrderStringList.equals(bitOrderListFromFragment)) {
+            if (!indexListFromFragment.isEmpty()) {
+                if (OrderStringList.equals(indexListFromFragment)) {
                     return fragment;
                 }
             }

@@ -1,10 +1,10 @@
 package ic.unicamp.fb.cli.cmd;
 
-import ic.unicamp.fb.graph.neo4j.schema.BitOrder;
+import ic.unicamp.fb.graph.neo4j.schema.Index;
 import ic.unicamp.fb.graph.neo4j.schema.Block;
 import ic.unicamp.fb.graph.neo4j.schema.Fragment;
-import ic.unicamp.fb.graph.neo4j.services.BitOrderService;
-import ic.unicamp.fb.graph.neo4j.services.BitOrderServiceImpl;
+import ic.unicamp.fb.graph.neo4j.services.IndexService;
+import ic.unicamp.fb.graph.neo4j.services.IndexServiceImpl;
 import ic.unicamp.fb.graph.neo4j.services.BlockService;
 import ic.unicamp.fb.graph.neo4j.services.BlockServiceImpl;
 import ic.unicamp.fb.graph.neo4j.services.FragmentService;
@@ -45,10 +45,10 @@ public class FBListFragments implements Runnable {
             }
             if (isOrderEnabled) {
                 System.out.println("  bits order ...");
-                BitOrderService bitOrderService = new BitOrderServiceImpl();
-                List<BitOrder> bitOrderList = bitOrderService.getBitOrderByFragment(fragment.getFragmentId());
-                for (BitOrder bitOrder : bitOrderList) {
-                    System.out.printf("  - bit:%s %n", bitOrder.getBitOrderId());
+                IndexService indexService = new IndexServiceImpl();
+                List<Index> indexList = indexService.getIndexByFragment(fragment.getFragmentId());
+                for (Index index : indexList) {
+                    System.out.printf("  - bit:%s %n", index.getIndexId());
                 }
             }
         }
