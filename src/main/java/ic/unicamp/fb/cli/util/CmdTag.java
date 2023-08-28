@@ -17,7 +17,7 @@ import ic.unicamp.fb.cli.cmd.FBListFeatures;
 import ic.unicamp.fb.cli.cmd.FBListFiles;
 import ic.unicamp.fb.cli.cmd.FBListFragments;
 import ic.unicamp.fb.cli.cmd.FBListProducts;
-import ic.unicamp.fb.cli.cmd.FBMapFragmentToIndex;
+import ic.unicamp.fb.cli.cmd.FBAssociateFragToIndex;
 import ic.unicamp.fb.cli.cmd.FBMoveBlocks;
 import ic.unicamp.fb.cli.cmd.FBProjectFeatures;
 import ic.unicamp.fb.cli.cmd.FBProjectProduct;
@@ -61,7 +61,7 @@ public interface CmdTag {
 
     String CMD_TAG_BLOCKS = FBTagBlocks.CMD_NAME;
 
-    String CMD_MAP_FRAGMENTS = FBMapFragmentToIndex.CMD_NAME;
+    String CMD_MAP_FRAGMENTS = FBAssociateFragToIndex.CMD_NAME;
     String CMD_INSPECT_FILES = FBInspectFiles.CMD_NAME;
     String CMD_UPSERT_BLOCK_OUT = FBUpsertBlockOut.CMD_NAME;
 

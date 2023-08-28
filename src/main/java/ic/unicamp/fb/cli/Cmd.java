@@ -17,7 +17,7 @@ import ic.unicamp.fb.cli.cmd.FBListFeatures;
 import ic.unicamp.fb.cli.cmd.FBListFiles;
 import ic.unicamp.fb.cli.cmd.FBListFragments;
 import ic.unicamp.fb.cli.cmd.FBListProducts;
-import ic.unicamp.fb.cli.cmd.FBMapFragmentToIndex;
+import ic.unicamp.fb.cli.cmd.FBAssociateFragToIndex;
 import ic.unicamp.fb.cli.cmd.FBMoveBlocks;
 import ic.unicamp.fb.cli.cmd.FBProjectFeatures;
 import ic.unicamp.fb.cli.cmd.FBProjectProduct;
@@ -106,7 +106,7 @@ import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__WELCOME_SPLM;
                 FBSync.class,
                 FBMoveBlocks.class,
                 FBTagBlocks.class,
-                FBMapFragmentToIndex.class,
+                FBAssociateFragToIndex.class,
                 FBInspectFiles.class,
                 FBUpsertBlockOut.class,
                 FBRemoveFeatures.class,
@@ -238,7 +238,7 @@ public class Cmd implements Runnable {
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_MAP_FRAGMENTS -> {
-                        CommandLine commandLine = new CommandLine(new FBMapFragmentToIndex());
+                        CommandLine commandLine = new CommandLine(new FBAssociateFragToIndex());
                         __executeCmd(inputs, commandLine);
                     }
                     case CMD_INSPECT_FILES -> {

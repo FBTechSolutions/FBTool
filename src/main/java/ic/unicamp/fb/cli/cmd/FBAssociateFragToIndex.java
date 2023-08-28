@@ -14,10 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 //ok
-@CommandLine.Command(name = FBMapFragmentToIndex.CMD_NAME)
-public class FBMapFragmentToIndex implements Runnable {
+@CommandLine.Command(name = FBAssociateFragToIndex.CMD_NAME)
+public class FBAssociateFragToIndex implements Runnable {
 
-    public static final String CMD_NAME = "map-frag-to-order";
+    public static final String CMD_NAME = "associate-frag-to-index";
 
     @Parameters(index = "0", description = "fragment Id", defaultValue = "")
     String fragmentId;
