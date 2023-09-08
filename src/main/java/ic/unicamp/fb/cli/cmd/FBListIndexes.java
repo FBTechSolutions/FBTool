@@ -10,7 +10,7 @@ import picocli.CommandLine.Command;
         description = "This command will list all the blocks")
 public class FBListIndexes implements Runnable {
 
-    public static final String CMD_NAME = "list-bit-order";
+    public static final String CMD_NAME = "list-indexes";
     
     @Override
     public void run() {
