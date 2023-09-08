@@ -159,7 +159,7 @@ public class FBConfigure implements Runnable {
         try {
             git.checkout().setName(FBBranchLabel).call();
             git.add().addFilepattern(".").call();
-            git.commit().setMessage("FB: Adding FB directory").call();
+            git.commit().setMessage("FB Tool: Added FB directory.").call();
         } catch (GitAPIException e) {
             throw new RuntimeException(e);
         }
@@ -174,7 +174,7 @@ public class FBConfigure implements Runnable {
             FileUtils.writeStringToFile(myFile, createGitIgnoreContent(), "ISO-8859-1");
             git.add().addFilepattern(".gitignore").call();
             git.add().addFilepattern(".").call();
-            git.commit().setMessage("FB: Adding Head with a commit").call();
+            git.commit().setMessage("FB Tool: Added Head pointer.").call();
         } catch (GitAPIException | IOException e) {
             throw new RuntimeException(e);
         }

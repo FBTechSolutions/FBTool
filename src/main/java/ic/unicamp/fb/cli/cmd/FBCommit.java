@@ -36,7 +36,7 @@ public class FBCommit implements Runnable {
                 fullBlock.setBlockState(BlockState.SYNC);
                 blockService.createOrUpdate(fullBlock);
             }
-            git.commit().setMessage("FB Adding blocks").call();
+            git.commit().setMessage("FB Tool: Added blocks.").call();
             List<Block> committedBlocks = blockService.getBlockByVCBlockState(DataState.COMMITTED);
             for (Block block : committedBlocks) {
                 String blockId = block.getBlockId();
