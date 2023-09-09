@@ -23,7 +23,7 @@ import static org.neo4j.ogm.annotation.Relationship.Direction.OUTGOING;
 @NoArgsConstructor(force = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NodeEntity(label = "Block")
-public class Block extends AbstractNode {
+public class Block extends AbstractNode implements Comparable<Block>{
 
     @NonNull
     @GeneratedValue
@@ -51,5 +51,10 @@ public class Block extends AbstractNode {
     @Override
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public int compareTo(Block block) {
+        return this.blockId.compareTo(block.blockId);
     }
 }

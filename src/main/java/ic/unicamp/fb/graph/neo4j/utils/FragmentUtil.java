@@ -1,7 +1,12 @@
 package ic.unicamp.fb.graph.neo4j.utils;
 
+import ic.unicamp.fb.graph.neo4j.schema.Feature;
 import ic.unicamp.fb.graph.neo4j.schema.Fragment;
 import ic.unicamp.fb.graph.neo4j.services.FragmentService;
+
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 import static ic.unicamp.fb.cli.cmd.FBConfigure.FB_GENERIC_FRAGMENT;
 
@@ -29,5 +34,14 @@ public class FragmentUtil {
     public static boolean exitsFragmentBean(FragmentService fragmentService, String fragmentId) {
         Fragment fullFragment = fragmentService.getFragmentByID(fragmentId);
         return fullFragment != null;
+    }
+
+    public static List<Fragment> orderFragments(Iterable<Fragment> fragmentIterable){
+        List<Fragment> orderedFragments = new LinkedList<>();
+        for (Fragment obj : fragmentIterable) {
+            orderedFragments.add(obj);
+        }
+        Collections.sort(orderedFragments);
+        return orderedFragments;
     }
 }

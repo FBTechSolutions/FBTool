@@ -22,7 +22,7 @@ import static org.neo4j.ogm.annotation.Relationship.Direction.OUTGOING;
 @NoArgsConstructor(force = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NodeEntity(label = "Fragment")
-public class Fragment extends AbstractNode {
+public class Fragment extends AbstractNode implements Comparable<Fragment>{
 
     @NonNull
     @GeneratedValue
@@ -41,5 +41,10 @@ public class Fragment extends AbstractNode {
     @Override
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public int compareTo(Fragment fragment) {
+        return this.fragmentId.compareTo(fragment.fragmentId);
     }
 }

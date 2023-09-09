@@ -1,5 +1,6 @@
 package ic.unicamp.fb.cli.cmd;
 
+import ic.unicamp.fb.graph.neo4j.schema.Feature;
 import ic.unicamp.fb.graph.neo4j.schema.Index;
 import ic.unicamp.fb.graph.neo4j.schema.Block;
 import ic.unicamp.fb.graph.neo4j.schema.Fragment;
@@ -9,6 +10,8 @@ import ic.unicamp.fb.graph.neo4j.services.BlockService;
 import ic.unicamp.fb.graph.neo4j.services.BlockServiceImpl;
 import ic.unicamp.fb.graph.neo4j.services.FragmentService;
 import ic.unicamp.fb.graph.neo4j.services.FragmentServiceImpl;
+import ic.unicamp.fb.graph.neo4j.utils.FeatureUtil;
+import ic.unicamp.fb.graph.neo4j.utils.FragmentUtil;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
@@ -31,7 +34,8 @@ public class FBListFragments implements Runnable {
     public void run() {
         System.out.println("Listing all fragments...");
         FragmentService fragmentService = new FragmentServiceImpl();
-        for (Fragment fragment : fragmentService.findAll()) {
+        List<Fragment> orderedFragments = FragmentUtil.orderFragments(fragmentService.findAll());
+        for (Fragment fragment : orderedFragments) {
             String message = String.format("- id:%s label:%s", fragment.getFragmentId(),
                     fragment.getFragmentLabel());
             System.out.println(message);
