@@ -28,3 +28,27 @@ Bug Reported. We can not applied fb sync Project_SPL two many times. Because it 
 
 
 
+////////////////////////////// FIX IN THE DATABASE TO DO
+MATCH (n:FBTool {configId: 'BM_CONFIG_ID'})
+SET n.configId = 'FB_CONFIG_ID'
+RETURN n;
+
+upsert-product --add SPL_Product FB_Generic_Feature
+associate-frag-to-index FB_Generic_Fragment -1
+
+
+add cuts -->
+sync SPL_Product
+add
+commit
+project SPL_Product
+inspect-files --all
+
+tag-blocks frg block
+tag-blocks
+
+
+
+
+
+

@@ -6,6 +6,7 @@ import ic.unicamp.fb.graph.neo4j.schema.relations.ProductToFeature;
 import ic.unicamp.fb.graph.neo4j.services.FeatureService;
 import ic.unicamp.fb.graph.neo4j.services.FragmentService;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -54,5 +55,14 @@ public class FeatureUtil {
     public static boolean exitsFeatureBean(FeatureService featureService, String featureId) {
         Feature fullFeature = featureService.getFeatureByID(featureId);
         return fullFeature != null;
+    }
+
+    public static List<Feature> orderFeatures(Iterable<Feature> featureIterable){
+        List<Feature> orderedFeatures = new LinkedList<>();
+        for (Feature obj : featureIterable) {
+            orderedFeatures.add(obj);
+        }
+        Collections.sort(orderedFeatures);
+        return orderedFeatures;
     }
 }

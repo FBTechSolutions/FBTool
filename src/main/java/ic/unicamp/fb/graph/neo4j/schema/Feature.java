@@ -20,7 +20,7 @@ import static org.neo4j.ogm.annotation.Relationship.Direction.OUTGOING;
 @NoArgsConstructor(force = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NodeEntity(label = "Feature")
-public class Feature extends AbstractNode {
+public class Feature extends AbstractNode implements Comparable<Feature>{
 
     @NonNull
     @GeneratedValue
@@ -39,5 +39,10 @@ public class Feature extends AbstractNode {
     @Override
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public int compareTo(Feature feature) {
+        return this.featureId.compareTo(feature.featureId);
     }
 }

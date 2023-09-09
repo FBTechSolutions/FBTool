@@ -6,8 +6,13 @@ import ic.unicamp.fb.graph.neo4j.services.IndexService;
 import ic.unicamp.fb.graph.neo4j.services.IndexServiceImpl;
 import ic.unicamp.fb.graph.neo4j.services.FeatureService;
 import ic.unicamp.fb.graph.neo4j.services.FeatureServiceImpl;
+import ic.unicamp.fb.graph.neo4j.utils.FeatureUtil;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
+
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 @Command(
         name = FBListFeatures.CMD_NAME,
@@ -24,7 +29,8 @@ public class FBListFeatures implements Runnable {
         System.out.println("Fetching feature list...");
         FeatureService featureService = new FeatureServiceImpl();
         IndexService indexService = new IndexServiceImpl();
-        for (Feature feature : featureService.findAll()) {
+        List<Feature> orderedFeatures = FeatureUtil.orderFeatures(featureService.findAll());
+        for (Feature feature : orderedFeatures) {
             String message = String.format("- id:%s label:%s", feature.getFeatureId(),
                     feature.getFeatureLabel());
             System.out.println(message);
