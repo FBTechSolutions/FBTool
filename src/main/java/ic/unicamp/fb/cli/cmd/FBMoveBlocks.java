@@ -15,7 +15,7 @@ import java.util.List;
 
 @Command(
         name = FBMoveBlocks.CMD_NAME,
-        description = "This command will add the blocks from the temporal folder to the real folder")
+        description = "Do not use this command")
 public class FBMoveBlocks implements Runnable {
 
     public static final String CMD_NAME = "move-blocks";

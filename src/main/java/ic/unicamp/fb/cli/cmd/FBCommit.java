@@ -12,6 +12,7 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import picocli.CommandLine.Command;
 
+import java.util.Collections;
 import java.util.List;
 
 @Command(
@@ -30,6 +31,7 @@ public class FBCommit implements Runnable {
 
             BlockService blockService = new BlockServiceImpl();
             List<Block> stageBlocks = blockService.getBlockByVCBlockState(DataState.STAGE);
+            Collections.sort(stageBlocks);
             for (Block block : stageBlocks) {
                 Block fullBlock = blockService.getBlockByID(block.getBlockId());
                 fullBlock.setVcBlockState(DataState.COMMITTED);
@@ -38,6 +40,7 @@ public class FBCommit implements Runnable {
             }
             git.commit().setMessage("FB Tool: Added blocks.").call();
             List<Block> committedBlocks = blockService.getBlockByVCBlockState(DataState.COMMITTED);
+            Collections.sort(committedBlocks);
             for (Block block : committedBlocks) {
                 String blockId = block.getBlockId();
                 System.out.println("blockId - " + blockId + "  state - " + block.getVcBlockState());

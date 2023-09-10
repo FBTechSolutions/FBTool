@@ -12,6 +12,7 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import picocli.CommandLine.Command;
 
+import java.util.Collections;
 import java.util.List;
 
 @Command(
@@ -43,6 +44,7 @@ public class FBAdd implements Runnable {
                 blockService.createOrUpdate(fullBlock);
             }
             List<Block> stageData = blockService.getBlockByVCBlockState(DataState.STAGE);
+            Collections.sort(stageData);
             for (Block block : stageData) {
                 String blockId = block.getBlockId();
                 System.out.println("blockId - " + blockId + "  state - " + block.getVcBlockState());

@@ -47,7 +47,7 @@ import static ic.unicamp.fb.graph.neo4j.utils.FragmentUtil.retrieveOrCreateGener
 
 @Command(
         name = FBGenerateCuts.CMD_NAME,
-        description = "This command will add the blocks from the temporal folder to the real folder")
+        description = "")
 public class FBGenerateCuts implements Runnable {
 
     @CommandLine.Parameters(index = "0", description = "repository Name", defaultValue = "")

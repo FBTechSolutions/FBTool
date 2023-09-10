@@ -43,7 +43,9 @@ public class FBListFragments implements Runnable {
             if (isBlockEnabled) {
                 System.out.println("  blocks ...");
                 BlockService blockService = new BlockServiceImpl();
-                for (Block block : blockService.getBlocksByFragment(fragment.getFragmentId())) {
+                List<Block> blockList = blockService.getBlocksByFragment(fragment.getFragmentId());
+                Collections.sort(blockList);
+                for (Block block : blockList) {
                     System.out.printf("  - id:%s state:%s vcState:%s%n", block.getBlockId(),
                             block.getBlockState(), block.getVcBlockState());
                 }
