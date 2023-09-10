@@ -44,9 +44,46 @@ commit
 project SPL_Product
 inspect-files --all
 
-tag-blocks frg block
-tag-blocks
+- id:sF0057 label:sStop
+- id:sF0058 label:sUI
+- id:sF0059 label:sEnterprise
+- id:sF0060 label:sCommon
 
+tag-blocks frg block
+tag-blocks sF0057 0000000000000231
+tag-blocks sF0000 0000000000000230
+// file
+tag-blocks sF0057 0000000000000232
+// file
+tag-blocks sF0059 0000000000000234
+tag-blocks sF0000 0000000000000233
+tag-blocks sF0059 0000000000000259
+tag-blocks sF0000 0000000000000258
+tag-blocks sF0060 0000000000000257
+tag-blocks sF0059 0000000000000256
+tag-blocks sF0000 0000000000000255
+tag-blocks sF0059 0000000000000254
+tag-blocks sF0060 0000000000000253
+tag-blocks sF0000 0000000000000252
+tag-blocks sF0057 0000000000000251
+
+tag-blocks sF0060 0000000000000265
+tag-blocks sF0059 0000000000000264
+tag-blocks sF0000 0000000000000263
+
+tag-blocks sF0059 0000000000000262
+tag-blocks sF0060 0000000000000261
+tag-blocks sF0000 0000000000000260
+// file
+
+tag-blocks sF0057 0000000000000222
+tag-blocks sF0000 0000000000000221
+tag-blocks sF0057 0000000000000225
+tag-blocks sF0057 0000000000000226
+//file
+tag-blocks sF0057 0000000000000227
+tag-blocks sF0057 0000000000000229
+tag-blocks sF0000 0000000000000228
 
 
 

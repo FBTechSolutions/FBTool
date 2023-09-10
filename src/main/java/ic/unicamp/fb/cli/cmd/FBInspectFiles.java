@@ -71,6 +71,7 @@ public class FBInspectFiles implements Runnable {
             for (Block block : blocks) {
                 String blockId = block.getBlockId();
                 String fragId = "";
+                String fragLabel = "";
                 Block fullBlock = blockService.getBlockByID(blockId);
                 if (fullBlock != null) {
                     BlockToFragment relation = fullBlock.getAssociatedTo();
@@ -78,13 +79,14 @@ public class FBInspectFiles implements Runnable {
                         Fragment fragment = relation.getEndFragment();
                         if (fragment != null) {
                             fragId = fragment.getFragmentId();
+                            fragLabel = fragment.getFragmentLabel();
                         }
                     } else {
                         System.out.println("  - not fragment associated to " + fullBlock.getBlockId());
                     }
                 }
-                String message = String.format("  - block:%s fragment:%s", blockId,
-                        fragId);
+                String message = String.format("  - block:%s fragment:%s - %s", blockId,
+                        fragId, fragLabel);
                 System.out.println(message);
             }
         } else {
