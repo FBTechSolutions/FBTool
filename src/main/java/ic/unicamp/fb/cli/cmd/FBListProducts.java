@@ -11,6 +11,7 @@ import ic.unicamp.fb.graph.neo4j.utils.FeatureUtil;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
+import java.util.Collections;
 import java.util.List;
 
 @Command(
@@ -43,7 +44,9 @@ public class FBListProducts implements Runnable {
                 System.out.println("  calculating fragments ...");
                 List<ProductToFeature> featureList = product.getAssociatedTo();
                 List<String> featureIds = FeatureUtil.retrieveFeatureIdsByProductToFeatureRelation(featureList);
+                Collections.sort(featureIds);
                 List<Fragment> fragmentList = fragmentService.calculateFragmentsByFeatureList(featureIds);
+                Collections.sort(fragmentList);
                 for (Fragment fragment : fragmentList) {
                     System.out.println("  - " + fragment.getFragmentId() + "  " + fragment.getFragmentLabel());
                 }

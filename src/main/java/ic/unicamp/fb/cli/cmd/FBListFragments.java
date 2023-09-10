@@ -15,6 +15,7 @@ import ic.unicamp.fb.graph.neo4j.utils.FragmentUtil;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
+import java.util.Collections;
 import java.util.List;
 
 @Command(
@@ -51,6 +52,7 @@ public class FBListFragments implements Runnable {
                 System.out.println("  bits order ...");
                 IndexService indexService = new IndexServiceImpl();
                 List<Index> indexList = indexService.getIndexByFragment(fragment.getFragmentId());
+                Collections.sort(indexList);
                 for (Index index : indexList) {
                     System.out.printf("  - bit:%s %n", index.getIndexId());
                 }

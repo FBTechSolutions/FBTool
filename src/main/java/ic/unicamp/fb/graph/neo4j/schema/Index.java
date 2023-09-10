@@ -18,7 +18,7 @@ import org.neo4j.ogm.annotation.Property;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NodeEntity(label = "Index")
 @ToString
-public class Index extends AbstractNode {
+public class Index extends AbstractNode implements Comparable<Index>{
 
     @NonNull
     @GeneratedValue
@@ -31,6 +31,10 @@ public class Index extends AbstractNode {
     @Override
     public Long getId() {
         return id;
+    }
+
+    public int compareTo(Index index) {
+        return this.indexId - index.indexId;
     }
 
 }

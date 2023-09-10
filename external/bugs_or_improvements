@@ -85,6 +85,8 @@ tag-blocks sF0057 0000000000000227
 tag-blocks sF0057 0000000000000229
 tag-blocks sF0000 0000000000000228
 
+project Enterprise --clean
+
 
 
 
