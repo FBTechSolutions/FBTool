@@ -115,7 +115,7 @@ public class BlockScanner implements IBlockScanner {
                                         String endBlockId = getFirstEndMarkId(line);
                                         if (beginBlockId.equals(endBlockId)) {
                                             if (isLine) {
-                                                block.append("\r\n");
+                                                block.append(System.lineSeparator());
                                             }
                                             block.append(line.substring(startPos, endPos + 4));
                                             blocks.put(endBlockId, block.toString());
@@ -141,7 +141,7 @@ public class BlockScanner implements IBlockScanner {
                                     String endBlockId = getFirstEndMarkId(line);
                                     if (endBlockId.equals(expectedEndMarkId)) {
                                         if (isLine) {
-                                            block.append("\r\n");
+                                            block.append(System.lineSeparator());
                                         }
                                         block.append(line.substring(0, endPos + 4));
                                         blocks.put(endBlockId, block.toString());
@@ -158,7 +158,7 @@ public class BlockScanner implements IBlockScanner {
                                     }
                                 } else {
                                     if (isLine) {
-                                        block.append("\r\n");
+                                        block.append(System.lineSeparator());
                                     }
                                     block.append(line);
                                     //line = "";
@@ -205,7 +205,7 @@ public class BlockScanner implements IBlockScanner {
                           String endBlockId = getFirstEndMarkId(line);
                           if (beginBlockId.equals(endBlockId)) {
                             if (isLine) {
-                              block.append("\r\n");
+                              block.append(System.lineSeparator());
                             }
                             block.append(line.substring(startPos, endPos + 4));
                             blocks.put(endBlockId, block.toString());
@@ -244,7 +244,7 @@ public class BlockScanner implements IBlockScanner {
                       String endBlockId = getFirstEndMarkId(line);
                       if (endBlockId.equals(expectedEndMarkId)) {
                         if (isLine) {
-                          block.append("\r\n");
+                          block.append(System.lineSeparator());
                         }
                         block.append(line.substring(0, endPos + 4));
                         blocks.put(endBlockId, block.toString());
@@ -261,7 +261,7 @@ public class BlockScanner implements IBlockScanner {
                       }
                     } else {
                       if (isLine) {
-                        block.append("\r\n");
+                        block.append(System.lineSeparator());
                       }
                       block.append(line);
                       //line = "";
@@ -289,10 +289,12 @@ public class BlockScanner implements IBlockScanner {
                 it = FileUtils.lineIterator(pathFile.toFile(), "UTF-8");
                 try {
                     StringBuilder block = new StringBuilder();
-
+                    boolean isLine = true;
                     while (it.hasNext()) {
-                        String line = it.nextLine(); //read line
-                        boolean isLine = true;
+                        String line = it.nextLine();; //read line
+                        if(isLine){
+                            line = line + System.lineSeparator();
+                        }
                         boolean isCheckingALine = true;
                         while (isCheckingALine) {
                             int firstStartPos = getFirstBeginMark(line);
@@ -455,7 +457,7 @@ public class BlockScanner implements IBlockScanner {
                                     } else {
                                         // empty
                                         block.append(line); //add
-                                        block.append("\r\n"); //space
+                                        //block.append(System.lineSeparator()); //space
                                         isCheckingALine = false;
                                     }
                                 }

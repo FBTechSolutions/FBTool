@@ -1,0 +1,14 @@
+    method 0
+b->[0000000000000000] 1space1word [0000000000000000]<-b
+    1space1word
+    b->[0000000000000001]
+    1space1word
+    b>>[cut] method 1
+    b>>[cut] method 2
+    b>>[cut] method 3()p[pddsa[]
+    [0000000000000001]<-bb->[0000000000000002]
+as been the industry's standard dummy text ever since the 1500s, when an unknown printer took a ga
+    [0000000000000002]<-b
+    method 4
+    b>>[cut]
+    method 5

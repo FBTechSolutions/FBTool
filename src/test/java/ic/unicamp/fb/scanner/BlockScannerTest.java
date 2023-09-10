@@ -76,6 +76,39 @@ class BlockScannerTest {
         }
 
     }
+    @Test
+    void detectAllBlocks3() {
+        BlockScanner blockScanner = new BlockScanner();
+        Path resourceDirectory1 = Paths.get("src", "test", "resources")
+                .resolve("source-code-with-blocks-5.txt");
+        try {
+            Map<String, String> updatedBlocks = blockScanner.retrieveAllBlocks(resourceDirectory1);
+            assertEquals(10, updatedBlocks.size());
+            for (String key : updatedBlocks.keySet()) {
+                System.out.print(updatedBlocks.get(key));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Test
+    void detectAllBlocks6() {
+        BlockScanner blockScanner = new BlockScanner();
+        Path resourceDirectory1 = Paths.get("src", "test", "resources")
+                .resolve("source-code-with-blocks-6.txt");
+        try {
+            Map<String, String> updatedBlocks = blockScanner.retrieveAllBlocks(resourceDirectory1);
+            assertEquals(37, updatedBlocks.size());
+            for (String key : updatedBlocks.keySet()) {
+                System.out.print(updatedBlocks.get(key));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
     @Test
     void createInitialBlock() {

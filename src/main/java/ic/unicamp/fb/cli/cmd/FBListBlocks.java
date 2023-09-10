@@ -15,7 +15,7 @@ import java.util.List;
         description = "This command will list all the blocks")
 public class FBListBlocks implements Runnable {
 
-    public static final String CMD_NAME = "list-blocks";
+    public static final String CMD_NAME = "list-db-blocks";
 
     @Override
     public void run() {
