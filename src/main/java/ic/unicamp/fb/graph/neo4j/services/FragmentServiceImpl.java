@@ -47,7 +47,7 @@ public class FragmentServiceImpl extends GenericService<Fragment> implements Fra
 
         String queryTemplate = "MATCH (fr:Fragment)-[rel:ASSOCIATED_TO]->(i:Index{indexId: '%s'}) return fr";
         String query = String.format(queryTemplate, index.getIndexId());
-        System.out.println(query);
+        //System.out.println(query);
         Iterable<Map<String, Object>> queryResult = Neo4jSessionFactory.getInstance().getNeo4jSession()
                 .query(query, Collections.EMPTY_MAP);
         List<Fragment> result = new LinkedList<>();

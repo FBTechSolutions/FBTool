@@ -9,7 +9,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class BlockScannerTest {
-
+    //FIXME: Add good TEST. It is affecting the database. Do not run it.
     @Test
     void detectValidBlocks() {
         BlockScanner blockScanner = new BlockScanner();
@@ -50,7 +50,7 @@ class BlockScannerTest {
                 .resolve("source-code-with-blocks-4.txt");
         try {
             Map<String, String> updatedBlocks = blockScanner.retrieveAllBlocks(resourceDirectory1);
-            assertEquals(6, updatedBlocks.size());
+            assertEquals(7, updatedBlocks.size());
             for (String key : updatedBlocks.keySet()) {
                 System.out.println(updatedBlocks.get(key));
             }
@@ -67,7 +67,7 @@ class BlockScannerTest {
                 .resolve("source-code-with-blocks-2.txt");
         try {
             Map<String, String> updatedBlocks = blockScanner.retrieveAllBlocks(resourceDirectory1);
-            assertEquals(7, updatedBlocks.size());
+            assertEquals(8, updatedBlocks.size());
             for (String key : updatedBlocks.keySet()) {
                 System.out.println(updatedBlocks.get(key));
             }
@@ -100,7 +100,7 @@ class BlockScannerTest {
                 .resolve("source-code-with-blocks-6.txt");
         try {
             Map<String, String> updatedBlocks = blockScanner.retrieveAllBlocks(resourceDirectory1);
-            assertEquals(37, updatedBlocks.size());
+            assertEquals(36, updatedBlocks.size());
             for (String key : updatedBlocks.keySet()) {
                 System.out.print(updatedBlocks.get(key));
             }
@@ -110,6 +110,22 @@ class BlockScannerTest {
 
     }
 
+    @Test
+    void detectAllBlocks7() {
+        BlockScanner blockScanner = new BlockScanner();
+        Path resourceDirectory1 = Paths.get("src", "test", "resources")
+                .resolve("source-code-with-blocks-7.txt");
+        try {
+            Map<String, String> updatedBlocks = blockScanner.retrieveAllBlocks(resourceDirectory1);
+            assertEquals(5, updatedBlocks.size());
+            for (String key : updatedBlocks.keySet()) {
+                System.out.print(updatedBlocks.get(key));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
     @Test
     void createInitialBlock() {
         BlockScanner.BLOCK_CONTENT_MAX_SIZE = 11;

@@ -21,6 +21,7 @@ import ic.unicamp.fb.cli.cmd.FBAssociateFragToIndex;
 import ic.unicamp.fb.cli.cmd.FBMoveBlocks;
 import ic.unicamp.fb.cli.cmd.FBProjectFeatures;
 import ic.unicamp.fb.cli.cmd.FBProjectProduct;
+import ic.unicamp.fb.cli.cmd.FBProjectSPL;
 import ic.unicamp.fb.cli.cmd.FBRemoveFeatures;
 import ic.unicamp.fb.cli.cmd.FBRemoveFragments;
 import ic.unicamp.fb.cli.cmd.FBRemoveProducts;
@@ -61,6 +62,7 @@ import static ic.unicamp.fb.cli.util.CmdTag.CMD_MAP_FRAGMENTS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_MOVE_BLOCKS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_PROJECT_FEATURES;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_PROJECT_PRODUCT;
+import static ic.unicamp.fb.cli.util.CmdTag.CMD_PROJECT_SPL;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_REMOVE_FEATURES;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_REMOVE_FRAGMENTS;
 import static ic.unicamp.fb.cli.util.CmdTag.CMD_REMOVE_PRODUCTS;
@@ -115,7 +117,8 @@ import static ic.unicamp.fb.cli.util.msg.InfoMessages.INF_0__WELCOME_SPLM;
                 FBGenerateCuts.class,
                 FBCleanDBBlocks.class,
                 FBCheckAnd.class,
-                FBDBConnection.class},
+                FBDBConnection.class,
+                FBProjectSPL.class},
         footer = {"", "launching prompt ...", ""})
 public class Cmd implements Runnable {
 
@@ -275,6 +278,10 @@ public class Cmd implements Runnable {
                     }
                     case CMD_DB_CONNECTION -> {
                         CommandLine commandLine = new CommandLine(new FBDBConnection());
+                        __executeCmd(inputs, commandLine);
+                    }
+                    case CMD_PROJECT_SPL -> {
+                        CommandLine commandLine = new CommandLine(new FBProjectSPL());
                         __executeCmd(inputs, commandLine);
                     }
                     default -> __printCmdNotValid();

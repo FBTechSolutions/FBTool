@@ -39,7 +39,7 @@ public class FeatureServiceImpl extends GenericService<Feature> implements Featu
     public List<Feature> getFeaturesByProductId(String productId) {
         String queryTemplate = "MATCH (p:Product{productId: '%s'})-[rel:ASSOCIATED_TO]->(f:Feature) return f";
         String query = String.format(queryTemplate, productId);
-        System.out.println(query);
+        //System.out.println(query);
         Iterable<Map<String, Object>> queryResult = Neo4jSessionFactory.getInstance().getNeo4jSession()
                 .query(query, Collections.EMPTY_MAP);
         List<Feature> result = new LinkedList<>();
@@ -49,6 +49,18 @@ public class FeatureServiceImpl extends GenericService<Feature> implements Featu
             result.add(fullFeature);
         });
         return result;
+    }
+
+    @Override
+    public List<Feature> getAllFeatures() {
+        Iterable<Feature> features = session.loadAll(Feature.class, 1);
+        List<Feature> list = new LinkedList<>();
+
+        for (Feature item : features) {
+            list.add(item);
+        }
+        Collections.sort(list);
+        return list;
     }
 
     @Override

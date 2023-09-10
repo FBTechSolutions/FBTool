@@ -47,7 +47,7 @@ public class BlockServiceImpl extends GenericService<Block> implements BlockServ
 
         String queryTemplate = "MATCH (b:Block{vcBlockState: '%s'}) return b";
         String query = String.format(queryTemplate, vcBlockState);
-        System.out.println(query);
+        //System.out.println(query);
         Iterable<Map<String, Object>> queryResult = Neo4jSessionFactory.getInstance().getNeo4jSession()
                 .query(query, Collections.EMPTY_MAP);
         List<Block> result = new LinkedList<>();

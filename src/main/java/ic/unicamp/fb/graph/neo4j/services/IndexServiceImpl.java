@@ -41,7 +41,7 @@ public class IndexServiceImpl extends GenericService<Index> implements IndexServ
     public Index getIndexByFeature(String featureId) {
         String queryTemplate = "MATCH (f:Feature{featureId: '%s'})-[rel:HAS_A]->(i:Index) return i";
         String query = String.format(queryTemplate, featureId);
-        System.out.println(query);
+        //System.out.println(query);
         Iterable<Map<String, Object>> queryResult = Neo4jSessionFactory.getInstance().getNeo4jSession()
                 .query(query, Collections.EMPTY_MAP);
         List<Index> result = new LinkedList<>();

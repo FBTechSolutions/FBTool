@@ -465,7 +465,7 @@ public class BlockScanner implements IBlockScanner {
                         }
                     }
                     //rest
-                    if (!block.isEmpty()) {
+                    if (!block.isEmpty() && !block.toString().equals(System.lineSeparator())) {
                         String key = "N" + SequenceAbstractBlockNumber.getNextStringCode();
                         blocks.put(key, block.toString());
                     }

@@ -10,4 +10,5 @@ public interface FeatureService extends Service<Feature> {
 
     List<Feature> getFeaturesByProductId(String productId);
 
+    List<Feature> getAllFeatures();
 }

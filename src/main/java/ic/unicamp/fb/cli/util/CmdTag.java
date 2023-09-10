@@ -21,6 +21,7 @@ import ic.unicamp.fb.cli.cmd.FBAssociateFragToIndex;
 import ic.unicamp.fb.cli.cmd.FBMoveBlocks;
 import ic.unicamp.fb.cli.cmd.FBProjectFeatures;
 import ic.unicamp.fb.cli.cmd.FBProjectProduct;
+import ic.unicamp.fb.cli.cmd.FBProjectSPL;
 import ic.unicamp.fb.cli.cmd.FBRemoveFeatures;
 import ic.unicamp.fb.cli.cmd.FBRemoveFragments;
 import ic.unicamp.fb.cli.cmd.FBRemoveProducts;
@@ -76,4 +77,6 @@ public interface CmdTag {
 
     String CMD_CHECK_AND = FBCheckAnd.CMD_NAME;
     String CMD_DB_CONNECTION = FBDBConnection.CMD_NAME;
+
+    String CMD_PROJECT_SPL = FBProjectSPL.CMD_NAME;
 }

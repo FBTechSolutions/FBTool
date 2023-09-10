@@ -167,10 +167,10 @@ public class FBSync implements Runnable {
                                 block.setBlockState(BlockState.TO_INSERT);
                                 block.setVcBlockState(DataState.TEMPORAL);
                                 // tag block
-                                BlockToFragment blockToFeature = new BlockToFragment();
-                                blockToFeature.setStartBlock(block);
-                                blockToFeature.setEndFragment(defaultFragment);
-                                block.setAssociatedTo(blockToFeature);
+                                BlockToFragment blockToFragment = new BlockToFragment();
+                                blockToFragment.setStartBlock(block);
+                                blockToFragment.setEndFragment(defaultFragment);
+                                block.setAssociatedTo(blockToFragment);
 
                                 if (previousBlock == null) {
                                     firstBlock = block;
