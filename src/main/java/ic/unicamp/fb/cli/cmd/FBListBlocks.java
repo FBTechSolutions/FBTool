@@ -23,9 +23,14 @@ public class FBListBlocks implements Runnable {
         BlockService blockService = new BlockServiceImpl();
         List<Block> orderedBlocks = BlockUtil.orderBlocks(blockService.findAll());
         for (Block block : orderedBlocks) {
-            String message = String.format("- id:%s state:%s vcState:%s", block.getBlockId(),
-                    block.getBlockState(), block.getVcBlockState());
+            String nextBlock = "";
+            if (block.getGoNextBlock() != null && block.getGoNextBlock().getEndBlock() != null) {
+                nextBlock = block.getGoNextBlock().getEndBlock().getBlockId();
+            }
+            String message = String.format("- id:%s state:%s vcState:%s --> %s", block.getBlockId(),
+                    block.getBlockState(), block.getVcBlockState(), nextBlock);
             System.out.println(message);
+
         }
     }
 }
