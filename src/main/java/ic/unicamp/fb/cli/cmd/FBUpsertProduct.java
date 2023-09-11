@@ -72,7 +72,19 @@ public class FBUpsertProduct implements Runnable {
                 ProductToFeature relation = new ProductToFeature();
                 relation.setStartProduct(product);
                 relation.setEndFeature(feature);
-                updatedFeatures.add(relation);
+                boolean alreadyAdded = false;
+                for (ProductToFeature updatedFeature : updatedFeatures) {
+                    if (updatedFeature.getEndFeature() != null &&
+                            updatedFeature.getEndFeature().getFeatureId().equals(featureId)) {
+                        alreadyAdded = true;
+                        break;
+                    }
+                }
+                if(!alreadyAdded){
+                    updatedFeatures.add(relation);
+                }else{
+                    System.out.println("Feature exits in the product" + featureId);
+                }
             }
             product.setAssociatedTo(updatedFeatures);
             productService.createOrUpdate(product);
