@@ -324,3 +324,16 @@ query getFeature(featureId: string) {
     }
 }
 
+Comando para fixear relacion del GO_NEXT_BLOCK que se corta aveces por bugs.
+
+MATCH (from:Block {blockId:'0000000000000019'}),
+      (to:Block   {blockId:'0000000000000018'})
+MERGE (from)-[r:GO_NEXT_BLOCK]->(to);
+
+
+para buscar texto en lob locks usa grep.
+Recuerda la relacion NextBlock solo funciona si hay pues si un archivo solo tiene 1 no va salir.
+
+
+jcc@jcc-OMEN:~/Documents/phd2026/fb-framework/fb_spl_ws/.fb$ grep -rnw . -e "I’m from Toronto"
+./0000000000000010:11:      \speak{S}{I’m from Toronto.}

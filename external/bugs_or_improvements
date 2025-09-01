@@ -89,5 +89,16 @@ project Enterprise --clean
 
 
 
+//Improvement add a secpmd descro[topm om tje fragment, one to codes and one to names like
+fb upsert-fragment Fr1000 Fr-F0005&F0008 Fr-Teacher&Workbook
+
+
+//Maybe project with the code and name of this code (Fragment name), and ignore this field as normal do.
+
+
+
+BUG-> Sometimes when labeling blocks with fragments, the fragment lost the order.
+IMPROMENT-> SOMe way only update a fragment or list the new blocks createds and then updatelist
+
 
 
